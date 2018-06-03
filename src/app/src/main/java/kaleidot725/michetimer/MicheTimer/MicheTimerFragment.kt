@@ -1,7 +1,5 @@
 package kaleidot725.michetimer.MicheTimer
 
-import android.content.Context
-import android.net.Uri
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v7.widget.LinearLayoutManager
@@ -9,12 +7,12 @@ import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import kaleidot725.michetimer.Models.UserTimer
+import kaleidot725.michetimer.Models.Timer
 
 import kaleidot725.michetimer.R
 
 class MicheTimerFragment : Fragment() {
-    private lateinit var values : ArrayList<UserTimer>
+    private lateinit var values : ArrayList<Timer>
     private lateinit var recyclerView: RecyclerView
     private lateinit var viewAdapter: RecyclerView.Adapter<*>
     private lateinit var viewManager: RecyclerView.LayoutManager
@@ -28,10 +26,10 @@ class MicheTimerFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        values = ArrayList<UserTimer>()
-        values.add(UserTimer("One"  ,  60))
-        values.add(UserTimer("Two"  , 120))
-        values.add(UserTimer("Three", 180))
+        values = ArrayList<Timer>()
+        values.add(Timer("One"  ,  60))
+        values.add(Timer("Two"  , 120))
+        values.add(Timer("Three", 180))
 
         viewManager = LinearLayoutManager(activity)
         viewAdapter = TimerListAdapter(values)

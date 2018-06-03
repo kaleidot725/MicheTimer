@@ -1,5 +1,7 @@
 package kaleidot725.michetimer.MicheTimer
 
-class MicheTimerViewModel() {
+import android.arch.lifecycle.ViewModel
+
+class MicheTimerViewModel() : ViewModel() {
 
 }

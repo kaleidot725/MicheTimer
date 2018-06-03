@@ -5,16 +5,12 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
-import android.widget.FrameLayout
-import android.widget.LinearLayout
 import android.widget.TextView
-import kaleidot725.michetimer.Models.UserTimer
+import kaleidot725.michetimer.Models.Timer
 import kaleidot725.michetimer.R
-import kaleidot725.michetimer.R.layout.timer_list_view_item
-import kotlinx.android.synthetic.main.timer_list_view_item.view.*
 
-class TimerListAdapter(array : ArrayList<UserTimer>) : RecyclerView.Adapter<TimerListAdapter.ViewHolder>() {
-    private val array : ArrayList<UserTimer> = array
+class TimerListAdapter(array : ArrayList<Timer>) : RecyclerView.Adapter<TimerListAdapter.ViewHolder>() {
+    private val array : ArrayList<Timer> = array
 
     class ViewHolder(itemView : View) : RecyclerView.ViewHolder(itemView) {
         val nameTextView          : TextView    = itemView.findViewById<TextView>(R.id.name_textview)
@@ -31,10 +27,10 @@ class TimerListAdapter(array : ArrayList<UserTimer>) : RecyclerView.Adapter<Time
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         holder.nameTextView.text          = array[position].name
-        holder.remainSecondsTextView.text = array[position].seconds.toString()
+        holder.remainSecondsTextView.text = array[position].remainSeconds.toString()
         holder.optionButton.text          = "︙"
         holder.resetButton.text           = "Reset"
-        holder.runButton.text             = "Run"
+        holder.runButton.text             = "Start"
     }
 
     override fun getItemCount(): Int = array.count()
