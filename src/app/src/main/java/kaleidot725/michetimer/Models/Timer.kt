@@ -1,5 +1,6 @@
 package kaleidot725.michetimer.Models
 
+import android.arch.lifecycle.MutableLiveData
 import java.util.*
 import java.util.Timer
 import kotlin.concurrent.timerTask
@@ -7,23 +8,29 @@ import kotlin.concurrent.timerTask
 class Timer(name : String, seconds : Long) {
     val name : String = name
     val seconds : Long = seconds
-    var remainSeconds : Long = seconds
-    var state : TimerState = TimerState.Init
+
+    var remainSeconds : MutableLiveData<Long> = MutableLiveData()
+    var state : MutableLiveData<TimerState> = MutableLiveData()
 
     private var beginSeconds : Long = seconds
     private var beginDate : Date = Date()
     private var timer : Timer? = null
+
+    init {
+        remainSeconds.postValue(seconds)
+        state.postValue(TimerState.Init)
+    }
 
     fun run() {
         if (state == TimerState.Run || state == TimerState.Timeup)
             throw IllegalStateException()
 
         beginDate = Date()
-        beginSeconds = remainSeconds
+        beginSeconds = remainSeconds.value ?: 0
 
         timer = Timer()
         timer?.scheduleAtFixedRate(timerTask { countdown() }, 0, 100)
-        state = TimerState.Run
+        state.postValue(TimerState.Run)
     }
 
     fun pause() {
@@ -31,8 +38,8 @@ class Timer(name : String, seconds : Long) {
             throw IllegalStateException()
 
         timer?.cancel()
-        remainSeconds = beginSeconds - diffSeconds(beginDate, Date())
-        state = TimerState.Pause
+        remainSeconds.postValue(beginSeconds - diffSeconds(beginDate, Date()))
+        state.postValue(TimerState.Pause)
     }
 
     fun reset() {
@@ -40,16 +47,16 @@ class Timer(name : String, seconds : Long) {
             throw IllegalStateException()
 
         timer?.cancel()
-        remainSeconds = seconds
-        state = TimerState.Init
+        remainSeconds.postValue(seconds)
+        state.postValue(TimerState.Init)
     }
 
     private fun countdown() {
-        remainSeconds = beginSeconds - diffSeconds(beginDate, Date())
-        if (remainSeconds <= 0) {
+        remainSeconds.postValue(beginSeconds - diffSeconds(beginDate, Date()))
+        if ((remainSeconds.value ?: 0) <= 0) {
             timer?.cancel()
-            remainSeconds = 0
-            state = TimerState.Timeup
+            remainSeconds.postValue( 0)
+            state.postValue(TimerState.Timeup)
         }
     }
 
