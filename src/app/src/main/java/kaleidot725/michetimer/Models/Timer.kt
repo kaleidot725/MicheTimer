@@ -1,36 +1,27 @@
 package kaleidot725.michetimer.Models
 
-import android.arch.lifecycle.MutableLiveData
+import io.reactivex.subjects.PublishSubject
+import org.reactivestreams.Subscriber
 import java.util.*
 import java.util.Timer
-import kotlin.concurrent.timerTask
 
 class Timer(name : String, seconds : Long) {
-    val name : String = name
-    val seconds : Long = seconds
-
-    var remainSeconds : MutableLiveData<Long> = MutableLiveData()
-    var state : MutableLiveData<TimerState> = MutableLiveData()
+    var name : String = name
+    var seconds : Long = seconds
+    var remainSeconds : Long = seconds
+    var state : TimerState = TimerState.Init
 
     private var beginSeconds : Long = seconds
     private var beginDate : Date = Date()
     private var timer : Timer? = null
-
-    init {
-        remainSeconds.postValue(seconds)
-        state.postValue(TimerState.Init)
-    }
 
     fun run() {
         if (state == TimerState.Run || state == TimerState.Timeup)
             throw IllegalStateException()
 
         beginDate = Date()
-        beginSeconds = remainSeconds.value ?: 0
-
-        timer = Timer()
-        timer?.scheduleAtFixedRate(timerTask { countdown() }, 0, 100)
-        state.postValue(TimerState.Run)
+        beginSeconds = remainSeconds
+        state = TimerState.Run
     }
 
     fun pause() {
@@ -38,8 +29,22 @@ class Timer(name : String, seconds : Long) {
             throw IllegalStateException()
 
         timer?.cancel()
-        remainSeconds.postValue(beginSeconds - diffSeconds(beginDate, Date()))
-        state.postValue(TimerState.Pause)
+        remainSeconds = beginSeconds - diffSeconds(beginDate, Date())
+        state = TimerState.Pause
+    }
+
+    fun update() : Long {
+        if (state != TimerState.Run)
+            throw IllegalStateException()
+
+        remainSeconds = beginSeconds - diffSeconds(beginDate, Date())
+        if (remainSeconds <= 0) {
+            timer?.cancel()
+            remainSeconds = 0
+            state = TimerState.Timeup
+        }
+
+        return remainSeconds
     }
 
     fun reset() {
@@ -47,17 +52,8 @@ class Timer(name : String, seconds : Long) {
             throw IllegalStateException()
 
         timer?.cancel()
-        remainSeconds.postValue(seconds)
-        state.postValue(TimerState.Init)
-    }
-
-    private fun countdown() {
-        remainSeconds.postValue(beginSeconds - diffSeconds(beginDate, Date()))
-        if ((remainSeconds.value ?: 0) <= 0) {
-            timer?.cancel()
-            remainSeconds.postValue( 0)
-            state.postValue(TimerState.Timeup)
-        }
+        remainSeconds = seconds
+        state = TimerState.Init
     }
 
     private fun diffSeconds(begin : Date, end : Date) : Long {

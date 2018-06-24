@@ -1,9 +1,8 @@
-package kaleidot725.michetimer.MicheTimer
+package kaleidot725.michetimer
 
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.support.v4.app.Fragment
-import kaleidot725.michetimer.R
 
 class MicheTimerActivity : AppCompatActivity() {
 

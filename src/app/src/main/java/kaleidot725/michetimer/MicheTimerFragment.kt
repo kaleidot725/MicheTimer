@@ -1,5 +1,8 @@
-package kaleidot725.michetimer.MicheTimer
+package kaleidot725.michetimer
 
+
+import android.arch.lifecycle.LifecycleOwner
+import android.arch.lifecycle.ViewModelProviders
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v7.widget.LinearLayoutManager
@@ -7,15 +10,13 @@ import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import kaleidot725.michetimer.Models.Timer
-
-import kaleidot725.michetimer.R
+import kaleidot725.michetimer.Models.ViewModelFactory
 
 class MicheTimerFragment : Fragment() {
-    private lateinit var values : ArrayList<Timer>
     private lateinit var recyclerView: RecyclerView
     private lateinit var viewAdapter: RecyclerView.Adapter<*>
     private lateinit var viewManager: RecyclerView.LayoutManager
+    private lateinit var viewModelFactory : ViewModelFactory
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
@@ -26,14 +27,11 @@ class MicheTimerFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        values = ArrayList<Timer>()
-        values.add(Timer("One"  ,  60))
-        values.add(Timer("Two"  , 120))
-        values.add(Timer("Three", 180))
+        viewModelFactory = ViewModelFactory()
+        val viewModel = ViewModelProviders.of(activity as MicheTimerActivity, viewModelFactory).get(MicheTimerViewModel::class.java)
 
         viewManager = LinearLayoutManager(activity)
-        viewAdapter = TimerListAdapter(values)
-
+        viewAdapter = TimerListAdapter(viewModel.timerList)
         recyclerView = view.findViewById<RecyclerView>(R.id.recycler_view).apply {
             setHasFixedSize(true)
             layoutManager = viewManager
