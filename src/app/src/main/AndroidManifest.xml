@@ -9,11 +9,16 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".MicheTimer.MicheTimerActivity">
+
+        <activity android:name=".main.MicheTimerActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <activity android:name=".addtimer.AddTimerActivity"
+                  android:label="@string/activity_add_timer_name"/>
     </application>
 </manifest>
