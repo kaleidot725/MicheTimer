@@ -7,7 +7,7 @@ import kaleidot725.michetimer.MicheTimerViewModel
 class ViewModelFactory() : ViewModelProvider.Factory{
 
     private val timers : List<Timer> =
-            listOf( Timer("One", 90),
+            listOf( Timer("One", 10),
                     Timer("Two", 120),
                     Timer("Three", 180),
                     Timer("Four", 240))

@@ -4,35 +4,35 @@ import android.arch.lifecycle.MutableLiveData
 import android.arch.lifecycle.ViewModel
 import android.util.Log
 import android.view.View
+import android.widget.Toast
 import kaleidot725.michetimer.Models.Timer
 import kaleidot725.michetimer.Models.TimerState
 import java.util.*
 
 class TimerViewModel(timer : Timer) : ViewModel() {
-    val name : MutableLiveData<String>
-    val state : MutableLiveData<String>
-    val remainSeconds : MutableLiveData<String>
+    var navigator : MicheTimerNavigator? = null
+    val name : String = timer.name
+    val state : MutableLiveData<String> = MutableLiveData()
+    val remainSeconds : MutableLiveData<String> = MutableLiveData()
 
-
+    private val tag : String = "TimerViewModel"
     private val timer : Timer = timer
-    private var updater : java.util.Timer? = java.util.Timer()
 
     init {
-        name = MutableLiveData()
-        name.postValue(timer.name)
+        timer.state.subscribe {
+            this.state.postValue(toStateString(it))
+        }
 
-        state = MutableLiveData()
-        state.postValue(toStateString(timer.state))
-
-        remainSeconds = MutableLiveData()
-        remainSeconds.postValue(toRemainSecondsString(timer.remainSeconds))
-
-
+        timer.remainSeconds.subscribe {
+            this.remainSeconds.postValue(toRemainSecondsString(it))
+            if (it == 0L)
+                this.navigator?.timerTimeout(this.name)
+        }
     }
 
     fun run(view: View) {
         try {
-            when (timer.state) {
+            when (this.timer.state.value) {
                 TimerState.Init -> {
                     timer.run()
                 }
@@ -46,22 +46,18 @@ class TimerViewModel(timer : Timer) : ViewModel() {
                     timer.reset()
                 }
             }
-
-            state.postValue(toStateString(timer.state))
         }
         catch (e : Exception) {
-
+            Log.d(tag, e.toString())
         }
     }
 
     fun reset(view: View) {
         try {
             timer.reset()
-            state.postValue(toStateString(timer.state))
-            remainSeconds.postValue(toRemainSecondsString(timer.remainSeconds))
         }
         catch (e : Exception) {
-
+            Log.d(tag, e.toString())
         }
     }
 
@@ -71,7 +67,8 @@ class TimerViewModel(timer : Timer) : ViewModel() {
 
     private fun toStateString(state : TimerState) =
             when (state) {
-                TimerState.Run -> { "Stop"  }
-                else           -> { "Start" }
+                TimerState.Run     -> { "Pause"  }
+                TimerState.Timeout -> { "Pause" }
+                else               -> { "Start" }
             }
 }

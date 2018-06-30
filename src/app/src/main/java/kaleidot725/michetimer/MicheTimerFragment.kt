@@ -4,15 +4,21 @@ package kaleidot725.michetimer
 import android.arch.lifecycle.LifecycleOwner
 import android.arch.lifecycle.ViewModelProviders
 import android.os.Bundle
+import android.os.Handler
 import android.support.v4.app.Fragment
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import kaleidot725.michetimer.Models.ViewModelFactory
 
-class MicheTimerFragment : Fragment() {
+interface MicheTimerNavigator {
+    fun timerTimeout(name : String)
+}
+
+class MicheTimerFragment : Fragment(), MicheTimerNavigator {
     private lateinit var recyclerView: RecyclerView
     private lateinit var viewAdapter: RecyclerView.Adapter<*>
     private lateinit var viewManager: RecyclerView.LayoutManager
@@ -20,7 +26,6 @@ class MicheTimerFragment : Fragment() {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
-        // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_miche_timer, container, false)
     }
 
@@ -29,6 +34,7 @@ class MicheTimerFragment : Fragment() {
 
         viewModelFactory = ViewModelFactory()
         val viewModel = ViewModelProviders.of(activity as MicheTimerActivity, viewModelFactory).get(MicheTimerViewModel::class.java)
+        viewModel.navigator = this
 
         viewManager = LinearLayoutManager(activity)
         viewAdapter = TimerListAdapter(viewModel.timerList)
@@ -37,5 +43,13 @@ class MicheTimerFragment : Fragment() {
             layoutManager = viewManager
             adapter = viewAdapter
         }
+    }
+
+    override fun timerTimeout(name: String) {
+        val mainHandler = Handler(context?.mainLooper)
+        var runnable = Runnable {
+            Toast.makeText(context, "$name Timeout!!!", Toast.LENGTH_SHORT).show()
+        }
+        mainHandler.post(runnable)
     }
 }

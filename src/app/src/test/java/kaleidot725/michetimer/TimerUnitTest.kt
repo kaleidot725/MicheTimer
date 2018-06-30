@@ -39,7 +39,6 @@ class TimerUnitTest {
         Assert.assertEquals(TimerState.Run, timer.state)
         Thread.sleep(1100)
 
-        timer.update()
         Assert.assertTrue(timer.remainSeconds as Long <= 59L)
         Thread.sleep(1100)
 
@@ -51,7 +50,6 @@ class TimerUnitTest {
         Assert.assertEquals(TimerState.Run, timer.state)
         Thread.sleep(1100)
 
-        timer.update()
         Assert.assertTrue(timer.remainSeconds as Long <= 57L)
         Thread.sleep(1100)
 
@@ -89,8 +87,7 @@ class TimerUnitTest {
         timeupTimer.run()
         Thread.sleep(2000)
 
-        timeupTimer.update()
-        Assert.assertEquals(TimerState.Timeup, timeupTimer.state)
+        Assert.assertEquals(TimerState.Timeout, timeupTimer.state)
         Assert.assertEquals(0L, timeupTimer.remainSeconds)
 
         timeupTimer.reset()
@@ -104,8 +101,7 @@ class TimerUnitTest {
         timeupTimer.run()
         Thread.sleep(2000)
 
-        timeupTimer.update()
-        Assert.assertEquals(TimerState.Timeup, timeupTimer.state)
+        Assert.assertEquals(TimerState.Timeout, timeupTimer.state)
         Assert.assertEquals(0L, timeupTimer.remainSeconds)
     }
 }
