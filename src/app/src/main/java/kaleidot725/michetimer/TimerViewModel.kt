@@ -43,7 +43,6 @@ class TimerViewModel(timer : Timer) : ViewModel() {
                     timer.run()
                 }
                 else -> {
-                    timer.reset()
                 }
             }
         }
@@ -67,8 +66,8 @@ class TimerViewModel(timer : Timer) : ViewModel() {
 
     private fun toStateString(state : TimerState) =
             when (state) {
-                TimerState.Run     -> { "Pause"  }
-                TimerState.Timeout -> { "Pause" }
-                else               -> { "Start" }
+                TimerState.Run     -> { "Pause"   }
+                TimerState.Timeout -> { "Pause"   }
+                else               -> { "Start"   }
             }
 }

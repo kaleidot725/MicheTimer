@@ -3,6 +3,7 @@ package kaleidot725.michetimer
 
 import android.arch.lifecycle.LifecycleOwner
 import android.arch.lifecycle.ViewModelProviders
+import android.databinding.DataBindingUtil
 import android.os.Bundle
 import android.os.Handler
 import android.support.v4.app.Fragment
@@ -13,9 +14,15 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import kaleidot725.michetimer.Models.ViewModelFactory
+import kaleidot725.michetimer.databinding.FragmentMicheTimerBinding
+import android.support.design.widget.FloatingActionButton
+
+
+
 
 interface MicheTimerNavigator {
     fun timerTimeout(name : String)
+    fun addTimer()
 }
 
 class MicheTimerFragment : Fragment(), MicheTimerNavigator {
@@ -26,6 +33,8 @@ class MicheTimerFragment : Fragment(), MicheTimerNavigator {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
+
+        super.onCreate(savedInstanceState)
         return inflater.inflate(R.layout.fragment_miche_timer, container, false)
     }
 
@@ -35,6 +44,9 @@ class MicheTimerFragment : Fragment(), MicheTimerNavigator {
         viewModelFactory = ViewModelFactory()
         val viewModel = ViewModelProviders.of(activity as MicheTimerActivity, viewModelFactory).get(MicheTimerViewModel::class.java)
         viewModel.navigator = this
+
+        val binding = DataBindingUtil.bind<FragmentMicheTimerBinding>(view)
+        binding?.micheTimerViewModel = viewModel
 
         viewManager = LinearLayoutManager(activity)
         viewAdapter = TimerListAdapter(viewModel.timerList)
@@ -51,5 +63,9 @@ class MicheTimerFragment : Fragment(), MicheTimerNavigator {
             Toast.makeText(context, "$name Timeout!!!", Toast.LENGTH_SHORT).show()
         }
         mainHandler.post(runnable)
+    }
+
+    override fun addTimer() {
+        Toast.makeText(context, "Add!!!", Toast.LENGTH_SHORT).show()
     }
 }
