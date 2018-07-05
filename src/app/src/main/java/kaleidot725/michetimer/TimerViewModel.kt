@@ -9,8 +9,8 @@ import kaleidot725.michetimer.Models.Timer
 import kaleidot725.michetimer.Models.TimerState
 import java.util.*
 
-class TimerViewModel(timer : Timer) : ViewModel() {
-    var navigator : MicheTimerNavigator? = null
+class TimerViewModel(navigator : MicheTimerNavigator, timer : Timer) : ViewModel() {
+    val navigator : MicheTimerNavigator = navigator
     val name : String = timer.name
     val state : MutableLiveData<String> = MutableLiveData()
     val remainSeconds : MutableLiveData<String> = MutableLiveData()
@@ -26,7 +26,7 @@ class TimerViewModel(timer : Timer) : ViewModel() {
         timer.remainSeconds.subscribe {
             this.remainSeconds.postValue(toRemainSecondsString(it))
             if (it == 0L)
-                this.navigator?.timerTimeout(this.name)
+                this.navigator.onStartAlarmTimer(this.name)
         }
     }
 
