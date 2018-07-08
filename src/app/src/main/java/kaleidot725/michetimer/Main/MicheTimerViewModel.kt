@@ -3,8 +3,9 @@ package kaleidot725.michetimer
 
 import android.arch.lifecycle.ViewModel
 import android.view.View
+import kaleidot725.michetimer.Main.MicheTimerNavigator
 
-class MicheTimerViewModel(navigator : MicheTimerNavigator,  timers : List<kaleidot725.michetimer.Models.Timer>) : ViewModel() {
+class MicheTimerViewModel(navigator : MicheTimerNavigator, timers : List<kaleidot725.michetimer.Models.Timer>) : ViewModel() {
     val navigator: MicheTimerNavigator
     val timers: List<TimerViewModel>
 

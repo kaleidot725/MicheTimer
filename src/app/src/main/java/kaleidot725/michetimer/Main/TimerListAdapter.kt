@@ -7,9 +7,10 @@ import android.databinding.DataBindingUtil
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import kaleidot725.michetimer.R
 import kaleidot725.michetimer.databinding.TimerListViewItemBinding
 
-class TimerListAdapter(array : List<TimerViewModel>) : RecyclerView.Adapter<TimerListViewHolder>(), LifecycleOwner {
+internal class TimerListAdapter(array : List<TimerViewModel>) : RecyclerView.Adapter<TimerListViewHolder>(), LifecycleOwner {
     private val registry : LifecycleRegistry
     private val array : List<TimerViewModel>
 

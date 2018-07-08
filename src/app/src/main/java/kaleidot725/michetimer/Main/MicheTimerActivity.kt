@@ -1,22 +1,18 @@
 package kaleidot725.michetimer
 
-import android.arch.lifecycle.ViewModel
-import android.arch.lifecycle.ViewModelProviders
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Handler
 import android.support.v4.app.Fragment
-import android.support.v7.widget.RecyclerView
 import android.widget.Toast
 import kaleidot725.michetimer.Models.Timer
 import kaleidot725.michetimer.Models.ViewModelFactory
+import android.content.Intent
+import kaleidot725.michetimer.EditTimer.EditTimerActivity
+import kaleidot725.michetimer.Main.MicheTimerNavigator
 
-interface MicheTimerNavigator {
-    fun onStartAlarmTimer(name : String)
-    fun onStartEditTimer()
-}
 
-class MicheTimerActivity : AppCompatActivity(), MicheTimerNavigator{
+class MicheTimerActivity : AppCompatActivity(), MicheTimerNavigator {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -44,10 +40,7 @@ class MicheTimerActivity : AppCompatActivity(), MicheTimerNavigator{
     }
 
     override fun onStartEditTimer() {
-        val mainHandler = Handler(mainLooper)
-        var runnable = Runnable {
-            Toast.makeText(this, "Add!!!", Toast.LENGTH_SHORT).show()
-        }
-        mainHandler.post(runnable)
+        val intent = Intent(this, EditTimerActivity::class.java)
+        startActivity(intent)
     }
 }

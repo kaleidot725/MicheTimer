@@ -2,7 +2,7 @@ package kaleidot725.michetimer.Models
 
 import android.arch.lifecycle.ViewModel
 import android.arch.lifecycle.ViewModelProvider
-import kaleidot725.michetimer.MicheTimerNavigator
+import kaleidot725.michetimer.Main.MicheTimerNavigator
 import kaleidot725.michetimer.MicheTimerViewModel
 
 object ViewModelFactory : ViewModelProvider.Factory{

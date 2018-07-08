@@ -4,10 +4,9 @@ import android.arch.lifecycle.MutableLiveData
 import android.arch.lifecycle.ViewModel
 import android.util.Log
 import android.view.View
-import android.widget.Toast
+import kaleidot725.michetimer.Main.MicheTimerNavigator
 import kaleidot725.michetimer.Models.Timer
 import kaleidot725.michetimer.Models.TimerState
-import java.util.*
 
 class TimerViewModel(navigator : MicheTimerNavigator, timer : Timer) : ViewModel() {
     val navigator : MicheTimerNavigator = navigator
