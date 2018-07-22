@@ -1,18 +1,20 @@
-package kaleidot725.michetimer
+package kaleidot725.michetimer.main
 
 import android.arch.lifecycle.Lifecycle
 import android.arch.lifecycle.LifecycleOwner
 import android.arch.lifecycle.LifecycleRegistry
 import android.databinding.DataBindingUtil
+import android.databinding.ObservableArrayList
+import android.databinding.ObservableList
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import kaleidot725.michetimer.R
 import kaleidot725.michetimer.databinding.TimerListViewItemBinding
 
-internal class TimerListAdapter(array : List<TimerViewModel>) : RecyclerView.Adapter<TimerListViewHolder>(), LifecycleOwner {
+internal class TimerListAdapter(array : ObservableList<TimerViewModel>) : RecyclerView.Adapter<TimerListViewHolder>(), LifecycleOwner {
     private val registry : LifecycleRegistry
-    private val array : List<TimerViewModel>
+    private val array : ObservableList<TimerViewModel>
 
     init {
         this.registry = LifecycleRegistry(this)
@@ -39,6 +41,4 @@ internal class TimerListAdapter(array : List<TimerViewModel>) : RecyclerView.Ada
 
     override fun getItemCount(): Int = array.count()
     override fun getLifecycle(): Lifecycle = registry
-
-
 }

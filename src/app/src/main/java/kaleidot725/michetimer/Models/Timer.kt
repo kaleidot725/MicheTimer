@@ -1,8 +1,6 @@
-package kaleidot725.michetimer.Models
+package kaleidot725.michetimer.models
 
 import io.reactivex.subjects.BehaviorSubject
-import io.reactivex.subjects.PublishSubject
-import io.reactivex.subjects.Subject
 import java.util.*
 import java.util.Timer
 import kotlin.concurrent.timerTask

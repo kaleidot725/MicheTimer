@@ -1,15 +1,17 @@
-package kaleidot725.michetimer
+package kaleidot725.michetimer.main
 
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Handler
 import android.support.v4.app.Fragment
 import android.widget.Toast
-import kaleidot725.michetimer.Models.Timer
-import kaleidot725.michetimer.Models.ViewModelFactory
+import kaleidot725.michetimer.models.Timer
+import kaleidot725.michetimer.models.ViewModelFactory
 import android.content.Intent
-import kaleidot725.michetimer.EditTimer.EditTimerActivity
-import kaleidot725.michetimer.Main.MicheTimerNavigator
+import android.databinding.ObservableArrayList
+import android.databinding.ObservableList
+import kaleidot725.michetimer.R
+import kaleidot725.michetimer.addtimer.AddTimerActivity
 
 
 class MicheTimerActivity : AppCompatActivity(), MicheTimerNavigator {
@@ -18,12 +20,9 @@ class MicheTimerActivity : AppCompatActivity(), MicheTimerNavigator {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        ViewModelFactory.navigator = this
-        ViewModelFactory.timers =
-                listOf( Timer("One", 10),
-                Timer("Two", 120),
-                Timer("Three", 180),
-                Timer("Four", 240))
+        ViewModelFactory.micheTimerNavigator = this
+        ViewModelFactory.timers = ObservableArrayList()
+        ViewModelFactory.timers?.add(Timer("New", 100))
 
         val transaction = supportFragmentManager.beginTransaction()
         val fragment = MicheTimerFragment() as Fragment
@@ -40,7 +39,7 @@ class MicheTimerActivity : AppCompatActivity(), MicheTimerNavigator {
     }
 
     override fun onStartEditTimer() {
-        val intent = Intent(this, EditTimerActivity::class.java)
+        val intent = Intent(this, AddTimerActivity::class.java)
         startActivity(intent)
     }
 }

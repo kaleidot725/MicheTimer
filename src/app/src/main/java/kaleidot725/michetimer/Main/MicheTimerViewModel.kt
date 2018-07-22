@@ -1,21 +1,15 @@
-package kaleidot725.michetimer
+package kaleidot725.michetimer.main
 
 
 import android.arch.lifecycle.ViewModel
+import android.databinding.ObservableArrayList
+import android.databinding.ObservableList
 import android.view.View
-import kaleidot725.michetimer.Main.MicheTimerNavigator
+import kaleidot725.michetimer.models.Timer
 
-class MicheTimerViewModel(navigator : MicheTimerNavigator, timers : List<kaleidot725.michetimer.Models.Timer>) : ViewModel() {
-    val navigator: MicheTimerNavigator
-    val timers: List<TimerViewModel>
-
-    init {
-        this.navigator = navigator
-        this.timers = mutableListOf<TimerViewModel>()
-        timers.forEach {
-            i -> this.timers.add(TimerViewModel(navigator, i))
-        }
-    }
+class MicheTimerViewModel(navigator : MicheTimerNavigator, timerViewModels : ObservableList<TimerViewModel>) : ViewModel() {
+    val navigator: MicheTimerNavigator = navigator
+    val timerViewModels: ObservableList<TimerViewModel> = timerViewModels
 
     fun onStartEditTimer(view : View){
         navigator.onStartEditTimer()

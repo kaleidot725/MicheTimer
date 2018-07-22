@@ -10,7 +10,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
 
-        <activity android:name=".MicheTimerActivity">
+        <activity android:name=".main.MicheTimerActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -18,6 +18,7 @@
             </intent-filter>
         </activity>
 
-        <activity android:name=".EditTimer.EditTimerActivity"/>
+        <activity android:name=".addtimer.AddTimerActivity"
+                  android:label="@string/activity_add_timer_name"/>
     </application>
 </manifest>

@@ -1,4 +1,4 @@
-package kaleidot725.michetimer
+package kaleidot725.michetimer.main
 
 import android.arch.lifecycle.LifecycleOwner
 import android.support.v7.widget.RecyclerView

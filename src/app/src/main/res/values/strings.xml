@@ -1,6 +1,4 @@
 <resources>
     <string name="app_name">MicheTimer</string>
-
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="activity_add_timer_name">Add Timer</string>
 </resources>
