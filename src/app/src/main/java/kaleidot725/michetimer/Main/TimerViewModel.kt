@@ -2,12 +2,15 @@ package kaleidot725.michetimer.main
 
 import android.arch.lifecycle.MutableLiveData
 import android.arch.lifecycle.ViewModel
+import android.databinding.ObservableList
+import android.support.v7.widget.PopupMenu
 import android.util.Log
 import android.view.View
+import kaleidot725.michetimer.R
 import kaleidot725.michetimer.models.Timer
 import kaleidot725.michetimer.models.TimerState
 
-class TimerViewModel(navigator : MicheTimerNavigator, timer : Timer) : ViewModel() {
+class TimerViewModel(navigator : MicheTimerNavigator, timer : Timer, timers : ObservableList<Timer>) : ViewModel() {
     val navigator : MicheTimerNavigator = navigator
     val name : String = timer.name
     val state : MutableLiveData<String> = MutableLiveData()
@@ -15,6 +18,7 @@ class TimerViewModel(navigator : MicheTimerNavigator, timer : Timer) : ViewModel
 
     private val tag : String = "TimerViewModel"
     private val timer : Timer = timer
+    private val timers : ObservableList<Timer> = timers
 
     init {
         timer.state.subscribe {
@@ -52,8 +56,26 @@ class TimerViewModel(navigator : MicheTimerNavigator, timer : Timer) : ViewModel
     fun reset(view: View) {
         try {
             timer.reset()
+        } catch (e: Exception) {
+            Log.d(tag, e.toString())
         }
-        catch (e : Exception) {
+    }
+
+    fun popupOption(view : View){
+        try {
+            navigator.onStartDeleteTimer(view, PopupMenu.OnMenuItemClickListener {
+                when(it?.itemId) {
+                    R.id.delete -> {
+                        this.reset(view)
+                        timers.remove(timer)
+                        true
+                    }
+                    else -> {
+                        false
+                    }
+                }
+            })
+        } catch (e : Exception) {
             Log.d(tag, e.toString())
         }
     }

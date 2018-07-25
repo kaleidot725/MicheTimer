@@ -3,12 +3,12 @@ package kaleidot725.michetimer.main
 import android.arch.lifecycle.Lifecycle
 import android.arch.lifecycle.LifecycleOwner
 import android.arch.lifecycle.LifecycleRegistry
+import android.content.Context
 import android.databinding.DataBindingUtil
-import android.databinding.ObservableArrayList
 import android.databinding.ObservableList
+import android.support.v7.widget.PopupMenu
 import android.support.v7.widget.RecyclerView
-import android.view.LayoutInflater
-import android.view.ViewGroup
+import android.view.*
 import kaleidot725.michetimer.R
 import kaleidot725.michetimer.databinding.TimerListViewItemBinding
 
@@ -25,7 +25,6 @@ internal class TimerListAdapter(array : ObservableList<TimerViewModel>) : Recycl
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TimerListViewHolder {
         val layoutInflater = LayoutInflater.from(parent.context)
         val binding = DataBindingUtil.inflate<TimerListViewItemBinding>(layoutInflater, R.layout.timer_list_view_item, parent, false)
-
         registry.markState(Lifecycle.State.STARTED)
         return TimerListViewHolder(this, binding)
     }
