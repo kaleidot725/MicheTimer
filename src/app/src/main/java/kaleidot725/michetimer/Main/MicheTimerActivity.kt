@@ -9,10 +9,10 @@ import kaleidot725.michetimer.models.Timer
 import kaleidot725.michetimer.models.ViewModelFactory
 import android.content.Intent
 import android.databinding.ObservableArrayList
-import android.databinding.ObservableList
+import android.support.v7.widget.PopupMenu
 import kaleidot725.michetimer.R
 import kaleidot725.michetimer.addtimer.AddTimerActivity
-
+import android.view.View
 
 class MicheTimerActivity : AppCompatActivity(), MicheTimerNavigator {
 
@@ -41,5 +41,12 @@ class MicheTimerActivity : AppCompatActivity(), MicheTimerNavigator {
     override fun onStartEditTimer() {
         val intent = Intent(this, AddTimerActivity::class.java)
         startActivity(intent)
+    }
+
+    override fun onStartDeleteTimer(view : View,  menuListener : PopupMenu.OnMenuItemClickListener?) {
+        val popup = android.support.v7.widget.PopupMenu(this, view)
+        popup.menuInflater.inflate(R.menu.timer_menu, popup.menu)
+        popup.setOnMenuItemClickListener(menuListener)
+        popup.show()
     }
 }
