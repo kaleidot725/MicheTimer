@@ -40,28 +40,35 @@ class MicheTimerFragment() : Fragment() {
         }
 
         ViewModelFactory.timers?.addOnListChangedCallback(object : ObservableList.OnListChangedCallback<ObservableList<Timer>>(){
-            override fun onChanged(sender: ObservableList<Timer>?) {
-            }
 
-            override fun onItemRangeChanged(sender: ObservableList<Timer>?, positionStart: Int, itemCount: Int) {
-                if (sender != null) {
-                    viewModel.timerViewModels.add(TimerViewModel(ViewModelFactory?.micheTimerNavigator as MicheTimerNavigator, sender.get(positionStart)))
-                    recyclerView.adapter.notifyItemInserted(positionStart + 1)
-                }
-            }
 
             override fun onItemRangeInserted(sender: ObservableList<Timer>?, positionStart: Int, itemCount: Int) {
                 if (sender != null) {
-                    viewModel.timerViewModels.add(TimerViewModel(ViewModelFactory?.micheTimerNavigator as MicheTimerNavigator, sender.get(positionStart)))
+                    viewModel.timerViewModels.add(TimerViewModel(ViewModelFactory?.micheTimerNavigator as MicheTimerNavigator, sender.get(positionStart), sender))
                     recyclerView.adapter.notifyItemInserted(positionStart)
                 }
             }
 
-            override fun onItemRangeMoved(sender: ObservableList<Timer>?, fromPosition: Int, toPosition: Int, itemCount: Int) {
+            override fun onItemRangeRemoved(sender: ObservableList<Timer>?, positionStart: Int, itemCount: Int) {
+                if (sender != null) {
+                    viewModel.timerViewModels.removeAt(positionStart)
+                    recyclerView.adapter.notifyItemRemoved(positionStart)
+                }
             }
 
-            override fun onItemRangeRemoved(sender: ObservableList<Timer>?, positionStart: Int, itemCount: Int) {
+            override fun onChanged(sender: ObservableList<Timer>?) {
+
             }
+
+            override fun onItemRangeMoved(sender: ObservableList<Timer>?, fromPosition: Int, toPosition: Int, itemCount: Int) {
+
+            }
+
+            override fun onItemRangeChanged(sender: ObservableList<Timer>?, positionStart: Int, itemCount: Int) {
+
+            }
+
         })
     }
+
 }

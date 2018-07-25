@@ -46,7 +46,7 @@ object ViewModelFactory : ViewModelProvider.Factory{
     private fun createTimerViewModels(navigator : MicheTimerNavigator, timers : ObservableList<Timer>) : ObservableList<TimerViewModel>{
         val timerViewModels = ObservableArrayList<TimerViewModel>()
         timers.forEach {
-            i -> timerViewModels.add(TimerViewModel(navigator, i))
+            i -> timerViewModels.add(TimerViewModel(navigator, i, timers))
         }
 
         return timerViewModels
