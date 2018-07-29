@@ -28,7 +28,7 @@ class TimerViewModel(navigator : MicheTimerNavigator, timer : Timer, timers : Ob
         timer.remainSeconds.subscribe {
             this.remainSeconds.postValue(toRemainSecondsString(it))
             if (it == 0L)
-                this.navigator.onStartAlarmTimer(this.name)
+                this.navigator.onStartAlarmTimer(timer)
         }
     }
 
@@ -44,7 +44,9 @@ class TimerViewModel(navigator : MicheTimerNavigator, timer : Timer, timers : Ob
                 TimerState.Pause -> {
                     timer.run()
                 }
-                else -> {
+                TimerState.Timeout -> {
+                    this.navigator.onStopAlarmTimer(timer)
+                    timer.reset()
                 }
             }
         }
@@ -87,7 +89,9 @@ class TimerViewModel(navigator : MicheTimerNavigator, timer : Timer, timers : Ob
     private fun toStateString(state : TimerState) =
             when (state) {
                 TimerState.Run     -> { "Pause"   }
-                TimerState.Timeout -> { "Pause"   }
-                else               -> { "Start"   }
+                TimerState.Timeout -> { "Stop"    }
+                TimerState.Init    -> { "Start"   }
+                TimerState.Pause   -> { "Start"   }
+                else               -> { "Unknown" }
             }
 }
