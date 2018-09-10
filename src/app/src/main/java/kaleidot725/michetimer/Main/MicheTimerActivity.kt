@@ -1,5 +1,6 @@
 package kaleidot725.michetimer.main
 
+import android.content.Context
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Handler
@@ -15,8 +16,7 @@ import kaleidot725.michetimer.addtimer.AddTimerActivity
 import android.view.View
 import android.media.AudioAttributes
 import android.media.MediaPlayer
-import android.util.Log
-import android.widget.Toast
+import kaleidot725.michetimer.models.TimerRepository
 
 class MicheTimerActivity : AppCompatActivity(), MicheTimerNavigator {
 
@@ -29,9 +29,8 @@ class MicheTimerActivity : AppCompatActivity(), MicheTimerNavigator {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
+        ViewModelFactory.timerRepository = TimerRepository(this.applicationContext, "setting.json")
         ViewModelFactory.micheTimerNavigator = this
-        ViewModelFactory.timers = ObservableArrayList()
-        ViewModelFactory.timers?.add(Timer("New", 1))
 
         val transaction = supportFragmentManager.beginTransaction()
         val fragment = MicheTimerFragment() as Fragment
@@ -41,7 +40,6 @@ class MicheTimerActivity : AppCompatActivity(), MicheTimerNavigator {
         attributes = AudioAttributes.Builder().setUsage(AudioAttributes.USAGE_MEDIA).setContentType(AudioAttributes.CONTENT_TYPE_MUSIC).build()
         soundPool = SoundPool.Builder().setAudioAttributes(attributes).setMaxStreams(5).build()
         soundId = soundPool.load(applicationContext, R.raw.chime, 0)
-
         mediaPlayer = MediaPlayer.create(applicationContext, R.raw.chime)
     }
 

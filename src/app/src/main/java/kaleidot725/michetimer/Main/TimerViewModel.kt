@@ -7,10 +7,12 @@ import android.support.v7.widget.PopupMenu
 import android.util.Log
 import android.view.View
 import kaleidot725.michetimer.R
+import kaleidot725.michetimer.models.Repository
 import kaleidot725.michetimer.models.Timer
+import kaleidot725.michetimer.models.TimerRepository
 import kaleidot725.michetimer.models.TimerState
 
-class TimerViewModel(navigator : MicheTimerNavigator, timer : Timer, timers : ObservableList<Timer>) : ViewModel() {
+class TimerViewModel(navigator : MicheTimerNavigator, timer : Timer, timerRepository : TimerRepository) : ViewModel() {
     val navigator : MicheTimerNavigator = navigator
     val name : String = timer.name
     val state : MutableLiveData<String> = MutableLiveData()
@@ -18,7 +20,7 @@ class TimerViewModel(navigator : MicheTimerNavigator, timer : Timer, timers : Ob
 
     private val tag : String = "TimerViewModel"
     private val timer : Timer = timer
-    private val timers : ObservableList<Timer> = timers
+    private val timerRepository : TimerRepository = timerRepository
 
     init {
         timer.state.subscribe {
@@ -69,7 +71,7 @@ class TimerViewModel(navigator : MicheTimerNavigator, timer : Timer, timers : Ob
                 when(it?.itemId) {
                     R.id.delete -> {
                         this.reset(view)
-                        timers.remove(timer)
+                        timerRepository.remove(timer)
                         true
                     }
                     else -> {
