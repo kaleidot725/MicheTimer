@@ -14,7 +14,7 @@ import kaleidot725.michetimer.main.TimerViewModel
 object ViewModelFactory : ViewModelProvider.Factory{
     var micheTimerNavigator : MicheTimerNavigator? = null
     var addTimerNavigator : AddTimerNavigator? = null
-    var timers : ObservableList<Timer>? = null
+    var timerRepository : TimerRepository? = null
 
     override fun <T : ViewModel?> create(modelClass: Class<T>): T {
 
@@ -23,10 +23,10 @@ object ViewModelFactory : ViewModelProvider.Factory{
             if (micheTimerNavigator == null)
                 throw IllegalStateException("MicheTimerNavigator is null")
 
-            if (timers == null)
+            if (timerRepository == null)
                 throw IllegalStateException("Timers is null")
 
-            val timerViewModels = createTimerViewModels(micheTimerNavigator as MicheTimerNavigator, timers as ObservableList<Timer>)
+            val timerViewModels = createTimerViewModels(micheTimerNavigator as MicheTimerNavigator, timerRepository as TimerRepository)
             return MicheTimerViewModel(micheTimerNavigator as MicheTimerNavigator, timerViewModels) as T
         }
 
@@ -34,19 +34,19 @@ object ViewModelFactory : ViewModelProvider.Factory{
             if (addTimerNavigator == null)
                 throw IllegalStateException("MicheTimerNavigator is null")
 
-            if (timers == null)
+            if (timerRepository == null)
                 throw IllegalStateException("Timers is null")
 
-            return AddTimerViewModel(addTimerNavigator as AddTimerNavigator, timers as ObservableArrayList<Timer>) as T
+            return AddTimerViewModel(addTimerNavigator as AddTimerNavigator, timerRepository as TimerRepository) as T
         }
 
         throw IllegalArgumentException("Unknown ViewModel class : ${modelClass.name}")
     }
 
-    private fun createTimerViewModels(navigator : MicheTimerNavigator, timers : ObservableList<Timer>) : ObservableList<TimerViewModel>{
+    private fun createTimerViewModels(navigator : MicheTimerNavigator, timerRepository: TimerRepository) : ObservableList<TimerViewModel>{
         val timerViewModels = ObservableArrayList<TimerViewModel>()
-        timers.forEach {
-            i -> timerViewModels.add(TimerViewModel(navigator, i, timers))
+        timerRepository.findAll().forEach {
+            i -> timerViewModels.add(TimerViewModel(navigator, i, timerRepository as TimerRepository))
         }
 
         return timerViewModels

@@ -6,15 +6,16 @@ import android.databinding.ObservableList
 import android.view.View
 import android.widget.NumberPicker
 import kaleidot725.michetimer.models.Timer
+import kaleidot725.michetimer.models.TimerRepository
 
-class AddTimerViewModel(navigator: AddTimerNavigator, timers : ObservableList<Timer>) : ViewModel() {
+class AddTimerViewModel(navigator: AddTimerNavigator, timerRepository  : TimerRepository) : ViewModel() {
     val name : MutableLiveData<String> =  MutableLiveData()
     var hour : MutableLiveData<Long> = MutableLiveData()
     var minute : MutableLiveData<Long> = MutableLiveData()
     var second : MutableLiveData<Long> = MutableLiveData()
 
     private val navigator : AddTimerNavigator = navigator
-    private val timers = timers
+    private val timerRepository : TimerRepository = timerRepository
 
     init {
         name.value = "New Timer"
@@ -27,7 +28,7 @@ class AddTimerViewModel(navigator: AddTimerNavigator, timers : ObservableList<Ti
         if (!name.value.isNullOrEmpty() && hour.value != null && minute.value != null && second.value != null)
         {
             val timer = Timer(name.value as String, (hour.value as Long * 60 * 60) + (minute.value as Long * 60) + second.value as Long)
-            timers.add(timer)
+            timerRepository.add(timer)
             navigator.onComplete()
         }
     }
