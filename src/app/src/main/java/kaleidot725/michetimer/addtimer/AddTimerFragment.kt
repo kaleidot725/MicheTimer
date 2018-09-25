@@ -1,5 +1,7 @@
 package kaleidot725.michetimer.addtimer
 
+import android.arch.lifecycle.ViewModel
+import android.arch.lifecycle.ViewModelProvider
 import android.arch.lifecycle.ViewModelProviders
 import android.databinding.DataBindingUtil
 import android.os.Bundle
@@ -9,15 +11,15 @@ import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.EditText
-import android.widget.NumberPicker
+import android.widget.*
 import kaleidot725.michetimer.BR
-import kaleidot725.michetimer.models.ViewModelFactory
 import kaleidot725.michetimer.R
 import kaleidot725.michetimer.databinding.FragmentAddTimerBinding
+import kaleidot725.michetimer.models.timer.TimerRepository
+import kaleidot725.michetimer.models.addTimerNavigator
+import kaleidot725.michetimer.models.timerRepository
 
 class AddTimerFragment : Fragment() {
-
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
         super.onCreate(savedInstanceState)
@@ -27,8 +29,7 @@ class AddTimerFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val viewModel = ViewModelProviders.of(this, ViewModelFactory).get(AddTimerViewModel::class.java)
-
+        val viewModel = ViewModelProviders.of(this, AddTimerViewModelFactory).get(AddTimerViewModel::class.java)
         val nameEdit = view.findViewById<EditText>(R.id.name_edittext)
         nameEdit.addTextChangedListener(object : TextWatcher {
             override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
@@ -40,49 +41,39 @@ class AddTimerFragment : Fragment() {
             override fun afterTextChanged(p0: Editable?) { }
         })
 
-        val hourPicker = view.findViewById<NumberPicker>(R.id.hour_picker_value)
-        hourPicker.minValue = 0
-        hourPicker.maxValue = 24
-        hourPicker.setFormatter (object : NumberPicker.Formatter {
-            override fun format(value: Int): String {
-                return value.toString().padStart(2, '0')
-            }
-        })
+        val secondSpinner = view.findViewById<Spinner>(R.id.second_spinner)
+        val secondAdapter = ArrayAdapter.createFromResource(view.context ,R.array.seconds, android.R.layout.simple_spinner_dropdown_item)
+        secondAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+        secondSpinner.adapter = secondAdapter
 
-        hourPicker.setOnValueChangedListener { picker, oldVal, newVal ->
-            val hour = picker.value.toLong()
-            viewModel.hour.postValue(hour)
-        }
+        val minuteSpinner = view.findViewById<Spinner>(R.id.minute_spinner)
+        val minuteAdapter = ArrayAdapter.createFromResource(view.context, R.array.minutes, android.R.layout.simple_spinner_dropdown_item)
+        minuteAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+        minuteSpinner.adapter = minuteAdapter
 
-        var minutePicker = view.findViewById<NumberPicker>(R.id.minute_picker_value)
-        minutePicker.minValue = 0
-        minutePicker.maxValue = 59
-        minutePicker.setFormatter (object : NumberPicker.Formatter {
-            override fun format(value: Int): String {
-                return value.toString().padStart(2, '0')
-            }
-        })
-
-        minutePicker.setOnValueChangedListener { picker, oldVal, newVal ->
-            val minute = picker.value.toLong()
-            viewModel.minute.postValue(minute)
-        }
-
-        var secondPicker = view.findViewById<NumberPicker>(R.id.second_picker_value)
-        secondPicker.minValue = 0
-        secondPicker.maxValue = 59
-        secondPicker.setFormatter (object : NumberPicker.Formatter {
-            override fun format(value: Int): String {
-                return value.toString().padStart(2, '0')
-            }
-        })
-
-        secondPicker.setOnValueChangedListener { picker, oldVal, newVal ->
-            val second = picker.value.toLong()
-            viewModel.second.postValue(second)
-        }
+        val soundSpinner = view.findViewById<Spinner>(R.id.sound_spinner)
+        val soundAdapter = ArrayAdapter.createFromResource(view.context, R.array.sounds, android.R.layout.simple_spinner_dropdown_item)
+        soundAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+        soundSpinner.adapter = soundAdapter
 
         val binding = DataBindingUtil.bind<FragmentAddTimerBinding>(view)
         binding?.setVariable(BR.viewmodel, viewModel)
+    }
+
+    private object AddTimerViewModelFactory : ViewModelProvider.Factory{
+        override fun <T : ViewModel?> create(modelClass: Class<T>): T {
+            if (modelClass == AddTimerViewModel::class.java) {
+                if (addTimerNavigator == null)
+                    throw IllegalStateException("MicheTimerNavigator is null")
+
+                if (timerRepository == null) {
+                    throw IllegalStateException("Timers is null")
+                }
+
+                return AddTimerViewModel(addTimerNavigator as AddTimerNavigator, timerRepository as TimerRepository) as T
+            }
+
+            throw IllegalArgumentException("Unknown ViewModel class : ${modelClass.name}")
+        }
     }
 }
