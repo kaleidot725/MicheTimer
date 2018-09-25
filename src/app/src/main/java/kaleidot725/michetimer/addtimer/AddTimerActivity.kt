@@ -4,6 +4,7 @@ import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import kaleidot725.michetimer.R
+import kaleidot725.michetimer.models.ModelSingletons
 import kaleidot725.michetimer.models.ViewModelFactory
 
 class AddTimerActivity : AppCompatActivity(),  AddTimerNavigator  {
@@ -12,7 +13,8 @@ class AddTimerActivity : AppCompatActivity(),  AddTimerNavigator  {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_add_timer)
 
-        ViewModelFactory.addTimerNavigator = this
+        // Model
+        ModelSingletons.addTimerNavigator = this
         val transaction = supportFragmentManager.beginTransaction()
         val fragment = AddTimerFragment() as Fragment
         transaction.replace(R.id.container, fragment)

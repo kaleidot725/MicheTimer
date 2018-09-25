@@ -16,11 +16,11 @@ import kaleidot725.michetimer.BR
 import kaleidot725.michetimer.models.ViewModelFactory
 import kaleidot725.michetimer.R
 import kaleidot725.michetimer.databinding.FragmentMicheTimerBinding
+import kaleidot725.michetimer.models.ModelSingletons
 import kaleidot725.michetimer.models.Timer
 import kaleidot725.michetimer.models.TimerRepository
 
 class MicheTimerFragment() : Fragment() {
-    private val timers :  ObservableList<Timer> = ObservableArrayList()
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         super.onCreate(savedInstanceState)
@@ -40,12 +40,14 @@ class MicheTimerFragment() : Fragment() {
             adapter = TimerListAdapter(viewModel.timerViewModels)
         }
 
-        ViewModelFactory.timerRepository?.addOnListChangedCallback(object : ObservableList.OnListChangedCallback<ObservableList<Timer>>(){
+        var repository = ModelSingletons.timerRepository
+        repository?.addOnListChangedCallback(object : ObservableList.OnListChangedCallback<ObservableList<Timer>>(){
             override fun onItemRangeInserted(sender: ObservableList<Timer>?, positionStart: Int, itemCount: Int) {
                 if (sender != null) {
-                    viewModel.timerViewModels.add(TimerViewModel(   ViewModelFactory?.micheTimerNavigator as MicheTimerNavigator,
-                                                                    ViewModelFactory?.timerRepository?.findAll()?.get(positionStart) as Timer,
-                                                                    ViewModelFactory?.timerRepository as TimerRepository))
+                    viewModel.timerViewModels.add(TimerViewModel(
+                            ModelSingletons?.micheTimerNavigator as MicheTimerNavigator,
+                            repository.findAll()?.get(positionStart) as Timer,
+                            repository as TimerRepository))
 
                     recyclerView.adapter.notifyItemInserted(positionStart)
                 }

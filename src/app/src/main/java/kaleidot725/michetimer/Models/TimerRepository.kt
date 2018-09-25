@@ -72,7 +72,6 @@ class TimerRepository(context : Context, filename : String) : Repository<Timer> 
     }
 
     private fun loadFromFile(name : String) : ObservableList<Timer> {
-
         try {
             val moshi = Moshi.Builder().build()
             val type = Types.newParameterizedType(List::class.java, TimerSerializable::class.java)
