@@ -8,5 +8,5 @@ interface Repository<T> : Iterable<T> {
     fun findById(id : Int) : T?
     fun add(item : T)
     fun remove(item : T)
-    fun addOnListChangedCallback(callback : ObservableList.OnListChangedCallback<ObservableList<Timer>>)
+    fun addOnListChangedCallback(callback : ObservableList.OnListChangedCallback<ObservableList<T>>)
 }

@@ -20,10 +20,9 @@
             android:name=".addtimer.AddTimerActivity"
             android:label="@string/activity_add_timer_name" />
 
-        <service
-            android:name=".models.TimerService"
-            android:enabled="true"
-            android:exported="true"></service>
+        <service android:name=".models.TimerService"/>
     </application>
 
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
 </manifest>
