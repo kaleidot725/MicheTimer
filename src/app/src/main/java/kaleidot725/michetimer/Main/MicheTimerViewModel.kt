@@ -7,9 +7,8 @@ import android.databinding.ObservableList
 import android.view.View
 import kaleidot725.michetimer.models.Timer
 
-class MicheTimerViewModel(navigator : MicheTimerNavigator, timerViewModels : ObservableList<TimerViewModel>) : ViewModel() {
+class MicheTimerViewModel(navigator : MicheTimerNavigator) : ViewModel() {
     val navigator: MicheTimerNavigator = navigator
-    val timerViewModels: ObservableList<TimerViewModel> = timerViewModels
 
     fun onStartEditTimer(view : View){
         navigator.onStartEditTimer()

@@ -7,48 +7,63 @@ import android.support.v7.widget.PopupMenu
 import android.util.Log
 import android.view.View
 import kaleidot725.michetimer.R
-import kaleidot725.michetimer.models.Repository
-import kaleidot725.michetimer.models.Timer
-import kaleidot725.michetimer.models.TimerRepository
-import kaleidot725.michetimer.models.TimerState
+import kaleidot725.michetimer.models.*
 
-class TimerViewModel(navigator : MicheTimerNavigator, timer : Timer, timerRepository : TimerRepository) : ViewModel() {
-    val navigator : MicheTimerNavigator = navigator
-    val name : String = timer.name
+class TimerViewModel(navigator : MicheTimerNavigator, service : TimerService, repository: TimerRepository, index : Int) : ViewModel() {
+    val name : String
     val state : MutableLiveData<String> = MutableLiveData()
     val remainSeconds : MutableLiveData<String> = MutableLiveData()
 
     private val tag : String = "TimerViewModel"
-    private val timer : Timer = timer
-    private val timerRepository : TimerRepository = timerRepository
+    private val navigator : MicheTimerNavigator = navigator
+    private val service : TimerService? = service
+    private var runner : TimerRunner = service.register(repository.elementAt(index))
+    private val timer : Timer = repository.elementAt(index)
+
+    private val listener : PopupMenu.OnMenuItemClickListener = PopupMenu.OnMenuItemClickListener {
+        when(it?.itemId) {
+            R.id.delete -> {
+                repository.remove(timer)
+                true
+            }
+            else -> {
+                false
+            }
+        }
+    }
 
     init {
-        timer.state.subscribe {
+        this.name = timer.name
+        this.state.postValue(toStateString(TimerState.Init))
+        this.remainSeconds.postValue(toRemainSecondsString(timer.seconds))
+
+        this.runner.state.subscribe {
             this.state.postValue(toStateString(it))
         }
 
-        timer.remainSeconds.subscribe {
+        this.runner.remainSeconds.subscribe {
             this.remainSeconds.postValue(toRemainSecondsString(it))
-            if (it == 0L)
-                this.navigator.onStartAlarmTimer(timer)
         }
     }
 
     fun run(view: View) {
         try {
-            when (this.timer.state.value) {
+            when (this.runner.state.value) {
                 TimerState.Init -> {
-                    timer.run()
+                    val r = timerService?.register(timer)
+                    if (r != null) {
+                        this.runner = r
+                        runner.run()
+                    }
                 }
                 TimerState.Run -> {
-                    timer.pause()
+                    runner.pause()
                 }
                 TimerState.Pause -> {
-                    timer.run()
+                    runner.run()
                 }
                 TimerState.Timeout -> {
-                    this.navigator.onStopAlarmTimer(timer)
-                    timer.reset()
+                    runner.reset()
                 }
             }
         }
@@ -59,29 +74,14 @@ class TimerViewModel(navigator : MicheTimerNavigator, timer : Timer, timerReposi
 
     fun reset(view: View) {
         try {
-            timer.reset()
+            runner.reset()
         } catch (e: Exception) {
             Log.d(tag, e.toString())
         }
     }
 
     fun popupOption(view : View){
-        try {
-            navigator.onStartDeleteTimer(view, PopupMenu.OnMenuItemClickListener {
-                when(it?.itemId) {
-                    R.id.delete -> {
-                        this.reset(view)
-                        timerRepository.remove(timer)
-                        true
-                    }
-                    else -> {
-                        false
-                    }
-                }
-            })
-        } catch (e : Exception) {
-            Log.d(tag, e.toString())
-        }
+        navigator.onShowOption(view, this.listener)
     }
 
     private fun toRemainSecondsString(remainSeconds : Long) =

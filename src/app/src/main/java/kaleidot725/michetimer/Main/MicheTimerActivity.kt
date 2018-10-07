@@ -19,18 +19,24 @@ import android.media.AudioAttributes
 import android.media.MediaPlayer
 import android.os.IBinder
 import android.util.Log
+import android.view.MenuItem
 import kaleidot725.michetimer.models.*
 
 class MicheTimerActivity : AppCompatActivity(), MicheTimerNavigator {
     val connection : ServiceConnection = object : ServiceConnection {
-        override fun onServiceDisconnected(name : ComponentName?) {
-            ModelSingletons.timerService = null
-            Log.v("tag", "onServiceDisconnected")
+        override fun onServiceConnected(name: ComponentName?, service: IBinder?) {
+            timerService = (service as TimerService.ServiceBinder).service
+
+            val transaction = supportFragmentManager.beginTransaction()
+            val fragment = MicheTimerFragment() as Fragment
+            transaction.replace(R.id.container, fragment)
+            transaction.commit()
+            Log.v("tag", "onServiceConnected")
         }
 
-        override fun onServiceConnected(name: ComponentName?, service: IBinder?) {
-            ModelSingletons.timerService = (service as TimerService.ServiceBinder).service
-            Log.v("tag", "onServiceConnected")
+        override fun onServiceDisconnected(name : ComponentName?) {
+            timerService = null
+            Log.v("tag", "onServiceDisconnected")
         }
     }
 
@@ -38,15 +44,12 @@ class MicheTimerActivity : AppCompatActivity(), MicheTimerNavigator {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        val intent = Intent(this, TimerService::class.java)
-        bindService(intent, this.connection, Context.BIND_ADJUST_WITH_ACTIVITY)
-        ModelSingletons.micheTimerNavigator = this
-        ModelSingletons.timerRepository = TimerRepository(this.applicationContext, "setting.json")
+        micheTimerNavigator = this
+        timerRepository = TimerRepository(this.applicationContext, "setting.json")
 
-        val transaction = supportFragmentManager.beginTransaction()
-        val fragment = MicheTimerFragment() as Fragment
-        transaction.replace(R.id.container, fragment)
-        transaction.commit()
+        val intent = Intent(this, TimerService::class.java)
+        startService(intent)
+        bindService(intent, this.connection, Context.BIND_ADJUST_WITH_ACTIVITY)
         Log.v("tag", "onCreate")
     }
 
@@ -60,31 +63,15 @@ class MicheTimerActivity : AppCompatActivity(), MicheTimerNavigator {
         Log.v("tag", "onResume")
     }
 
-    override fun onStartAlarmTimer(timer: Timer) {
-        val mainHandler = Handler(mainLooper)
-        var runnable = Runnable {
-            //ModelSingletons.timerService?.alarmStart(timer)
-        }
-        mainHandler.post(runnable)
-    }
-
-    override fun onStopAlarmTimer(timer: Timer) {
-        val mainHandler = Handler(mainLooper)
-        var runnable = Runnable {
-            ModelSingletons.timerService?.alarmStart(timer)
-        }
-        mainHandler.post(runnable)
-    }
-
     override fun onStartEditTimer() {
         val intent = Intent(this, AddTimerActivity::class.java)
         startActivity(intent)
     }
 
-    override fun onStartDeleteTimer(view : View,  menuListener : PopupMenu.OnMenuItemClickListener?) {
+    override fun onShowOption(view : View, listner : PopupMenu.OnMenuItemClickListener) {
         val popup = android.support.v7.widget.PopupMenu(this, view)
         popup.menuInflater.inflate(R.menu.timer_menu, popup.menu)
-        popup.setOnMenuItemClickListener(menuListener)
+        popup.setOnMenuItemClickListener(listner)
         popup.show()
     }
 }

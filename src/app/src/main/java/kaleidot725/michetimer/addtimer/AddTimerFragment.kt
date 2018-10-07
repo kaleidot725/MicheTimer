@@ -1,5 +1,7 @@
 package kaleidot725.michetimer.addtimer
 
+import android.arch.lifecycle.ViewModel
+import android.arch.lifecycle.ViewModelProvider
 import android.arch.lifecycle.ViewModelProviders
 import android.databinding.DataBindingUtil
 import android.os.Bundle
@@ -12,12 +14,13 @@ import android.view.ViewGroup
 import android.widget.EditText
 import android.widget.NumberPicker
 import kaleidot725.michetimer.BR
-import kaleidot725.michetimer.models.ViewModelFactory
 import kaleidot725.michetimer.R
 import kaleidot725.michetimer.databinding.FragmentAddTimerBinding
+import kaleidot725.michetimer.models.TimerRepository
+import kaleidot725.michetimer.models.addTimerNavigator
+import kaleidot725.michetimer.models.timerRepository
 
 class AddTimerFragment : Fragment() {
-
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
         super.onCreate(savedInstanceState)
@@ -27,8 +30,7 @@ class AddTimerFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val viewModel = ViewModelProviders.of(this, ViewModelFactory).get(AddTimerViewModel::class.java)
-
+        val viewModel = ViewModelProviders.of(this, AddTimerViewModelFactory).get(AddTimerViewModel::class.java)
         val nameEdit = view.findViewById<EditText>(R.id.name_edittext)
         nameEdit.addTextChangedListener(object : TextWatcher {
             override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
@@ -84,5 +86,22 @@ class AddTimerFragment : Fragment() {
 
         val binding = DataBindingUtil.bind<FragmentAddTimerBinding>(view)
         binding?.setVariable(BR.viewmodel, viewModel)
+    }
+
+    private object AddTimerViewModelFactory : ViewModelProvider.Factory{
+        override fun <T : ViewModel?> create(modelClass: Class<T>): T {
+            if (modelClass == AddTimerViewModel::class.java) {
+                if (addTimerNavigator == null)
+                    throw IllegalStateException("MicheTimerNavigator is null")
+
+                if (timerRepository == null) {
+                    throw IllegalStateException("Timers is null")
+                }
+
+                return AddTimerViewModel(addTimerNavigator as AddTimerNavigator, timerRepository as TimerRepository) as T
+            }
+
+            throw IllegalArgumentException("Unknown ViewModel class : ${modelClass.name}")
+        }
     }
 }
