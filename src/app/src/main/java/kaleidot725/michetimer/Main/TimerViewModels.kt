@@ -10,14 +10,12 @@ import kaleidot725.michetimer.models.TimerRepository
 import kaleidot725.michetimer.models.TimerService
 
 class TimerViewModels(navigator : MicheTimerNavigator, service : TimerService, repository : TimerRepository) : ViewModel() {
-    // TODO いらない このクラス自体をコレクションにすればprivateにできる
     val all : ObservableList<TimerViewModel> = ObservableArrayList<TimerViewModel>()
-
     var onAddEvent : ((Int, TimerViewModel) -> Unit) ?= null
     var onRemoveEvent : ((Int, TimerViewModel) -> Unit) ?= null
 
     private val navigator : MicheTimerNavigator = navigator
-    private val service : TimerService = service
+    private val service : TimerService? = service
     private val repository : TimerRepository = repository
 
     init {

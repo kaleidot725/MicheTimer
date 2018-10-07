@@ -12,16 +12,23 @@ import android.util.Log
 import kaleidot725.michetimer.R
 import java.util.*
 
-class TimerService() : Service() {
+class TimerService : Service() {
     private val tag : String = "TimerService"
     private val binder : IBinder = ServiceBinder()
     private val runners : MutableList<Pair<TimerRunner, SoundPlayer>> = mutableListOf()
+
+    inner class ServiceBinder : Binder() {
+        val service: TimerService get() = this@TimerService
+    }
 
     private class SoundPlayer(context : Context) {
         private val attributes = AudioAttributes.Builder().setUsage(AudioAttributes.USAGE_MEDIA).setContentType(AudioAttributes.CONTENT_TYPE_MUSIC).build()
         private val soundPool = SoundPool.Builder().setAudioAttributes(attributes).setMaxStreams(5).build()
         private val soundId = soundPool.load(context, R.raw.chime, 0)
         private val mediaPlayer = MediaPlayer.create(context, R.raw.chime)
+
+        val isPlaying
+            get() = mediaPlayer.isPlaying()
 
         fun play() {
             mediaPlayer.isLooping = true
@@ -32,15 +39,12 @@ class TimerService() : Service() {
             mediaPlayer.stop()
         }
 
-        fun isPlaying() : Boolean = mediaPlayer.isPlaying()
-
         fun finalize()
         {
             soundPool.unload(soundId)
             mediaPlayer.release()
         }
     }
-
 
     override fun onCreate() {
         Log.v(tag, "onCreate")
@@ -77,10 +81,8 @@ class TimerService() : Service() {
         runner.reset()
 
         val player = pair.second
+        if (player.isPlaying)
+            player.stop()
         player.finalize()
-    }
-
-    inner class ServiceBinder : Binder() {
-        val service: TimerService get() = this@TimerService
     }
 }

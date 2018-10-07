@@ -2,7 +2,6 @@ package kaleidot725.michetimer.main
 
 import android.arch.lifecycle.MutableLiveData
 import android.arch.lifecycle.ViewModel
-import android.databinding.ObservableList
 import android.support.v7.widget.PopupMenu
 import android.util.Log
 import android.view.View
@@ -11,59 +10,84 @@ import kaleidot725.michetimer.models.*
 
 class TimerViewModel(navigator : MicheTimerNavigator, service : TimerService, repository: TimerRepository, index : Int) : ViewModel() {
     val name : String
-    val state : MutableLiveData<String> = MutableLiveData()
-    val remainSeconds : MutableLiveData<String> = MutableLiveData()
+    val seconds : String
+    val state : MutableLiveData<String>
+    val remainSeconds : MutableLiveData<String>
 
     private val tag : String = "TimerViewModel"
-    private val navigator : MicheTimerNavigator = navigator
-    private val service : TimerService? = service
-    private var runner : TimerRunner = service.register(repository.elementAt(index))
-    private val timer : Timer = repository.elementAt(index)
+    private val navigator : MicheTimerNavigator
+    private val service : TimerService?
+    private val repository : TimerRepository
+    private val index : Int
+    private var runner : TimerRunner?
+    private val timer : Timer
+    private val listener : PopupMenu.OnMenuItemClickListener
 
-    private val listener : PopupMenu.OnMenuItemClickListener = PopupMenu.OnMenuItemClickListener {
-        when(it?.itemId) {
-            R.id.delete -> {
-                repository.remove(timer)
-                true
-            }
-            else -> {
-                false
-            }
-        }
-    }
+    init
+    {
+        this.navigator = navigator
+        this.service = service
+        this.repository = repository
+        this.index = index
+        this.runner = null
+        this.timer = repository.elementAt(index)
 
-    init {
         this.name = timer.name
+        this.seconds = toRemainSecondsString(timer.seconds)
+        this.state = MutableLiveData()
         this.state.postValue(toStateString(TimerState.Init))
-        this.remainSeconds.postValue(toRemainSecondsString(timer.seconds))
-
-        this.runner.state.subscribe {
-            this.state.postValue(toStateString(it))
-        }
-
-        this.runner.remainSeconds.subscribe {
-            this.remainSeconds.postValue(toRemainSecondsString(it))
+        this.remainSeconds = MutableLiveData()
+        this.remainSeconds.postValue(this.seconds)
+        this.listener = PopupMenu.OnMenuItemClickListener {
+            when(it?.itemId) {
+                R.id.delete -> {
+                    repository.remove(timer)
+                    true
+                }
+                else -> {
+                    false
+                }
+            }
         }
     }
 
     fun run(view: View) {
+        if (this.runner == null) {
+            this.runner = service?.register(this.timer) as TimerRunner
+            this.runner?.state?.subscribe {
+                try {
+                    this.state.postValue(toStateString(it))
+                }
+                catch(e : java.lang.Exception) {
+                    Log.v("TimerViewModel", e.toString())
+                }
+            }
+            this.runner?.remainSeconds?.subscribe {
+                try {
+                    this.remainSeconds.postValue(toRemainSecondsString(it))
+                }
+                catch(e : java.lang.Exception) {
+                    Log.v("TimerViewModel", e.toString())
+                }
+            }
+        }
+
+        val nonNullRunner = this.runner as TimerRunner
         try {
-            when (this.runner.state.value) {
+            when (nonNullRunner.state.value) {
                 TimerState.Init -> {
-                    val r = timerService?.register(timer)
-                    if (r != null) {
-                        this.runner = r
-                        runner.run()
-                    }
+                    nonNullRunner.run()
                 }
                 TimerState.Run -> {
-                    runner.pause()
+                    nonNullRunner.pause()
                 }
                 TimerState.Pause -> {
-                    runner.run()
+                    nonNullRunner.run()
                 }
                 TimerState.Timeout -> {
-                    runner.reset()
+                    nonNullRunner.reset()
+                    service?.unregister(nonNullRunner)
+                    this.runner = null
                 }
             }
         }
@@ -73,20 +97,26 @@ class TimerViewModel(navigator : MicheTimerNavigator, service : TimerService, re
     }
 
     fun reset(view: View) {
+        if (this.runner == null) {
+            return
+        }
+
+        val nonNullRunner = this.runner as TimerRunner
         try {
-            runner.reset()
+            nonNullRunner.reset()
+            service?.unregister(nonNullRunner)
         } catch (e: Exception) {
             Log.d(tag, e.toString())
         }
     }
 
-    fun popupOption(view : View){
+    fun popupOption(view : View) {
         navigator.onShowOption(view, this.listener)
     }
 
     private fun toRemainSecondsString(remainSeconds : Long) =
-            "${(remainSeconds / 60).toString().padStart(2,'0')}:" +
-            "${(remainSeconds % 60).toString().padStart(2,'0')}"
+        "${(remainSeconds / 60).toString().padStart(2,'0')}: " +
+        "${(remainSeconds % 60).toString().padStart(2,'0')}"
 
     private fun toStateString(state : TimerState) =
             when (state) {
@@ -94,6 +124,5 @@ class TimerViewModel(navigator : MicheTimerNavigator, service : TimerService, re
                 TimerState.Timeout -> { "Stop"    }
                 TimerState.Init    -> { "Start"   }
                 TimerState.Pause   -> { "Start"   }
-                else               -> { "Unknown" }
             }
 }
