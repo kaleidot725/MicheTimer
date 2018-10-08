@@ -115,7 +115,7 @@ class TimerViewModel(navigator : MicheTimerNavigator, service : TimerService, re
     }
 
     private fun toRemainSecondsString(remainSeconds : Long) =
-        "${(remainSeconds / 60).toString().padStart(2,'0')}: " +
+        " ${(remainSeconds / 60).toString().padStart(2,'0')}:" +
         "${(remainSeconds % 60).toString().padStart(2,'0')}"
 
     private fun toStateString(state : TimerState) =
