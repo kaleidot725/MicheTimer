@@ -35,7 +35,12 @@ class AddTimerViewModel(navigator: AddTimerNavigator, timerRepository  : TimerRe
             return
 
         try {
-            val timer = Timer(name.value as String, (hour.value as Long * 60 * 60) + (minute.value as Long * 60) + second.value as Long)
+            // FIXME IDを採番する、O(n)なので最適化する必要があるかも
+            val sorted = timerRepository.findAll().sortedBy { it.id }
+            var newid = sorted.count()
+            sorted.forEachIndexed { i, t -> if (t.id != i) { newid = i } }
+
+            val timer = Timer(newid, name.value as String, (hour.value as Long * 60 * 60) + (minute.value as Long * 60) + second.value as Long)
             timerRepository.add(timer)
             navigator.onComplete()
         }
