@@ -42,23 +42,9 @@ class AddTimerFragment : Fragment() {
             override fun afterTextChanged(p0: Editable?) { }
         })
 
-        val hourPicker = view.findViewById<NumberPicker>(R.id.hour_picker_value)
-        hourPicker.minValue = 0
-        hourPicker.maxValue = 24
-        hourPicker.setFormatter (object : NumberPicker.Formatter {
-            override fun format(value: Int): String {
-                return value.toString().padStart(2, '0')
-            }
-        })
-
-        hourPicker.setOnValueChangedListener { picker, oldVal, newVal ->
-            val hour = picker.value.toLong()
-            viewModel.hour.postValue(hour)
-        }
-
         var minutePicker = view.findViewById<NumberPicker>(R.id.minute_picker_value)
         minutePicker.minValue = 0
-        minutePicker.maxValue = 59
+        minutePicker.maxValue = 99
         minutePicker.setFormatter (object : NumberPicker.Formatter {
             override fun format(value: Int): String {
                 return value.toString().padStart(2, '0')
