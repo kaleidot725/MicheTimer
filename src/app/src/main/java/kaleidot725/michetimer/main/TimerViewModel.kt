@@ -6,9 +6,13 @@ import android.support.v7.widget.PopupMenu
 import android.util.Log
 import android.view.View
 import kaleidot725.michetimer.R
-import kaleidot725.michetimer.models.*
+import kaleidot725.michetimer.models.timer.Timer
+import kaleidot725.michetimer.models.timer.TimerRepository
+import kaleidot725.michetimer.models.timer.TimerRunner
+import kaleidot725.michetimer.models.timer.TimerRunner.State
+import kaleidot725.michetimer.models.timer.TimerRunnerService
 
-class TimerViewModel(navigator : MicheTimerNavigator, service : TimerService, repository: TimerRepository, index : Int) : ViewModel() {
+class TimerViewModel(navigator : MicheTimerNavigator, service : TimerRunnerService, repository: TimerRepository, index : Int) : ViewModel() {
     val name : String
     val seconds : String
     val state : MutableLiveData<String>
@@ -16,7 +20,7 @@ class TimerViewModel(navigator : MicheTimerNavigator, service : TimerService, re
 
     private val tag : String = "TimerViewModel"
     private val navigator : MicheTimerNavigator
-    private val service : TimerService?
+    private val service : TimerRunnerService
     private val repository : TimerRepository
     private val index : Int
     private var runner : TimerRunner?
@@ -35,13 +39,13 @@ class TimerViewModel(navigator : MicheTimerNavigator, service : TimerService, re
         this.name = timer.name
         this.seconds = toRemainSecondsString(timer.seconds)
         this.state = MutableLiveData()
-        this.state.postValue(toStateString(TimerState.Init))
+        this.state.postValue(toStateString(State.Init))
         this.remainSeconds = MutableLiveData()
         this.remainSeconds.postValue(this.seconds)
         this.listener = PopupMenu.OnMenuItemClickListener {
             when(it?.itemId) {
                 R.id.delete -> {
-                    repository.remove(timer)
+                    delete()
                     true
                 }
                 else -> {
@@ -75,19 +79,17 @@ class TimerViewModel(navigator : MicheTimerNavigator, service : TimerService, re
         val nonNullRunner = this.runner as TimerRunner
         try {
             when (nonNullRunner.state.value) {
-                TimerState.Init -> {
+                State.Init -> {
                     nonNullRunner.run()
                 }
-                TimerState.Run -> {
+                State.Run -> {
                     nonNullRunner.pause()
                 }
-                TimerState.Pause -> {
+                State.Pause -> {
                     nonNullRunner.run()
                 }
-                TimerState.Timeout -> {
-                    nonNullRunner.reset()
-                    service?.unregister(nonNullRunner)
-                    this.runner = null
+                State.Timeout -> {
+                    service.unregister(timer)
                 }
             }
         }
@@ -101,13 +103,13 @@ class TimerViewModel(navigator : MicheTimerNavigator, service : TimerService, re
             return
         }
 
-        val nonNullRunner = this.runner as TimerRunner
-        try {
-            nonNullRunner.reset()
-            service?.unregister(nonNullRunner)
-        } catch (e: Exception) {
-            Log.d(tag, e.toString())
-        }
+        service.unregister(timer)
+    }
+
+    fun delete()
+    {
+        service.unregister(timer)
+        repository.remove(timer)
     }
 
     fun popupOption(view : View) {
@@ -118,11 +120,11 @@ class TimerViewModel(navigator : MicheTimerNavigator, service : TimerService, re
         " ${(remainSeconds / 60).toString().padStart(2,'0')}:" +
         "${(remainSeconds % 60).toString().padStart(2,'0')}"
 
-    private fun toStateString(state : TimerState) =
+    private fun toStateString(state : State) =
             when (state) {
-                TimerState.Run     -> { "Pause"   }
-                TimerState.Timeout -> { "Stop"    }
-                TimerState.Init    -> { "Start"   }
-                TimerState.Pause   -> { "Start"   }
+                State.Run     -> { "Pause"   }
+                State.Timeout -> { "Stop"    }
+                State.Init    -> { "Start"   }
+                State.Pause   -> { "Start"   }
             }
 }

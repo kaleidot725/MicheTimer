@@ -1,15 +1,14 @@
-package kaleidot725.michetimer.models
+package kaleidot725.michetimer.models.timer
 
 import android.content.Context
 import android.databinding.ObservableArrayList
 import android.databinding.ObservableList
 import android.util.Log
-import android.util.Xml
 import com.squareup.moshi.JsonAdapter
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.Types
 
-class TimerRepository(context : Context, filename : String) : Repository<Timer> {
+class TimerRepository(context : Context, filename : String) : TimerRepositoryInterface {
     private val context : Context = context
     private val filename : String = filename
     private var list : ObservableList<Timer>

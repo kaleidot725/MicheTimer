@@ -4,8 +4,6 @@ import android.arch.lifecycle.ViewModel
 import android.arch.lifecycle.ViewModelProvider
 import android.arch.lifecycle.ViewModelProviders
 import android.databinding.DataBindingUtil
-import android.databinding.ObservableArrayList
-import android.databinding.ObservableList
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v7.widget.LinearLayoutManager
@@ -14,10 +12,11 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import kaleidot725.michetimer.BR
-import kaleidot725.michetimer.Main.TimerViewModels
 import kaleidot725.michetimer.R
 import kaleidot725.michetimer.databinding.FragmentMicheTimerBinding
 import kaleidot725.michetimer.models.*
+import kaleidot725.michetimer.models.timer.TimerRepository
+import kaleidot725.michetimer.models.timer.TimerRunnerService
 
 class MicheTimerFragment() : Fragment() {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -64,7 +63,7 @@ class MicheTimerFragment() : Fragment() {
 
                 return TimerViewModels(
                         micheTimerNavigator as MicheTimerNavigator ,
-                        timerService as TimerService,
+                        timerService as TimerRunnerService,
                         timerRepository as TimerRepository
                 ) as T
             }

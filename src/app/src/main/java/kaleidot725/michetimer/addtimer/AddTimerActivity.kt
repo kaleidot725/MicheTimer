@@ -12,12 +12,17 @@ class AddTimerActivity : AppCompatActivity(),  AddTimerNavigator  {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_add_timer)
 
+        // FIXME シングルトンでの変数保持をやめる
         addTimerNavigator = this
 
         val transaction = supportFragmentManager.beginTransaction()
         val fragment = AddTimerFragment() as Fragment
         transaction.replace(R.id.container, fragment)
         transaction.commit()
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
     }
 
     override fun onComplete() {
