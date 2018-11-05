@@ -9,10 +9,14 @@ import android.content.Intent
 import android.content.ServiceConnection
 import android.support.v7.widget.PopupMenu
 import kaleidot725.michetimer.R
-import kaleidot725.michetimer.addtimer.AddTimerActivity
 import android.view.View
 import android.os.IBinder
 import android.util.Log
+import android.view.Menu
+import android.view.MenuItem
+import android.widget.Button
+import com.google.android.gms.oss.licenses.OssLicensesMenuActivity
+import kaleidot725.michetimer.addtimer.AddTimerActivity
 import kaleidot725.michetimer.models.*
 import kaleidot725.michetimer.models.timer.TimerRepository
 import kaleidot725.michetimer.models.timer.TimerRunnerService
@@ -36,17 +40,31 @@ class MicheTimerActivity : AppCompatActivity(), MicheTimerNavigator {
         }
     }
 
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        menuInflater.inflate(R.menu.bar_menu, menu)
+        return true
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem?): Boolean {
+        if(R.id.license_button == item?.itemId) {
+            onShowLicense()
+            return true
+        }
+
+        return false
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        // FIXME シングルトンでの変数保持をやめる
         micheTimerNavigator = this
         timerRepository = TimerRepository(this.applicationContext, "setting.json")
 
         val intent = Intent(this, TimerRunnerService::class.java)
         startService(intent)
         bindService(intent, this.connection, Context.BIND_ADJUST_WITH_ACTIVITY)
+
         Log.v("tag", "onCreate")
     }
 
@@ -62,6 +80,11 @@ class MicheTimerActivity : AppCompatActivity(), MicheTimerNavigator {
 
     override fun onStartEditTimer() {
         val intent = Intent(this, AddTimerActivity::class.java)
+        startActivity(intent)
+    }
+
+    override fun onShowLicense() {
+        val intent = Intent(this, OssLicensesMenuActivity::class.java)
         startActivity(intent)
     }
 
