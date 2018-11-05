@@ -1,21 +1,18 @@
-package kaleidot725.michetimer.models
+package kaleidot725.michetimer.models.timer
 
 import android.content.Context
 import android.databinding.ObservableArrayList
 import android.databinding.ObservableList
 import android.util.Log
-import android.util.Xml
 import com.squareup.moshi.JsonAdapter
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.Types
 
-class TimerRepository(context : Context, filename : String) : Repository<Timer> {
+class TimerRepository(context : Context, filename : String) : TimerRepositoryInterface {
     private val context : Context = context
     private val filename : String = filename
     private var list : ObservableList<Timer>
     private var callback : ObservableList.OnListChangedCallback<ObservableList<Timer>>? = null
-
-    private data class TimerSerializable (val name : String, val remainSeconds : Long)
 
     init {
         list = loadFromFile(this.filename)
@@ -43,6 +40,10 @@ class TimerRepository(context : Context, filename : String) : Repository<Timer> 
         saveToFile(this.filename, this.list);
     }
 
+    override fun count() : Int {
+        return this.list.count()
+    }
+
     override fun iterator(): Iterator<Timer> {
         return list.iterator()
     }
@@ -54,15 +55,9 @@ class TimerRepository(context : Context, filename : String) : Repository<Timer> 
     private fun saveToFile(name : String, list : ObservableList<Timer>) {
         try {
             val moshi = Moshi.Builder().build()
-            val type = Types.newParameterizedType(List::class.java, TimerSerializable::class.java)
-            val adapter : JsonAdapter<List<TimerSerializable>> = moshi.adapter(type)
-
-            val serializableList = arrayListOf<TimerSerializable>()
-            this.list.forEach {
-                serializableList.add(TimerSerializable(it.name, it.seconds))
-            }
-
-            val multitimerJson = adapter.toJson(serializableList)
+            val type = Types.newParameterizedType(List::class.java, Timer::class.java)
+            val adapter : JsonAdapter<List<Timer>> = moshi.adapter(type)
+            val multitimerJson = adapter.toJson(this.list)
             val output = context.openFileOutput(filename, Context.MODE_PRIVATE)
             output.write(multitimerJson.toByteArray())
         }
@@ -72,26 +67,20 @@ class TimerRepository(context : Context, filename : String) : Repository<Timer> 
     }
 
     private fun loadFromFile(name : String) : ObservableList<Timer> {
+        val observableList = ObservableArrayList<Timer>()
         try {
             val moshi = Moshi.Builder().build()
-            val type = Types.newParameterizedType(List::class.java, TimerSerializable::class.java)
-            val adapter : JsonAdapter<List<TimerSerializable>> = moshi.adapter(type)
-
+            val type = Types.newParameterizedType(List::class.java, Timer::class.java)
+            val adapter : JsonAdapter<List<Timer>> = moshi.adapter(type)
             val input = context.openFileInput(name)
             val json = input.readBytes().toString(Charsets.UTF_8)
-            val loadList = adapter.fromJson(json)
-            if (loadList != null) {
-                val timers = ObservableArrayList<Timer>()
-                loadList.forEach {
-                    timers.add(Timer(it.name, it.remainSeconds))
-                }
-                return timers
-            }
+            val loadList : List<Timer>? = adapter.fromJson(json)
+            loadList?.forEach { observableList.add(it) }
         }
         catch (e : Exception) {
             Log.d(this.javaClass.name.toString(), e.toString())
         }
 
-        return ObservableArrayList<Timer>()
+        return observableList
     }
 }

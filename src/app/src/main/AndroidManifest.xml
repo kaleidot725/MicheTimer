@@ -4,15 +4,14 @@
 
     <application
         android:allowBackup="true"
-        android:icon="@mipmap/ic_launcher"
+        android:icon="@mipmap/ic_miche_timer"
         android:label="@string/app_name"
-        android:roundIcon="@mipmap/ic_launcher_round"
+        android:roundIcon="@mipmap/ic_miche_timer_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity android:name=".main.MicheTimerActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
@@ -20,7 +19,7 @@
             android:name=".addtimer.AddTimerActivity"
             android:label="@string/activity_add_timer_name" />
 
-        <service android:name=".models.TimerService"/>
+        <service android:name=".models.timer.TimerRunnerService"/>
     </application>
 
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>

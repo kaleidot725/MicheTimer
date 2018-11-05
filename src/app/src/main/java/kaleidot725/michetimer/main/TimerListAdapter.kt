@@ -7,7 +7,6 @@ import android.databinding.DataBindingUtil
 import android.databinding.ObservableList
 import android.support.v7.widget.RecyclerView
 import android.view.*
-import kaleidot725.michetimer.Main.TimerViewModels
 import kaleidot725.michetimer.R
 import kaleidot725.michetimer.databinding.TimerListViewItemBinding
 

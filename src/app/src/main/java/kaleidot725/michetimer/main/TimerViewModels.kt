@@ -1,21 +1,19 @@
-package kaleidot725.michetimer.Main
+package kaleidot725.michetimer.main
 
 import android.arch.lifecycle.ViewModel
 import android.databinding.ObservableArrayList
 import android.databinding.ObservableList
-import kaleidot725.michetimer.main.MicheTimerNavigator
-import kaleidot725.michetimer.main.TimerViewModel
-import kaleidot725.michetimer.models.Timer
-import kaleidot725.michetimer.models.TimerRepository
-import kaleidot725.michetimer.models.TimerService
+import kaleidot725.michetimer.models.timer.Timer
+import kaleidot725.michetimer.models.timer.TimerRepository
+import kaleidot725.michetimer.models.timer.TimerRunnerService
 
-class TimerViewModels(navigator : MicheTimerNavigator, service : TimerService, repository : TimerRepository) : ViewModel() {
+class TimerViewModels(navigator : MicheTimerNavigator, service : TimerRunnerService, repository : TimerRepository) : ViewModel() {
     val all : ObservableList<TimerViewModel> = ObservableArrayList<TimerViewModel>()
     var onAddEvent : ((Int, TimerViewModel) -> Unit) ?= null
     var onRemoveEvent : ((Int, TimerViewModel) -> Unit) ?= null
 
     private val navigator : MicheTimerNavigator = navigator
-    private val service : TimerService? = service
+    private val service : TimerRunnerService? = service
     private val repository : TimerRepository = repository
 
     init {
