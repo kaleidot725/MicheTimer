@@ -90,6 +90,7 @@ class TimerViewModel(navigator : MicheTimerNavigator, service : TimerRunnerServi
                 }
                 State.Timeout -> {
                     service.unregister(timer)
+                    runner = null
                 }
             }
         }
