@@ -31,6 +31,8 @@ class TimerRunner(context : Context, name : String, seconds : Long, sound : Stri
         else -> {
             MediaPlayer.create(context, R.raw.chime)
         }
+    }.apply {
+        isLooping = true
     }
 
     init {
