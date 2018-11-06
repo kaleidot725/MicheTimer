@@ -24,13 +24,13 @@
             android:layout_margin="5dp"
             android:orientation="vertical">
 
-            <Button
+            <ImageButton
                 android:id="@+id/option_button"
                 android:layout_width="40dp"
-                android:layout_height="wrap_content"
+                android:layout_height="40dp"
                 android:layout_alignParentEnd="true"
                 android:layout_alignParentTop="true"
-                android:text="︙"
+                android:src="@drawable/ic_card_menu"
                 android:background="#00000000"
                 android:onClick="@{timerViewModel::popupOption}"/>
 
@@ -39,7 +39,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="left|top"
-                android:layout_margin="5dp"
+                android:layout_margin="8dp"
                 android:text="@{timerViewModel.name}"
                 android:textSize="@dimen/large_text"/>
 
