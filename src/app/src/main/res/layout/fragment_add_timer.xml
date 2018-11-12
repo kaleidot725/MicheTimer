@@ -64,19 +64,41 @@
                 android:onItemSelected="@{(parent, view, position, id) -> viewmodel.onItemSelectedSecond(parent, view, position, id)}"
                 android:layout_height="wrap_content"/>
 
-            <TextView
-                android:id="@+id/sound_text"
+            <LinearLayout
+                android:id="@+id/alarm_layout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textSize="@dimen/middle_text"
                 app:layout_constraintTop_toBottomOf="@+id/second_spinner"
-                android:layout_marginTop="15dp"
-                android:text="Alarm"/>
+                android:layout_marginTop="15dp">
+                <TextView
+                    android:id="@+id/alarm_text"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="@dimen/middle_text"
+                    android:text="Alarm"/>
+
+                <TextView
+                    android:id="@+id/from_text"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="@dimen/middle_text"
+                    android:layout_marginLeft="10dp"
+                    android:text="from"/>
+
+                <TextView
+                    android:id="@+id/alarm_url"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Sound Pocket"
+                    android:layout_marginLeft="10dp"
+                    android:textSize="@dimen/middle_text"
+                    app:layout_constraintLeft_toRightOf="@id/alarm_text" />
+            </LinearLayout>
 
             <Spinner
                 android:id="@+id/sound_spinner"
                 android:layout_width="fill_parent"
-                app:layout_constraintTop_toBottomOf="@+id/sound_text"
+                app:layout_constraintTop_toBottomOf="@+id/alarm_layout"
                 android:onItemSelected="@{(parent, view, position, id) -> viewmodel.onItemSelectedAlarm(parent, view, position, id)}"
                 android:layout_height="wrap_content"/>
         </android.support.constraint.ConstraintLayout>
