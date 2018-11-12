@@ -7,7 +7,9 @@ import android.databinding.DataBindingUtil
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.text.Editable
+import android.text.Html
 import android.text.TextWatcher
+import android.text.method.LinkMovementMethod
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -55,6 +57,12 @@ class AddTimerFragment : Fragment() {
         val soundAdapter = ArrayAdapter.createFromResource(view.context, R.array.sounds, android.R.layout.simple_spinner_dropdown_item)
         soundAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
         soundSpinner.adapter = soundAdapter
+
+        val alarmUrl = view.findViewById<TextView>(R.id.alarm_url)
+        alarmUrl.linksClickable = true
+        @Suppress("DEPRECATION")
+        alarmUrl.text = Html.fromHtml( "<a href=\"https://pocket-se.info/\">Pocket Sound</a>")
+        alarmUrl.movementMethod = LinkMovementMethod.getInstance()
 
         val binding = DataBindingUtil.bind<FragmentAddTimerBinding>(view)
         binding?.setVariable(BR.viewmodel, viewModel)
