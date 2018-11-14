@@ -8,11 +8,12 @@ import java.util.*
 import java.util.Timer
 import kotlin.concurrent.timerTask
 
-class TimerRunner(context : Context, name : String, seconds : Long, sound : String) : TimerRunnerInterface {
+class TimerRunner(context : Context, id : Int, name : String, seconds : Long, sound : String) : TimerRunnerInterface {
     enum class State {
         Init, Run, Pause, Timeout
     }
 
+    override val id : Int = id
     override val name : String = name
     override val seconds : Long = seconds
     override val remainSeconds : BehaviorSubject<Long>

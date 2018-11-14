@@ -23,7 +23,7 @@ class TimerViewModel(navigator : MicheTimerNavigator, service : TimerRunnerServi
     private val service : TimerRunnerService
     private val repository : TimerRepository
     private val index : Int
-    private var runner : TimerRunner?
+    private var runner : TimerRunner
     private val timer : Timer
     private val listener : PopupMenu.OnMenuItemClickListener
 
@@ -33,7 +33,6 @@ class TimerViewModel(navigator : MicheTimerNavigator, service : TimerRunnerServi
         this.service = service
         this.repository = repository
         this.index = index
-        this.runner = null
         this.timer = repository.elementAt(index)
 
         this.name = timer.name
@@ -53,44 +52,40 @@ class TimerViewModel(navigator : MicheTimerNavigator, service : TimerRunnerServi
                 }
             }
         }
+
+        this.runner = service?.register(this.timer) as TimerRunner
+        this.runner?.state?.subscribe {
+            try {
+                this.state.postValue(toStateString(it))
+            }
+            catch(e : java.lang.Exception) {
+                Log.v("TimerViewModel", e.toString())
+            }
+        }
+        this.runner?.remainSeconds?.subscribe {
+            try {
+                this.remainSeconds.postValue(toRemainSecondsString(it))
+            }
+            catch(e : java.lang.Exception) {
+                Log.v("TimerViewModel", e.toString())
+            }
+        }
     }
 
     fun run(view: View) {
-        if (this.runner == null) {
-            this.runner = service?.register(this.timer) as TimerRunner
-            this.runner?.state?.subscribe {
-                try {
-                    this.state.postValue(toStateString(it))
-                }
-                catch(e : java.lang.Exception) {
-                    Log.v("TimerViewModel", e.toString())
-                }
-            }
-            this.runner?.remainSeconds?.subscribe {
-                try {
-                    this.remainSeconds.postValue(toRemainSecondsString(it))
-                }
-                catch(e : java.lang.Exception) {
-                    Log.v("TimerViewModel", e.toString())
-                }
-            }
-        }
-
-        val nonNullRunner = this.runner as TimerRunner
         try {
-            when (nonNullRunner.state.value) {
+            when (this.runner.state.value) {
                 State.Init -> {
-                    nonNullRunner.run()
+                    this.runner.run()
                 }
                 State.Run -> {
-                    nonNullRunner.pause()
+                    this.runner.pause()
                 }
                 State.Pause -> {
-                    nonNullRunner.run()
+                    this.runner.run()
                 }
                 State.Timeout -> {
-                    service.unregister(timer)
-                    runner = null
+                    this.runner.reset()
                 }
             }
         }
@@ -104,7 +99,7 @@ class TimerViewModel(navigator : MicheTimerNavigator, service : TimerRunnerServi
             return
         }
 
-        service.unregister(timer)
+        this.runner.reset()
     }
 
     fun delete()
