@@ -28,8 +28,15 @@ class TimerRunnerService : Service(), TimerRunnerServiceInterface {
 
     override fun register(timer: Timer): TimerRunnerInterface {
         try {
-            val runner = TimerRunner(applicationContext, timer.name, timer.seconds, timer.sound)
-            runners.put(timer.id, runner)
+            var runner : TimerRunnerInterface
+            if (runners[timer.id] == null) {
+                runner = TimerRunner(applicationContext, timer.id, timer.name, timer.seconds, timer.sound)
+                runners.put(timer.id, runner)
+            }
+            else {
+                runner = runners[timer.id] as TimerRunnerInterface
+            }
+
             return runner
         }
         catch (e : Exception) {
