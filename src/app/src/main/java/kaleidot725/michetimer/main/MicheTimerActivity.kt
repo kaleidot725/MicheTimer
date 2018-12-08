@@ -1,12 +1,9 @@
 package kaleidot725.michetimer.main
 
-import android.content.ComponentName
-import android.content.Context
+import android.content.*
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.support.v4.app.Fragment
-import android.content.Intent
-import android.content.ServiceConnection
 import android.support.v7.widget.PopupMenu
 import kaleidot725.michetimer.R
 import android.view.View
@@ -14,12 +11,13 @@ import android.os.IBinder
 import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
-import android.widget.Button
 import com.google.android.gms.oss.licenses.OssLicensesMenuActivity
 import kaleidot725.michetimer.addtimer.AddTimerActivity
-import kaleidot725.michetimer.models.*
-import kaleidot725.michetimer.models.timer.TimerRepository
-import kaleidot725.michetimer.models.timer.TimerRunnerService
+import kaleidot725.michetimer.repository.*
+import kaleidot725.michetimer.repository.TimerRepositoryJson
+import kaleidot725.michetimer.service.TimerRunnerService
+import android.content.Intent
+
 
 class MicheTimerActivity : AppCompatActivity(), MicheTimerNavigator {
     val connection : ServiceConnection = object : ServiceConnection {
@@ -59,7 +57,7 @@ class MicheTimerActivity : AppCompatActivity(), MicheTimerNavigator {
         setContentView(R.layout.activity_main)
 
         micheTimerNavigator = this
-        timerRepository = TimerRepository(this.applicationContext, "setting.json")
+        timerRepository = TimerRepositoryJson(this.applicationContext, "setting.json")
 
         val intent = Intent(this, TimerRunnerService::class.java)
         startService(intent)
@@ -81,6 +79,8 @@ class MicheTimerActivity : AppCompatActivity(), MicheTimerNavigator {
     override fun onStartEditTimer() {
         val intent = Intent(this, AddTimerActivity::class.java)
         startActivity(intent)
+
+        sendBroadcast(Intent(TimerBroadcastReceiver.TIMER_RESET))
     }
 
     override fun onShowLicense() {
@@ -93,5 +93,10 @@ class MicheTimerActivity : AppCompatActivity(), MicheTimerNavigator {
         popup.menuInflater.inflate(R.menu.timer_menu, popup.menu)
         popup.setOnMenuItemClickListener(listner)
         popup.show()
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        unbindService(this.connection)
     }
 }

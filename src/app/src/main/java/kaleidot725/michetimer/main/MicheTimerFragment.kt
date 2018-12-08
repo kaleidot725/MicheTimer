@@ -14,9 +14,9 @@ import android.view.ViewGroup
 import kaleidot725.michetimer.BR
 import kaleidot725.michetimer.R
 import kaleidot725.michetimer.databinding.FragmentMicheTimerBinding
-import kaleidot725.michetimer.models.*
-import kaleidot725.michetimer.models.timer.TimerRepository
-import kaleidot725.michetimer.models.timer.TimerRunnerService
+import kaleidot725.michetimer.repository.*
+import kaleidot725.michetimer.repository.TimerRepositoryJson
+import kaleidot725.michetimer.service.TimerRunnerService
 
 class MicheTimerFragment() : Fragment() {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -64,7 +64,7 @@ class MicheTimerFragment() : Fragment() {
                 return TimerViewModels(
                         micheTimerNavigator as MicheTimerNavigator ,
                         timerService as TimerRunnerService,
-                        timerRepository as TimerRepository
+                        timerRepository as TimerRepositoryJson
                 ) as T
             }
 

@@ -1,4 +1,4 @@
-package kaleidot725.michetimer.models.timer
+package kaleidot725.michetimer.repository
 
 import android.databinding.ObservableList
 

@@ -15,11 +15,9 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity
-            android:name=".addtimer.AddTimerActivity"
-            android:label="@string/activity_add_timer_name" />
-
-        <service android:name=".models.timer.TimerRunnerService"/>
+        <activity android:name=".addtimer.AddTimerActivity" android:label="@string/activity_add_timer_name" />
+        <activity android:name=".timerstop.StopTimerActivity" android:label="Stop Timer"/>
+        <service android:name=".service.TimerRunnerService"/>
     </application>
 
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
