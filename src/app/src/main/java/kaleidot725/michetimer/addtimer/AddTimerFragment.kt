@@ -1,11 +1,11 @@
 package kaleidot725.michetimer.addtimer
 
-import android.arch.lifecycle.ViewModel
-import android.arch.lifecycle.ViewModelProvider
-import android.arch.lifecycle.ViewModelProviders
-import android.databinding.DataBindingUtil
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.ViewModelProviders
+import androidx.databinding.DataBindingUtil
 import android.os.Bundle
-import android.support.v4.app.Fragment
+import androidx.fragment.app.Fragment
 import android.text.Editable
 import android.text.Html
 import android.text.TextWatcher
@@ -17,9 +17,9 @@ import android.widget.*
 import kaleidot725.michetimer.BR
 import kaleidot725.michetimer.R
 import kaleidot725.michetimer.databinding.FragmentAddTimerBinding
-import kaleidot725.michetimer.models.timer.TimerRepository
-import kaleidot725.michetimer.models.addTimerNavigator
-import kaleidot725.michetimer.models.timerRepository
+import kaleidot725.michetimer.repository.TimerRepository
+import kaleidot725.michetimer.addTimerNavigator
+import kaleidot725.michetimer.timerRepository
 
 class AddTimerFragment : Fragment() {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,

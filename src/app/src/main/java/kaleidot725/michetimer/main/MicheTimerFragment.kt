@@ -1,22 +1,24 @@
 package kaleidot725.michetimer.main
 
-import android.arch.lifecycle.ViewModel
-import android.arch.lifecycle.ViewModelProvider
-import android.arch.lifecycle.ViewModelProviders
-import android.databinding.DataBindingUtil
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.ViewModelProviders
+import androidx.databinding.DataBindingUtil
 import android.os.Bundle
-import android.support.v4.app.Fragment
-import android.support.v7.widget.LinearLayoutManager
-import android.support.v7.widget.RecyclerView
+import androidx.fragment.app.Fragment
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import kaleidot725.michetimer.BR
 import kaleidot725.michetimer.R
 import kaleidot725.michetimer.databinding.FragmentMicheTimerBinding
-import kaleidot725.michetimer.models.*
-import kaleidot725.michetimer.models.timer.TimerRepository
-import kaleidot725.michetimer.models.timer.TimerRunnerService
+import kaleidot725.michetimer.repository.TimerRepository
+import kaleidot725.michetimer.micheTimerNavigator
+import kaleidot725.michetimer.timerRepository
+import kaleidot725.michetimer.timerService
+import kaleidot725.michetimer.service.TimerRunnerService
 
 class MicheTimerFragment() : Fragment() {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -39,8 +41,8 @@ class MicheTimerFragment() : Fragment() {
             adapter = TimerListAdapter(timerViewModels)
         }
 
-        timerViewModels.onRemoveEvent = { i, vm -> recyclerView.adapter.notifyItemRemoved(i) }
-        timerViewModels.onAddEvent = { i, vm -> recyclerView.adapter.notifyItemInserted(i) }
+        timerViewModels.onRemoveEvent = { i, vm -> recyclerView.adapter?.notifyItemRemoved(i) }
+        timerViewModels.onAddEvent = { i, vm -> recyclerView.adapter?.notifyItemInserted(i) }
     }
 
     private object MicheTimerViewModelFactory : ViewModelProvider.Factory{

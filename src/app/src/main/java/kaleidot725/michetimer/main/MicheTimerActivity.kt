@@ -1,25 +1,25 @@
 package kaleidot725.michetimer.main
 
-import android.content.ComponentName
-import android.content.Context
-import android.support.v7.app.AppCompatActivity
+import android.content.*
+import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.support.v4.app.Fragment
-import android.content.Intent
-import android.content.ServiceConnection
-import android.support.v7.widget.PopupMenu
+import androidx.fragment.app.Fragment
+import androidx.appcompat.widget.PopupMenu
 import kaleidot725.michetimer.R
 import android.view.View
 import android.os.IBinder
 import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
-import android.widget.Button
 import com.google.android.gms.oss.licenses.OssLicensesMenuActivity
 import kaleidot725.michetimer.addtimer.AddTimerActivity
-import kaleidot725.michetimer.models.*
-import kaleidot725.michetimer.models.timer.TimerRepository
-import kaleidot725.michetimer.models.timer.TimerRunnerService
+import kaleidot725.michetimer.repository.TimerRepository
+import kaleidot725.michetimer.service.TimerRunnerService
+import android.content.Intent
+import kaleidot725.michetimer.micheTimerNavigator
+import kaleidot725.michetimer.timerRepository
+import kaleidot725.michetimer.timerService
+
 
 class MicheTimerActivity : AppCompatActivity(), MicheTimerNavigator {
     val connection : ServiceConnection = object : ServiceConnection {
@@ -59,7 +59,7 @@ class MicheTimerActivity : AppCompatActivity(), MicheTimerNavigator {
         setContentView(R.layout.activity_main)
 
         micheTimerNavigator = this
-        timerRepository = TimerRepository(this.applicationContext, "setting.json")
+        timerRepository = TimerRepository(this.applicationContext.filesDir.path + "setting.json")
 
         val intent = Intent(this, TimerRunnerService::class.java)
         startService(intent)
@@ -89,9 +89,14 @@ class MicheTimerActivity : AppCompatActivity(), MicheTimerNavigator {
     }
 
     override fun onShowOption(view : View, listner : PopupMenu.OnMenuItemClickListener) {
-        val popup = android.support.v7.widget.PopupMenu(this, view)
+        val popup = androidx.appcompat.widget.PopupMenu(this, view)
         popup.menuInflater.inflate(R.menu.timer_menu, popup.menu)
         popup.setOnMenuItemClickListener(listner)
         popup.show()
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        unbindService(this.connection)
     }
 }

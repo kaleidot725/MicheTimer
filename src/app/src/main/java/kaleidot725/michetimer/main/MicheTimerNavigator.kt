@@ -1,6 +1,6 @@
 package kaleidot725.michetimer.main
 
-import android.support.v7.widget.PopupMenu
+import androidx.appcompat.widget.PopupMenu
 import android.view.View
 
 interface MicheTimerNavigator {

@@ -1,16 +1,16 @@
 package kaleidot725.michetimer.main
 
-import android.arch.lifecycle.MutableLiveData
-import android.arch.lifecycle.ViewModel
-import android.support.v7.widget.PopupMenu
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
+import androidx.appcompat.widget.PopupMenu
 import android.util.Log
 import android.view.View
+import kaleidot725.michetimer.domain.TimerRunnerController
 import kaleidot725.michetimer.R
-import kaleidot725.michetimer.models.timer.Timer
-import kaleidot725.michetimer.models.timer.TimerRepository
-import kaleidot725.michetimer.models.timer.TimerRunner
-import kaleidot725.michetimer.models.timer.TimerRunner.State
-import kaleidot725.michetimer.models.timer.TimerRunnerService
+import kaleidot725.michetimer.repository.Timer
+import kaleidot725.michetimer.repository.TimerRepository
+import kaleidot725.michetimer.service.TimerRunnerService
+import kaleidot725.michetimer.domain.TimerRunnerState
 
 class TimerViewModel(navigator : MicheTimerNavigator, service : TimerRunnerService, repository: TimerRepository, index : Int) : ViewModel() {
     val name : String
@@ -23,7 +23,7 @@ class TimerViewModel(navigator : MicheTimerNavigator, service : TimerRunnerServi
     private val service : TimerRunnerService
     private val repository : TimerRepository
     private val index : Int
-    private var runner : TimerRunner
+    private var runner : TimerRunnerController
     private val timer : Timer
     private val listener : PopupMenu.OnMenuItemClickListener
 
@@ -38,7 +38,7 @@ class TimerViewModel(navigator : MicheTimerNavigator, service : TimerRunnerServi
         this.name = timer.name
         this.seconds = toRemainSecondsString(timer.seconds)
         this.state = MutableLiveData()
-        this.state.postValue(toStateString(State.Init))
+        this.state.postValue(toStateString(TimerRunnerState.Init))
         this.remainSeconds = MutableLiveData()
         this.remainSeconds.postValue(this.seconds)
         this.listener = PopupMenu.OnMenuItemClickListener {
@@ -53,7 +53,7 @@ class TimerViewModel(navigator : MicheTimerNavigator, service : TimerRunnerServi
             }
         }
 
-        this.runner = service?.register(this.timer) as TimerRunner
+        this.runner = service?.register(timer.id, timer.name, timer.seconds, timer.sound) as TimerRunnerController
         this.runner?.state?.subscribe {
             try {
                 this.state.postValue(toStateString(it))
@@ -75,16 +75,16 @@ class TimerViewModel(navigator : MicheTimerNavigator, service : TimerRunnerServi
     fun run(view: View) {
         try {
             when (this.runner.state.value) {
-                State.Init -> {
+                TimerRunnerState.Init -> {
                     this.runner.run()
                 }
-                State.Run -> {
+                TimerRunnerState.Run -> {
                     this.runner.pause()
                 }
-                State.Pause -> {
+                TimerRunnerState.Pause -> {
                     this.runner.run()
                 }
-                State.Timeout -> {
+                TimerRunnerState.Timeout -> {
                     this.runner.reset()
                 }
             }
@@ -104,7 +104,7 @@ class TimerViewModel(navigator : MicheTimerNavigator, service : TimerRunnerServi
 
     fun delete()
     {
-        service.unregister(timer)
+        service.unregister(timer.id)
         repository.remove(timer)
     }
 
@@ -116,11 +116,11 @@ class TimerViewModel(navigator : MicheTimerNavigator, service : TimerRunnerServi
         " ${(remainSeconds / 60).toString().padStart(2,'0')}:" +
         "${(remainSeconds % 60).toString().padStart(2,'0')}"
 
-    private fun toStateString(state : State) =
+    private fun toStateString(state : TimerRunnerState) =
             when (state) {
-                State.Run     -> { "Pause"   }
-                State.Timeout -> { "Stop"    }
-                State.Init    -> { "Start"   }
-                State.Pause   -> { "Start"   }
+                TimerRunnerState.Run     -> { "Pause"   }
+                TimerRunnerState.Timeout -> { "Stop"    }
+                TimerRunnerState.Init    -> { "Start"   }
+                TimerRunnerState.Pause   -> { "Start"   }
             }
 }

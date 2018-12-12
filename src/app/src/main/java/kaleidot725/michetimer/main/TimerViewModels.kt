@@ -1,11 +1,11 @@
 package kaleidot725.michetimer.main
 
-import android.arch.lifecycle.ViewModel
-import android.databinding.ObservableArrayList
-import android.databinding.ObservableList
-import kaleidot725.michetimer.models.timer.Timer
-import kaleidot725.michetimer.models.timer.TimerRepository
-import kaleidot725.michetimer.models.timer.TimerRunnerService
+import androidx.lifecycle.ViewModel
+import androidx.databinding.ObservableArrayList
+import androidx.databinding.ObservableList
+import kaleidot725.michetimer.repository.Timer
+import kaleidot725.michetimer.repository.TimerRepository
+import kaleidot725.michetimer.service.TimerRunnerService
 
 class TimerViewModels(navigator : MicheTimerNavigator, service : TimerRunnerService, repository : TimerRepository) : ViewModel() {
     val all : ObservableList<TimerViewModel> = ObservableArrayList<TimerViewModel>()
