@@ -4,17 +4,17 @@ import android.arch.lifecycle.ViewModel
 import android.databinding.ObservableArrayList
 import android.databinding.ObservableList
 import kaleidot725.michetimer.repository.Timer
-import kaleidot725.michetimer.repository.TimerRepositoryJson
+import kaleidot725.michetimer.repository.TimerRepository
 import kaleidot725.michetimer.service.TimerRunnerService
 
-class TimerViewModels(navigator : MicheTimerNavigator, service : TimerRunnerService, repository : TimerRepositoryJson) : ViewModel() {
+class TimerViewModels(navigator : MicheTimerNavigator, service : TimerRunnerService, repository : TimerRepository) : ViewModel() {
     val all : ObservableList<TimerViewModel> = ObservableArrayList<TimerViewModel>()
     var onAddEvent : ((Int, TimerViewModel) -> Unit) ?= null
     var onRemoveEvent : ((Int, TimerViewModel) -> Unit) ?= null
 
     private val navigator : MicheTimerNavigator = navigator
     private val service : TimerRunnerService? = service
-    private val repository : TimerRepositoryJson = repository
+    private val repository : TimerRepository = repository
 
     init {
         repository.forEachIndexed { i, t -> all.add(TimerViewModel(navigator, service, repository, i)) }

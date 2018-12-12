@@ -17,9 +17,9 @@ import android.widget.*
 import kaleidot725.michetimer.BR
 import kaleidot725.michetimer.R
 import kaleidot725.michetimer.databinding.FragmentAddTimerBinding
-import kaleidot725.michetimer.repository.TimerRepositoryJson
-import kaleidot725.michetimer.repository.addTimerNavigator
-import kaleidot725.michetimer.repository.timerRepository
+import kaleidot725.michetimer.repository.TimerRepository
+import kaleidot725.michetimer.addTimerNavigator
+import kaleidot725.michetimer.timerRepository
 
 class AddTimerFragment : Fragment() {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
@@ -78,7 +78,7 @@ class AddTimerFragment : Fragment() {
                     throw IllegalStateException("Timers is null")
                 }
 
-                return AddTimerViewModel(addTimerNavigator as AddTimerNavigator, timerRepository as TimerRepositoryJson) as T
+                return AddTimerViewModel(addTimerNavigator as AddTimerNavigator, timerRepository as TimerRepository) as T
             }
 
             throw IllegalArgumentException("Unknown ViewModel class : ${modelClass.name}")
