@@ -1,12 +1,11 @@
-package kaleidot725.michetimer.service
+package kaleidot725.michetimer.domain
 
-import android.content.Context
 import io.reactivex.subjects.BehaviorSubject
 import java.util.*
 import java.util.Timer
 import kotlin.concurrent.timerTask
 
-class TimerRunner(context : Context, id : Int, name : String, seconds : Long) : TimerRunnerInterface, TimerRunnerController {
+class TimerRunner(id : Int, name : String, seconds : Long) : TimerRunnerInterface, TimerRunnerController {
     override val id : Int = id
     override val name : String = name
     override val seconds : Long = seconds

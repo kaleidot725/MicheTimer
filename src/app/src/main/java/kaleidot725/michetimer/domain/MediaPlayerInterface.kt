@@ -1,8 +1,8 @@
-package kaleidot725.michetimer.service
+package kaleidot725.michetimer.domain
 
 import android.content.Context
 
-interface TimerMediaPlayerInterface {
+interface MediaPlayerInterface {
     val context : Context
     val name : String
     val id : Int

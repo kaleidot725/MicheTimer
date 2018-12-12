@@ -13,10 +13,12 @@ import android.view.Menu
 import android.view.MenuItem
 import com.google.android.gms.oss.licenses.OssLicensesMenuActivity
 import kaleidot725.michetimer.addtimer.AddTimerActivity
-import kaleidot725.michetimer.repository.*
-import kaleidot725.michetimer.repository.TimerRepositoryJson
+import kaleidot725.michetimer.repository.TimerRepository
 import kaleidot725.michetimer.service.TimerRunnerService
 import android.content.Intent
+import kaleidot725.michetimer.micheTimerNavigator
+import kaleidot725.michetimer.timerRepository
+import kaleidot725.michetimer.timerService
 
 
 class MicheTimerActivity : AppCompatActivity(), MicheTimerNavigator {
@@ -57,7 +59,7 @@ class MicheTimerActivity : AppCompatActivity(), MicheTimerNavigator {
         setContentView(R.layout.activity_main)
 
         micheTimerNavigator = this
-        timerRepository = TimerRepositoryJson(this.applicationContext, "setting.json")
+        timerRepository = TimerRepository(this.applicationContext.filesDir.path + "setting.json")
 
         val intent = Intent(this, TimerRunnerService::class.java)
         startService(intent)
@@ -79,8 +81,6 @@ class MicheTimerActivity : AppCompatActivity(), MicheTimerNavigator {
     override fun onStartEditTimer() {
         val intent = Intent(this, AddTimerActivity::class.java)
         startActivity(intent)
-
-        sendBroadcast(Intent(TimerBroadcastReceiver.TIMER_RESET))
     }
 
     override fun onShowLicense() {

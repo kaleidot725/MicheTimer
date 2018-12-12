@@ -1,10 +1,10 @@
-package kaleidot725.michetimer.service
+package kaleidot725.michetimer.domain
 
 import android.content.Context
 import android.media.MediaPlayer
 import kaleidot725.michetimer.R
 
-class TimerMediaPlayer(context : Context, name : String) : TimerMediaPlayerInterface {
+class MediaPlayer(context : Context, name : String) : MediaPlayerInterface {
     override val context = context
     override val name : String = name
     override val id : Int = when(name) {

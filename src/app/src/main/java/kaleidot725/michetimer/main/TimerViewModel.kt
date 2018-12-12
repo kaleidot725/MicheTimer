@@ -5,14 +5,14 @@ import android.arch.lifecycle.ViewModel
 import android.support.v7.widget.PopupMenu
 import android.util.Log
 import android.view.View
-import kaleidot725.michetimer.service.TimerRunnerController
+import kaleidot725.michetimer.domain.TimerRunnerController
 import kaleidot725.michetimer.R
 import kaleidot725.michetimer.repository.Timer
-import kaleidot725.michetimer.repository.TimerRepositoryJson
+import kaleidot725.michetimer.repository.TimerRepository
 import kaleidot725.michetimer.service.TimerRunnerService
-import kaleidot725.michetimer.service.TimerRunnerState
+import kaleidot725.michetimer.domain.TimerRunnerState
 
-class TimerViewModel(navigator : MicheTimerNavigator, service : TimerRunnerService, repository: TimerRepositoryJson, index : Int) : ViewModel() {
+class TimerViewModel(navigator : MicheTimerNavigator, service : TimerRunnerService, repository: TimerRepository, index : Int) : ViewModel() {
     val name : String
     val seconds : String
     val state : MutableLiveData<String>
@@ -21,7 +21,7 @@ class TimerViewModel(navigator : MicheTimerNavigator, service : TimerRunnerServi
     private val tag : String = "TimerViewModel"
     private val navigator : MicheTimerNavigator
     private val service : TimerRunnerService
-    private val repository : TimerRepositoryJson
+    private val repository : TimerRepository
     private val index : Int
     private var runner : TimerRunnerController
     private val timer : Timer

@@ -6,17 +6,17 @@ import android.util.Log
 import android.view.View
 import android.widget.AdapterView
 import kaleidot725.michetimer.repository.Timer
-import kaleidot725.michetimer.repository.TimerRepositoryJson
+import kaleidot725.michetimer.repository.TimerRepository
 import java.lang.Exception
 
-class AddTimerViewModel(navigator: AddTimerNavigator, timerRepository  : TimerRepositoryJson) : ViewModel() {
+class AddTimerViewModel(navigator: AddTimerNavigator, timerRepository  : TimerRepository) : ViewModel() {
     val name : MutableLiveData<String> =  MutableLiveData()
     val sound : MutableLiveData<String> = MutableLiveData()
     var minute : MutableLiveData<Long> = MutableLiveData()
     var second : MutableLiveData<Long> = MutableLiveData()
 
     private val navigator : AddTimerNavigator = navigator
-    private val timerRepository : TimerRepositoryJson = timerRepository
+    private val timerRepository : TimerRepository = timerRepository
     private val tag = "AddTimerViewModel"
 
     init {
@@ -65,7 +65,7 @@ class AddTimerViewModel(navigator: AddTimerNavigator, timerRepository  : TimerRe
         }
     }
 
-    fun TimerRepositoryJson.getBlankId() : Int {
+    fun TimerRepository.getBlankId() : Int {
         val sorted = timerRepository.findAll().sortedBy { it.id }
         var blankId = sorted.count()
         sorted.forEachIndexed { i, t -> if (t.id != i)  { blankId = i  } }

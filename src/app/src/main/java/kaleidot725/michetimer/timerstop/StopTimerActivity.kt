@@ -4,48 +4,54 @@ import android.content.*
 import android.os.Bundle
 import android.os.IBinder
 import android.support.v7.app.AppCompatActivity
-import android.util.Log
 import kaleidot725.michetimer.R
 import kaleidot725.michetimer.service.TimerRunnerService
-import kaleidot725.michetimer.repository.timerService
+import kaleidot725.michetimer.timerService
 
 class StopTimerActivity : AppCompatActivity()  {
-    private val connection : ServiceConnection = object : ServiceConnection {
+    private inner class TimerServiceConnectionForStoppingTimer : ServiceConnection {
         override fun onServiceConnected(name: ComponentName?, service: IBinder?) {
             timerService = (service as TimerRunnerService.ServiceBinder).instance
             if (timerService != null) {
-                val controller = timerService?.resolve(id)
+                val controller = timerService?.resolve(StopTimerActivity@id)
                 controller?.reset()
             }
 
-            completed = true
-            Log.v("tag", "onServiceConnected")
+            StopTimerActivity@completed = true
         }
 
         override fun onServiceDisconnected(name : ComponentName?) {
-            Log.v("tag", "onServiceDisconnected")
         }
     }
 
+    private val defaultTimeoutMs = 1000L
+    private val defaultIntervalMs = 100L
     private var id : Int = -1
     private var completed : Boolean = false
+    private lateinit var connection : TimerServiceConnectionForStoppingTimer
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        id = intent.getIntExtra("id", -1)
+        // Initialize activity property
+        this.id = intent.getIntExtra("id", -1)
+        this.completed = false
 
+        // Create timer service intent
         val intent = Intent(this, TimerRunnerService::class.java)
+        this.connection = this.TimerServiceConnectionForStoppingTimer()
         startService(intent)
         bindService(intent, this.connection, Context.BIND_ADJUST_WITH_ACTIVITY)
 
-        var count = 10
-        while(!completed) {
-            if (count == 0)
+        // Wait for stopping timer
+        var remainingMs = defaultTimeoutMs
+        while(completed) {
+            Thread.sleep(defaultIntervalMs)
+            remainingMs -= defaultIntervalMs
+            if (remainingMs <= 0) {
                 break
-            Thread.sleep(100)
-            count--
+            }
         }
 
         finish()
