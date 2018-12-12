@@ -1,8 +1,8 @@
 package kaleidot725.michetimer.main
 
-import android.arch.lifecycle.ViewModel
-import android.databinding.ObservableArrayList
-import android.databinding.ObservableList
+import androidx.lifecycle.ViewModel
+import androidx.databinding.ObservableArrayList
+import androidx.databinding.ObservableList
 import kaleidot725.michetimer.repository.Timer
 import kaleidot725.michetimer.repository.TimerRepository
 import kaleidot725.michetimer.service.TimerRunnerService

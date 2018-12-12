@@ -1,11 +1,11 @@
 package kaleidot725.michetimer.main
 
-import android.arch.lifecycle.Lifecycle
-import android.arch.lifecycle.LifecycleOwner
-import android.arch.lifecycle.LifecycleRegistry
-import android.databinding.DataBindingUtil
-import android.databinding.ObservableList
-import android.support.v7.widget.RecyclerView
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.LifecycleOwner
+import androidx.lifecycle.LifecycleRegistry
+import androidx.databinding.DataBindingUtil
+import androidx.databinding.ObservableList
+import androidx.recyclerview.widget.RecyclerView
 import android.view.*
 import kaleidot725.michetimer.R
 import kaleidot725.michetimer.databinding.TimerListViewItemBinding

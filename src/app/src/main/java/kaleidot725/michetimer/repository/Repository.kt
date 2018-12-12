@@ -1,6 +1,6 @@
 package kaleidot725.michetimer.repository
 
-import android.databinding.ObservableList
+import androidx.databinding.ObservableList
 
 interface Repository<T> : Iterable<T> {
     fun findAll() : List<T>

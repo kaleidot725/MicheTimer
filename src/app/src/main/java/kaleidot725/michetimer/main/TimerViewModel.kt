@@ -1,8 +1,8 @@
 package kaleidot725.michetimer.main
 
-import android.arch.lifecycle.MutableLiveData
-import android.arch.lifecycle.ViewModel
-import android.support.v7.widget.PopupMenu
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
+import androidx.appcompat.widget.PopupMenu
 import android.util.Log
 import android.view.View
 import kaleidot725.michetimer.domain.TimerRunnerController

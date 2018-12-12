@@ -1,10 +1,10 @@
 package kaleidot725.michetimer.main
 
 import android.content.*
-import android.support.v7.app.AppCompatActivity
+import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.support.v4.app.Fragment
-import android.support.v7.widget.PopupMenu
+import androidx.fragment.app.Fragment
+import androidx.appcompat.widget.PopupMenu
 import kaleidot725.michetimer.R
 import android.view.View
 import android.os.IBinder
@@ -89,7 +89,7 @@ class MicheTimerActivity : AppCompatActivity(), MicheTimerNavigator {
     }
 
     override fun onShowOption(view : View, listner : PopupMenu.OnMenuItemClickListener) {
-        val popup = android.support.v7.widget.PopupMenu(this, view)
+        val popup = androidx.appcompat.widget.PopupMenu(this, view)
         popup.menuInflater.inflate(R.menu.timer_menu, popup.menu)
         popup.setOnMenuItemClickListener(listner)
         popup.show()

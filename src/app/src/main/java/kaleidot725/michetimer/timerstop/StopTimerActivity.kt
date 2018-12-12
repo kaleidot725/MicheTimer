@@ -3,7 +3,7 @@ package kaleidot725.michetimer.timerstop
 import android.content.*
 import android.os.Bundle
 import android.os.IBinder
-import android.support.v7.app.AppCompatActivity
+import androidx.appcompat.app.AppCompatActivity
 import kaleidot725.michetimer.R
 import kaleidot725.michetimer.service.TimerRunnerService
 import kaleidot725.michetimer.timerService
