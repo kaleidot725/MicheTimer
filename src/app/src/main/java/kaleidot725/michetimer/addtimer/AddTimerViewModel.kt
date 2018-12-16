@@ -5,8 +5,8 @@ import androidx.lifecycle.ViewModel
 import android.util.Log
 import android.view.View
 import android.widget.AdapterView
-import kaleidot725.michetimer.repository.Timer
-import kaleidot725.michetimer.repository.TimerRepository
+import kaleidot725.michetimer.domain.Timer
+import kaleidot725.michetimer.domain.TimerRepository
 import java.lang.Exception
 
 class AddTimerViewModel(navigator: AddTimerNavigator, timerRepository  : TimerRepository) : ViewModel() {
