@@ -1,4 +1,4 @@
-package kaleidot725.michetimer.repository
+package kaleidot725.michetimer.domain
 
 import androidx.databinding.ObservableArrayList
 import androidx.databinding.ObservableList

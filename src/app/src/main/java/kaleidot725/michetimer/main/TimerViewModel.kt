@@ -7,8 +7,8 @@ import android.util.Log
 import android.view.View
 import kaleidot725.michetimer.domain.TimerRunnerController
 import kaleidot725.michetimer.R
-import kaleidot725.michetimer.repository.Timer
-import kaleidot725.michetimer.repository.TimerRepository
+import kaleidot725.michetimer.domain.Timer
+import kaleidot725.michetimer.domain.TimerRepository
 import kaleidot725.michetimer.service.TimerRunnerService
 import kaleidot725.michetimer.domain.TimerRunnerState
 

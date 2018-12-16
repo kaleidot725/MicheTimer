@@ -17,7 +17,7 @@ import android.widget.*
 import kaleidot725.michetimer.BR
 import kaleidot725.michetimer.R
 import kaleidot725.michetimer.databinding.FragmentAddTimerBinding
-import kaleidot725.michetimer.repository.TimerRepository
+import kaleidot725.michetimer.domain.TimerRepository
 import kaleidot725.michetimer.addTimerNavigator
 import kaleidot725.michetimer.timerRepository
 
