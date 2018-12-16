@@ -3,8 +3,8 @@ package kaleidot725.michetimer.main
 import androidx.lifecycle.ViewModel
 import androidx.databinding.ObservableArrayList
 import androidx.databinding.ObservableList
-import kaleidot725.michetimer.repository.Timer
-import kaleidot725.michetimer.repository.TimerRepository
+import kaleidot725.michetimer.domain.Timer
+import kaleidot725.michetimer.domain.TimerRepository
 import kaleidot725.michetimer.service.TimerRunnerService
 
 class TimerViewModels(navigator : MicheTimerNavigator, service : TimerRunnerService, repository : TimerRepository) : ViewModel() {

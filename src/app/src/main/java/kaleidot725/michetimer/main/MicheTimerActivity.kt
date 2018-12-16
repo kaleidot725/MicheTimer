@@ -13,7 +13,7 @@ import android.view.Menu
 import android.view.MenuItem
 import com.google.android.gms.oss.licenses.OssLicensesMenuActivity
 import kaleidot725.michetimer.addtimer.AddTimerActivity
-import kaleidot725.michetimer.repository.TimerRepository
+import kaleidot725.michetimer.domain.TimerRepository
 import kaleidot725.michetimer.service.TimerRunnerService
 import android.content.Intent
 import kaleidot725.michetimer.micheTimerNavigator
