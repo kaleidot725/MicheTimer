@@ -1,5 +1,6 @@
 package kaleidot725.michetimer.addtimer
 
+import android.text.Editable
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import android.util.Log
@@ -8,6 +9,10 @@ import android.widget.AdapterView
 import kaleidot725.michetimer.domain.Timer
 import kaleidot725.michetimer.domain.TimerRepository
 import java.lang.Exception
+import androidx.databinding.adapters.TextViewBindingAdapter.setPassword
+import android.text.TextWatcher
+
+
 
 class AddTimerViewModel(navigator: AddTimerNavigator, timerRepository  : TimerRepository) : ViewModel() {
     val name : MutableLiveData<String> =  MutableLiveData()
@@ -53,7 +58,7 @@ class AddTimerViewModel(navigator: AddTimerNavigator, timerRepository  : TimerRe
 
         try {
             val blankId = timerRepository.getBlankId()
-            val name    = name.value   as String
+            val name    = name.value as String
             val seconds = minute.value as Long * 60 + second.value as Long
             val sound   = sound.value  as String
             val timer   = Timer(blankId, name, seconds, sound)
