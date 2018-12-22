@@ -5,6 +5,7 @@ import androidx.lifecycle.ViewModel
 import androidx.appcompat.widget.PopupMenu
 import android.util.Log
 import android.view.View
+import io.reactivex.disposables.CompositeDisposable
 import kaleidot725.michetimer.domain.TimerRunnerController
 import kaleidot725.michetimer.R
 import kaleidot725.michetimer.domain.Timer
@@ -22,17 +23,16 @@ class TimerViewModel(navigator : MicheTimerNavigator, service : TimerRunnerServi
     private val navigator : MicheTimerNavigator
     private val service : TimerRunnerService
     private val repository : TimerRepository
-    private val index : Int
     private var runner : TimerRunnerController
     private val timer : Timer
     private val listener : PopupMenu.OnMenuItemClickListener
+    private val compositeDisposable : CompositeDisposable
 
     init
     {
         this.navigator = navigator
         this.service = service
         this.repository = repository
-        this.index = index
         this.timer = repository.elementAt(index)
 
         this.name = timer.name
@@ -53,8 +53,9 @@ class TimerViewModel(navigator : MicheTimerNavigator, service : TimerRunnerServi
             }
         }
 
-        this.runner = service?.register(timer.id, timer.name, timer.seconds, timer.sound) as TimerRunnerController
-        this.runner?.state?.subscribe {
+
+        this.runner = service.register(timer.id, timer.name, timer.seconds, timer.sound) as TimerRunnerController
+        val stateDisposable = this.runner.state.subscribe {
             try {
                 this.state.postValue(toStateString(it))
             }
@@ -62,7 +63,7 @@ class TimerViewModel(navigator : MicheTimerNavigator, service : TimerRunnerServi
                 Log.v("TimerViewModel", e.toString())
             }
         }
-        this.runner?.remainSeconds?.subscribe {
+        val remainSecondsDisposable = this.runner.remainSeconds.subscribe {
             try {
                 this.remainSeconds.postValue(toRemainSecondsString(it))
             }
@@ -70,6 +71,9 @@ class TimerViewModel(navigator : MicheTimerNavigator, service : TimerRunnerServi
                 Log.v("TimerViewModel", e.toString())
             }
         }
+
+        compositeDisposable = CompositeDisposable()
+        compositeDisposable.addAll(stateDisposable, remainSecondsDisposable)
     }
 
     fun run(view: View) {
@@ -87,6 +91,9 @@ class TimerViewModel(navigator : MicheTimerNavigator, service : TimerRunnerServi
                 TimerRunnerState.Timeout -> {
                     this.runner.reset()
                 }
+                else -> {
+
+                }
             }
         }
         catch (e : Exception) {
@@ -95,10 +102,6 @@ class TimerViewModel(navigator : MicheTimerNavigator, service : TimerRunnerServi
     }
 
     fun reset(view: View) {
-        if (this.runner == null) {
-            return
-        }
-
         this.runner.reset()
     }
 
@@ -106,6 +109,7 @@ class TimerViewModel(navigator : MicheTimerNavigator, service : TimerRunnerServi
     {
         service.unregister(timer.id)
         repository.remove(timer)
+        compositeDisposable.dispose()
     }
 
     fun popupOption(view : View) {
