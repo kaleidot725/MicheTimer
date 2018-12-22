@@ -32,16 +32,6 @@ class AddTimerFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         val viewModel = ViewModelProviders.of(this, AddTimerViewModelFactory).get(AddTimerViewModel::class.java)
-        val nameEdit = view.findViewById<EditText>(R.id.name_edittext)
-        nameEdit.addTextChangedListener(object : TextWatcher {
-            override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
-                val name = nameEdit.text.toString()
-                viewModel.name.postValue(name)
-            }
-
-            override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) { }
-            override fun afterTextChanged(p0: Editable?) { }
-        })
 
         val secondSpinner = view.findViewById<Spinner>(R.id.second_spinner)
         val secondAdapter = ArrayAdapter.createFromResource(view.context ,R.array.seconds, android.R.layout.simple_spinner_dropdown_item)
@@ -66,6 +56,7 @@ class AddTimerFragment : Fragment() {
 
         val binding = DataBindingUtil.bind<FragmentAddTimerBinding>(view)
         binding?.setVariable(BR.viewmodel, viewModel)
+        binding?.setLifecycleOwner(this)
     }
 
     private object AddTimerViewModelFactory : ViewModelProvider.Factory{
