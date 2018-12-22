@@ -74,7 +74,9 @@ class TimerRunnerService : Service(), TimerRunnerServiceInterface {
 
     override fun register(id : Int, name : String, seconds : Long, sound : String): TimerRunnerController {
         if (runners[id] != null)
-            throw IllegalArgumentException()
+        {
+            return runners[id] as TimerRunnerController
+        }
 
         players[id] = MediaPlayer(applicationContext, sound)
         runners[id] = TimerRunner(id, name, seconds).apply {
