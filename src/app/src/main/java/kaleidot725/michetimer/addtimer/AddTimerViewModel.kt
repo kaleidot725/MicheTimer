@@ -38,6 +38,7 @@ class AddTimerViewModel(navigator: AddTimerNavigator, timerRepository  : TimerRe
         val value = parent.selectedItem as String
         if (!value.isNullOrEmpty())
             second = (value as String).toLong()
+
         error.postValue(getError())
     }
 

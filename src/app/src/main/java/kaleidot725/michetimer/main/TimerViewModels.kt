@@ -40,6 +40,4 @@ class TimerViewModels(navigator : MicheTimerNavigator, service : TimerRunnerServ
             override fun onItemRangeChanged(sender: ObservableList<Timer>?, positionStart: Int, itemCount: Int) { }
         })
     }
-
-
 }
