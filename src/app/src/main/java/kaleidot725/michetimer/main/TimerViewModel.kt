@@ -63,6 +63,7 @@ class TimerViewModel(navigator : MicheTimerNavigator, service : TimerRunnerServi
                 Log.v("TimerViewModel", e.toString())
             }
         }
+
         val remainSecondsDisposable = this.runner.remainSeconds.subscribe {
             try {
                 this.remainSeconds.postValue(toRemainSecondsString(it))

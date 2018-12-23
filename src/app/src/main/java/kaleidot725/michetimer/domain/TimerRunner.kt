@@ -11,9 +11,10 @@ class TimerRunner(id : Int, name : String, seconds : Long) : TimerRunnerInterfac
     override val seconds : Long = seconds
     override val remainSeconds : BehaviorSubject<Long> =  BehaviorSubject.create()
     override val state : BehaviorSubject<TimerRunnerState> =  BehaviorSubject.create()
+    override var start : Date = Date()
+    override var end : Date = Date()
 
     private var countdownSeconds : Long = this.seconds
-    private var beginData : Date = Date()
     private var tickTimer : Timer? = null
 
     init {
@@ -27,7 +28,7 @@ class TimerRunner(id : Int, name : String, seconds : Long) : TimerRunnerInterfac
 
         tickTimer = Timer()
         tickTimer?.scheduleAtFixedRate(timerTask { countdown() }, 0, 100)
-        beginData = Date()
+        start = Date()
         state.onNext(TimerRunnerState.Run)
     }
 
@@ -36,7 +37,7 @@ class TimerRunner(id : Int, name : String, seconds : Long) : TimerRunnerInterfac
             throw IllegalStateException()
 
         tickTimer?.cancel()
-        countdownSeconds -= diffSeconds(beginData, Date())
+        countdownSeconds -= diffSeconds(start, Date())
         state.onNext(TimerRunnerState.Pause)
     }
 
@@ -56,12 +57,13 @@ class TimerRunner(id : Int, name : String, seconds : Long) : TimerRunnerInterfac
     }
 
     private fun countdown() {
-        val diff = countdownSeconds - diffSeconds(beginData, Date())
+        val diff = countdownSeconds - diffSeconds(start, Date())
 
         // タイムアウトしたか確認する
         if (diff < 0) {
             tickTimer?.cancel()
             remainSeconds.onNext(0)
+            end = Date()
             state.onNext(TimerRunnerState.Timeout)
             return
         }

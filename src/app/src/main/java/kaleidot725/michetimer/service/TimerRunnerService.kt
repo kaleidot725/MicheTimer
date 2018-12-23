@@ -15,7 +15,7 @@ import kaleidot725.michetimer.R
 import android.app.PendingIntent
 import kaleidot725.michetimer.domain.*
 import kaleidot725.michetimer.timerstop.StopTimerActivity
-import java.lang.IllegalArgumentException
+import java.text.SimpleDateFormat
 
 
 class TimerRunnerService : Service(), TimerRunnerServiceInterface {
@@ -87,7 +87,7 @@ class TimerRunnerService : Service(), TimerRunnerServiceInterface {
                     }
                     TimerRunnerState.Timeout -> {
                         players[id]?.play()
-                        notifyTimeOut(id)
+                        notifyTimeOut(runners[id] as TimerRunnerInterface)
                     }
                     TimerRunnerState.Run -> {
 
@@ -122,23 +122,26 @@ class TimerRunnerService : Service(), TimerRunnerServiceInterface {
         return
     }
 
-    private fun notifyTimeOut(id : Int)
+    private fun notifyTimeOut(runner : TimerRunnerInterface)
     {
-        val intent = Intent(this, StopTimerActivity::class.java)
-        intent.putExtra("id", id)
+        val intent = Intent(this, StopTimerActivity::class.java).apply {
+            putExtra("id", runner.id)
+            putExtra("start", runner.start.time)
+            putExtra( "end", runner.end.time)
+        }
 
-        val pIntent = PendingIntent.getActivity(this, id, intent, PendingIntent.FLAG_UPDATE_CURRENT)
+        val pIntent = PendingIntent.getActivity(this, runner.id, intent, PendingIntent.FLAG_UPDATE_CURRENT)
+        val df = SimpleDateFormat("HH:mm:ss")
 
         builder.setAutoCancel(true)
                 .setDefaults(Notification.DEFAULT_ALL)
                 .setWhen(System.currentTimeMillis())
                 .setSmallIcon(R.drawable.ic_notification)
-                .setTicker(runners[id]?.name + " is time up")
-                .setContentTitle(runners[id]?.name + " is time up")
-                .setContentText("Click to stop alarm!!")
+                .setTicker("${runner.name} is Time Up ${df.format(runner.start)} ~ ${df.format(runner.end)}")
+                .setContentTitle("${runner.name} is Time Up ${df.format(runner.start)} ~ ${df.format(runner.end)}")
+                .setContentText("Click to Stop Alarm!!")
                 .setContentIntent(pIntent)
 
-        manager.notify(id , builder.build())
+        manager.notify(runner.id , builder.build())
     }
-
 }

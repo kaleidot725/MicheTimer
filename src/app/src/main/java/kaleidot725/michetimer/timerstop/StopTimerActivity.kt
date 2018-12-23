@@ -5,16 +5,21 @@ import android.os.Bundle
 import android.os.IBinder
 import androidx.appcompat.app.AppCompatActivity
 import kaleidot725.michetimer.R
+import kaleidot725.michetimer.domain.TimerRunnerState
 import kaleidot725.michetimer.service.TimerRunnerService
 import kaleidot725.michetimer.timerService
+import java.util.*
 
 class StopTimerActivity : AppCompatActivity()  {
     private inner class TimerServiceConnectionForStoppingTimer : ServiceConnection {
         override fun onServiceConnected(name: ComponentName?, service: IBinder?) {
-            timerService = (service as TimerRunnerService.ServiceBinder).instance
-            if (timerService != null) {
-                val controller = timerService?.resolve(StopTimerActivity@id)
-                controller?.reset()
+            var timerService = (service as TimerRunnerService.ServiceBinder).instance
+            var controller = timerService.resolve(StopTimerActivity@id)
+            if (controller.state.value == TimerRunnerState.Timeout &&
+                controller.start.equals(StopTimerActivity@start) &&
+                controller.end.equals(StopTimerActivity@end))
+            {
+                controller.reset()
             }
 
             StopTimerActivity@completed = true
@@ -27,6 +32,8 @@ class StopTimerActivity : AppCompatActivity()  {
     private val defaultTimeoutMs = 1000L
     private val defaultIntervalMs = 100L
     private var id : Int = -1
+    private var start : Date = Date()
+    private var end : Date = Date()
     private var completed : Boolean = false
     private lateinit var connection : TimerServiceConnectionForStoppingTimer
 
@@ -36,7 +43,8 @@ class StopTimerActivity : AppCompatActivity()  {
 
         // Initialize activity property
         this.id = intent.getIntExtra("id", -1)
-        this.completed = false
+        this.start = Date(intent.getLongExtra("start", -1))
+        this.end = Date(intent.getLongExtra("end", -1))
 
         // Create timer service intent
         val intent = Intent(this, TimerRunnerService::class.java)
