@@ -5,21 +5,25 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import androidx.appcompat.widget.PopupMenu
-import kaleidot725.michetimer.R
 import android.view.View
 import android.os.IBinder
 import android.util.Log
-import android.view.Menu
 import android.view.MenuItem
 import com.google.android.gms.oss.licenses.OssLicensesMenuActivity
 import kaleidot725.michetimer.addtimer.AddTimerActivity
 import kaleidot725.michetimer.domain.TimerRepository
 import kaleidot725.michetimer.service.TimerRunnerService
 import android.content.Intent
+import android.view.Menu
+import androidx.appcompat.app.ActionBarDrawerToggle
+import androidx.appcompat.widget.Toolbar
+import androidx.drawerlayout.widget.DrawerLayout
+import com.google.android.material.navigation.NavigationView
+import kaleidot725.michetimer.R
 import kaleidot725.michetimer.micheTimerNavigator
 import kaleidot725.michetimer.timerRepository
 import kaleidot725.michetimer.timerService
-
+import kotlinx.android.synthetic.main.activity_main.*
 
 class MicheTimerActivity : AppCompatActivity(), MicheTimerNavigator {
     val connection : ServiceConnection = object : ServiceConnection {
@@ -40,20 +44,6 @@ class MicheTimerActivity : AppCompatActivity(), MicheTimerNavigator {
         }
     }
 
-    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
-        menuInflater.inflate(R.menu.bar_menu, menu)
-        return true
-    }
-
-    override fun onOptionsItemSelected(item: MenuItem?): Boolean {
-        if(R.id.license_button == item?.itemId) {
-            onShowLicense()
-            return true
-        }
-
-        return false
-    }
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -64,6 +54,32 @@ class MicheTimerActivity : AppCompatActivity(), MicheTimerNavigator {
         val intent = Intent(this, TimerRunnerService::class.java)
         startService(intent)
         bindService(intent, this.connection, Context.BIND_ADJUST_WITH_ACTIVITY)
+
+        val toolbar = findViewById<Toolbar>(R.id.toolbar)
+        setSupportActionBar(toolbar)
+
+        val drawerLayout = findViewById<DrawerLayout>(R.id.drawer_layout)
+        val toggle = ActionBarDrawerToggle(
+                this, drawerLayout, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close
+        ).apply {
+            syncState()
+        }
+        drawerLayout.addDrawerListener(toggle)
+        toggle.syncState()
+
+        val navigationView = findViewById<NavigationView>(R.id.navigation_view)
+        navigationView.setNavigationItemSelectedListener { menuItem ->
+
+            if (menuItem.itemId == R.id.navigation_license) {
+                onShowLicense()
+            }
+            else {
+                menuItem.isChecked = true
+            }
+
+            drawerLayout.closeDrawers()
+            true
+        }
 
         Log.v("tag", "onCreate")
     }

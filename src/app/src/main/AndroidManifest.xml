@@ -9,7 +9,7 @@
         android:roundIcon="@mipmap/ic_miche_timer_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".main.MicheTimerActivity">
+        <activity android:name=".main.MicheTimerActivity" android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
