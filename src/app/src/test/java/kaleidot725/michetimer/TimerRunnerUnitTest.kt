@@ -2,10 +2,10 @@ package kaleidot725.michetimer
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import kaleidot725.michetimer.domain.TimerRunner
+import kaleidot725.michetimer.domain.TimerRunnerInterface
 import kaleidot725.michetimer.domain.TimerRunnerState
 import org.junit.Assert
 import org.junit.Test
-import org.junit.Before
 import org.junit.Rule
 
 class TimerRunnerUnitTest {
@@ -13,28 +13,29 @@ class TimerRunnerUnitTest {
     @Rule @JvmField
     val instantTaskExecutorRule = InstantTaskExecutorRule()
 
-    lateinit var timer : TimerRunner
-    @Before
-    fun setup() {
-        timer = TimerRunner(1, "Name", 60)
-    }
+    private val ms = 1000L
+    private val expectedId : Int = 1
+    private val expectedName : String = "Name"
+    private val expectedSeconds : Long = 60L
+    private val timer : TimerRunnerInterface = TimerRunner(expectedId, expectedName, expectedSeconds)
 
     @Test
     fun constructor() {
-        Assert.assertEquals("Name", timer.name)
+        Assert.assertEquals(expectedName, timer.name)
         Assert.assertEquals(TimerRunnerState.Init, timer.state.value)
-        Assert.assertEquals(60L, timer.seconds)
-        Assert.assertEquals(60L, timer.remainSeconds.value)
+        Assert.assertEquals(expectedSeconds, timer.seconds)
+        Assert.assertEquals(expectedSeconds, timer.remainSeconds.value)
     }
 
     @Test
     fun RunとPause繰り返し() {
         timer.run()
         Assert.assertEquals(TimerRunnerState.Run, timer.state.value)
-        Thread.sleep(1100)
+        Thread.sleep(ms)
+        Thread.sleep(ms)
 
         Assert.assertTrue(timer.remainSeconds.value as Long <= 59L)
-        Thread.sleep(1100)
+        Thread.sleep(ms)
 
         timer.pause()
         Assert.assertEquals(TimerRunnerState.Pause, timer.state.value)
@@ -42,10 +43,10 @@ class TimerRunnerUnitTest {
 
         timer.run()
         Assert.assertEquals(TimerRunnerState.Run, timer.state.value)
-        Thread.sleep(1100)
+        Thread.sleep(ms)
 
         Assert.assertTrue(timer.remainSeconds.value as Long <= 57L)
-        Thread.sleep(1100)
+        Thread.sleep(ms)
 
         timer.pause()
         Assert.assertEquals(TimerRunnerState.Pause, timer.state.value)
@@ -59,7 +60,7 @@ class TimerRunnerUnitTest {
 
         timer.reset()
         Assert.assertEquals(TimerRunnerState.Init, timer.state.value)
-        Assert.assertEquals(60L, timer.remainSeconds.value)
+        Assert.assertEquals(expectedSeconds, timer.remainSeconds.value)
     }
 
     @Test
@@ -72,27 +73,27 @@ class TimerRunnerUnitTest {
 
         timer.reset()
         Assert.assertEquals(TimerRunnerState.Init, timer.state.value)
-        Assert.assertEquals(60L, timer.remainSeconds.value)
+        Assert.assertEquals(expectedSeconds, timer.remainSeconds.value)
     }
 
     @Test
     fun TimeupからReset() {
-        val timeupTimer = TimerRunner(1, "Name", 1)
-        timeupTimer.run()
-        Thread.sleep(2000)
+        val shortTimer = TimerRunner(expectedId, expectedName, 1)
+        shortTimer.run()
+        Thread.sleep(ms)
 
-        timeupTimer.reset()
+        shortTimer.reset()
         Assert.assertEquals(TimerRunnerState.Init, timer.state.value)
-        Assert.assertEquals(60L, timer.remainSeconds.value)
+        Assert.assertEquals(expectedSeconds, timer.remainSeconds.value)
     }
 
     @Test
     fun RunからTimeup() {
-        val timeupTimer = TimerRunner(1, "Name", 1)
-        timeupTimer.run()
-        Thread.sleep(3000)
+        val shortTimer = TimerRunner(expectedId, expectedName, 1)
+        shortTimer.run()
+        Thread.sleep(ms * 3)
 
-        Assert.assertEquals(TimerRunnerState.Timeout, timeupTimer.state.value)
-        Assert.assertEquals(0L, timeupTimer.remainSeconds.value)
+        Assert.assertEquals(TimerRunnerState.Timeout, shortTimer.state.value)
+        Assert.assertEquals(0L, shortTimer.remainSeconds.value)
     }
 }
