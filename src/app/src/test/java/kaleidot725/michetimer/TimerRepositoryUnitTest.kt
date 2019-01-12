@@ -103,19 +103,66 @@ class TimerRepositoryUnitTest {
 
         Assert.assertEquals(3, spy.insertedCount)
         Assert.assertEquals(0, spy.removedCount)
-        Assert.assertEquals(3, spy.changedCount)
+        Assert.assertEquals(0, spy.changedCount)
         Assert.assertEquals( 0, spy.rangeMovedCount)
-        Assert.assertEquals(3, spy.rangeChangedCount)
+        Assert.assertEquals(0, spy.rangeChangedCount)
+
+        repository.update(one)
+        repository.update(two)
+        repository.update(thr)
+
+        Assert.assertEquals(6, spy.insertedCount)
+        Assert.assertEquals(3, spy.removedCount)
+        Assert.assertEquals(0, spy.changedCount)
+        Assert.assertEquals( 0, spy.rangeMovedCount)
+        Assert.assertEquals(0, spy.rangeChangedCount)
 
         repository.remove(one)
         repository.remove(two)
         repository.remove(thr)
 
-        Assert.assertEquals(3, spy.insertedCount)
-        Assert.assertEquals(3, spy.removedCount)
-        Assert.assertEquals(6, spy.changedCount)
+        Assert.assertEquals(6, spy.insertedCount)
+        Assert.assertEquals(6, spy.removedCount)
+        Assert.assertEquals(0, spy.changedCount)
         Assert.assertEquals( 0, spy.rangeMovedCount)
-        Assert.assertEquals(6, spy.rangeChangedCount)
+        Assert.assertEquals(0, spy.rangeChangedCount)
+    }
+
+    @Test
+    fun update()
+    {
+        val repository : Repository<Timer> = TimerRepository(persistence)
+        val before = Timer(1, "2", 3, "4")
+        val after = Timer(1, "3", 4, "5")
+
+        repository.add(before)
+        repository.update(after)
+
+        Assert.assertEquals(after, repository.findById(1))
+        Assert.assertEquals(1, repository.count())
+    }
+
+    @Test(expected = IllegalArgumentException::class)
+    fun update_Timerなし()
+    {
+        val repository : Repository<Timer> = TimerRepository(persistence)
+        val one = Timer(1, "2", 3, "4")
+        repository.update(one)
+    }
+
+    @Test
+    fun next()
+    {
+        val repository : Repository<Timer> = TimerRepository(persistence)
+        var next : Int = 0
+        var count : Int = 0
+
+        for (i in 0..10)
+        {
+            next = repository.next()
+            repository.add(Timer(next, next.toString(), next.toLong(), next.toString()))
+            Assert.assertEquals(i, next)
+        }
     }
 
     class ObservableCallbackSpy : ObservableList.OnListChangedCallback<ObservableList<Timer>>() {

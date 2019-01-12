@@ -99,8 +99,13 @@ class MicheTimerActivity : AppCompatActivity(), MicheTimerNavigator {
         Log.v("tag", "onResume")
     }
 
-    override fun onStartEditTimer() {
-        val intent = Intent(this, AddTimerActivity::class.java)
+    override fun onStartAddTimer() {
+        val intent = AddTimerActivity.create(this, AddTimerActivity.addMode, -1)
+        startActivity(intent)
+    }
+
+    override fun onStartEditTimer(timer: Timer) {
+        val intent = AddTimerActivity.create(this, AddTimerActivity.editMode, timer.id)
         startActivity(intent)
     }
 
