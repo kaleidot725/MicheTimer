@@ -9,11 +9,13 @@ import kaleidot725.michetimer.domain.Timer
 import kaleidot725.michetimer.domain.TimerRepository
 import java.lang.Exception
 
-class AddTimerViewModel(navigator: AddTimerNavigator, timerRepository  : TimerRepository) : ViewModel() {
-    val name : MutableLiveData<String> =  MutableLiveData()
-    val sound : MutableLiveData<String> = MutableLiveData()
-    var minute : MutableLiveData<Long> = MutableLiveData()
-    var second : MutableLiveData<Long> = MutableLiveData()
+class AddTimerViewModel(navigator: AddTimerNavigator, timerRepository  : TimerRepository) : TimerViewModel() {
+
+    override val name : MutableLiveData<String> =  MutableLiveData()
+    override val error : MutableLiveData<String> = MutableLiveData()
+    override var sound : String = "chime"
+    override var minute : Long = 0
+    override var second : Long = 0
 
     private val navigator : AddTimerNavigator = navigator
     private val timerRepository : TimerRepository = timerRepository
@@ -21,42 +23,46 @@ class AddTimerViewModel(navigator: AddTimerNavigator, timerRepository  : TimerRe
 
     init {
         name.value = "New Timer"
-        sound.value = "chime"
-        minute.value = 0
-        second.value = 0
+        error.value = getError()
     }
 
-    fun onItemSelectedMinute(parent: AdapterView<*>, view: View, position: Int, id: Long) {
+    // View -> ViewModel
+    override fun onItemSelectedMinute(parent: AdapterView<*>, view: View, position: Int, id: Long) {
+        val value = parent.selectedItem as String?
+        if (!value.isNullOrEmpty())
+            minute = (value as String).toLong()
+
+        error.postValue(getError())
+    }
+
+    override fun onItemSelectedSecond(parent: AdapterView<*>, view: View, position: Int, id: Long) {
         val value = parent.selectedItem as String
-        minute.postValue(value.toLong())
+        if (!value.isNullOrEmpty())
+            second = (value as String).toLong()
+
+        error.postValue(getError())
     }
 
-    fun onItemSelectedSecond(parent: AdapterView<*>, view: View, position: Int, id: Long) {
+    override fun onItemSelectedAlarm(parent: AdapterView<*>, view: View, position: Int, id:Long) {
         val value = parent.selectedItem as String
-        second.postValue(value.toLong())
+        if (!value.isNullOrEmpty())
+            sound = value as String
+
+        error.postValue(getError())
     }
 
-    fun onItemSelectedAlarm(parent: AdapterView<*>, view: View, position: Int, id:Long) {
-        val value = parent.selectedItem as String
-        sound.postValue(value)
-    }
-
-    fun onComplete(view : View) {
-        if (name.value.isNullOrEmpty())
-            return
-
-        if (minute.value == null && second.value == null)
-            return
-
-        if (minute.value == 0L && second.value == 0L)
-            return
+    override fun onComplete(view : View) {
 
         try {
-            val blankId = timerRepository.getBlankId()
-            val name    = name.value   as String
-            val seconds = minute.value as Long * 60 + second.value as Long
-            val sound   = sound.value  as String
-            val timer   = Timer(blankId, name, seconds, sound)
+            if (hasError()){
+                return
+            }
+
+            val id = timerRepository.next()
+            val name    = name.value as String
+            val seconds = minute * 60 + second
+            val sound   = sound  as String
+            val timer   = Timer(id, name, seconds, sound)
             timerRepository.add(timer)
             navigator.onComplete()
         }
@@ -65,10 +71,17 @@ class AddTimerViewModel(navigator: AddTimerNavigator, timerRepository  : TimerRe
         }
     }
 
-    fun TimerRepository.getBlankId() : Int {
-        val sorted = timerRepository.findAll().sortedBy { it.id }
-        var blankId = sorted.count()
-        sorted.forEachIndexed { i, t -> if (t.id != i)  { blankId = i  } }
-        return blankId
+    private fun getError() : String {
+        if (minute == 0L && second == 0L)
+            return "Please select minutes and seconds"
+
+        return ""
+    }
+
+    private fun hasError() : Boolean{
+        if (minute == 0L && second == 0L)
+            return true
+
+        return false
     }
 }

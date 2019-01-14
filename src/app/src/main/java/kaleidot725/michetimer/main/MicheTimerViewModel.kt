@@ -7,7 +7,7 @@ import android.view.View
 class MicheTimerViewModel(navigator : MicheTimerNavigator) : ViewModel() {
     val navigator: MicheTimerNavigator = navigator
 
-    fun onStartEditTimer(view : View){
-        navigator.onStartEditTimer()
+    fun onStartAddTimer(view : View){
+        navigator.onStartAddTimer()
     }
 }

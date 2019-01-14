@@ -40,7 +40,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="left|top"
                 android:layout_margin="8dp"
-                android:text="@{timerViewModel.name}"
+                android:text="@={timerViewModel.name}"
                 android:textSize="@dimen/large_text"/>
 
             <TextView
@@ -48,7 +48,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerInParent="true"
-                android:text="@{timerViewModel.remainSeconds}"
+                android:text="@={timerViewModel.remainSeconds}"
                 android:textSize="@dimen/huge_text" />
 
             <Button
@@ -76,7 +76,7 @@
                 android:layout_alignParentEnd="true"
                 android:textColor="@color/colorSecondary"
                 android:background="#00000000"
-                android:text="@{timerViewModel.state}"
+                android:text="@={timerViewModel.state}"
                 android:onClick="@{timerViewModel::run}"/>
         </RelativeLayout>
     </androidx.cardview.widget.CardView>

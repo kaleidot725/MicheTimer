@@ -2,9 +2,11 @@ package kaleidot725.michetimer.main
 
 import androidx.appcompat.widget.PopupMenu
 import android.view.View
+import kaleidot725.michetimer.domain.Timer
 
 interface MicheTimerNavigator {
-    fun onStartEditTimer()
+    fun onStartAddTimer()
+    fun onStartEditTimer(timer : Timer)
     fun onShowLicense()
     fun onShowOption(view : View, menuListener : PopupMenu.OnMenuItemClickListener)
 }

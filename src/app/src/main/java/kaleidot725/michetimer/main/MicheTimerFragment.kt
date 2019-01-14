@@ -41,8 +41,18 @@ class MicheTimerFragment() : Fragment() {
             adapter = TimerListAdapter(timerViewModels)
         }
 
-        timerViewModels.onRemoveEvent = { i, vm -> recyclerView.adapter?.notifyItemRemoved(i) }
-        timerViewModels.onAddEvent = { i, vm -> recyclerView.adapter?.notifyItemInserted(i) }
+        timerViewModels.onRemoveEvent = { i ->
+            recyclerView.adapter?.notifyItemRemoved(i)
+        }
+
+        timerViewModels.onAddEvent = { i->
+            recyclerView.adapter?.notifyItemInserted(i)
+            recyclerView.adapter?.notifyItemChanged(i)
+        }
+
+        timerViewModels.onChanged = {
+            recyclerView.adapter?.notifyDataSetChanged()
+        }
     }
 
     private object MicheTimerViewModelFactory : ViewModelProvider.Factory{

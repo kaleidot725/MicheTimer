@@ -1,6 +1,7 @@
 package kaleidot725.michetimer.domain
 
 import io.reactivex.subjects.BehaviorSubject
+import java.util.*
 
 enum class TimerRunnerState {
     Init, Run, Pause, Timeout
@@ -12,6 +13,8 @@ interface TimerRunnerInterface {
     val seconds : Long
     val remainSeconds : BehaviorSubject<Long>
     val state : BehaviorSubject<TimerRunnerState>
+    val start : Date
+    val end : Date
 
     fun run()
     fun pause()
