@@ -20,6 +20,8 @@ import androidx.appcompat.widget.Toolbar
 import androidx.drawerlayout.widget.DrawerLayout
 import com.google.android.material.navigation.NavigationView
 import kaleidot725.michetimer.R
+import kaleidot725.michetimer.domain.FilePersistence
+import kaleidot725.michetimer.domain.Timer
 import kaleidot725.michetimer.micheTimerNavigator
 import kaleidot725.michetimer.timerRepository
 import kaleidot725.michetimer.timerService
@@ -49,7 +51,10 @@ class MicheTimerActivity : AppCompatActivity(), MicheTimerNavigator {
         setContentView(R.layout.activity_main)
 
         micheTimerNavigator = this
-        timerRepository = TimerRepository(this.applicationContext.filesDir.path + "setting.json")
+
+        val f = this.applicationContext.filesDir.path + "setting.json"
+        val p = FilePersistence(f, Timer::class.java)
+        timerRepository = TimerRepository(p)
 
         val intent = Intent(this, TimerRunnerService::class.java)
         startService(intent)
@@ -94,8 +99,13 @@ class MicheTimerActivity : AppCompatActivity(), MicheTimerNavigator {
         Log.v("tag", "onResume")
     }
 
-    override fun onStartEditTimer() {
-        val intent = Intent(this, AddTimerActivity::class.java)
+    override fun onStartAddTimer() {
+        val intent = AddTimerActivity.create(this, AddTimerActivity.addMode, -1)
+        startActivity(intent)
+    }
+
+    override fun onStartEditTimer(timer: Timer) {
+        val intent = AddTimerActivity.create(this, AddTimerActivity.editMode, timer.id)
         startActivity(intent)
     }
 

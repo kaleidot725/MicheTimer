@@ -4,7 +4,7 @@
     xmlns:android="http://schemas.android.com/apk/res/android">
 
     <data>
-        <variable name="viewmodel" type="kaleidot725.michetimer.addtimer.AddTimerViewModel"/>
+        <variable name="viewmodel" type="kaleidot725.michetimer.addtimer.TimerViewModel"/>
     </data>
 
     <FrameLayout

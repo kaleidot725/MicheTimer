@@ -1,28 +1,28 @@
 package kaleidot725.michetimer.addtimer
 
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
 import android.util.Log
 import android.view.View
 import android.widget.AdapterView
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
 import kaleidot725.michetimer.domain.Timer
 import kaleidot725.michetimer.domain.TimerRepository
 import java.lang.Exception
 
-class AddTimerViewModel(navigator: AddTimerNavigator, timerRepository  : TimerRepository) : TimerViewModel() {
-
+class EditTimerViewModel(navigator: AddTimerNavigator, repository : TimerRepository, timer : Timer) : TimerViewModel() {
     override val name : MutableLiveData<String> =  MutableLiveData()
     override val error : MutableLiveData<String> = MutableLiveData()
-    override var sound : String = "chime"
-    override var minute : Long = 0
-    override var second : Long = 0
+    override var sound : String = timer.sound
+    override var minute : Long = timer.seconds / 60
+    override var second : Long = timer.seconds % 60
 
+    private val id = timer.id
     private val navigator : AddTimerNavigator = navigator
-    private val timerRepository : TimerRepository = timerRepository
-    private val tag = "AddTimerViewModel"
+    private val timerRepository : TimerRepository = repository
+    private val tag = "EditTimerViewModel"
 
     init {
-        name.value = "New Timer"
+        name.value = timer.name
         error.value = getError()
     }
 
@@ -58,12 +58,11 @@ class AddTimerViewModel(navigator: AddTimerNavigator, timerRepository  : TimerRe
                 return
             }
 
-            val id = timerRepository.next()
             val name    = name.value as String
             val seconds = minute * 60 + second
             val sound   = sound  as String
             val timer   = Timer(id, name, seconds, sound)
-            timerRepository.add(timer)
+            timerRepository.update(timer)
             navigator.onComplete()
         }
         catch (e : Exception) {

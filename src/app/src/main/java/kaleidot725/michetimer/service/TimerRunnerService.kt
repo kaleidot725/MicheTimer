@@ -19,10 +19,6 @@ import java.text.SimpleDateFormat
 
 
 class TimerRunnerService : Service(), TimerRunnerServiceInterface {
-    inner class ServiceBinder : Binder() {
-        val instance: TimerRunnerService get() = this@TimerRunnerService
-    }
-
     private val tag: String = "TimerService"
     private val binder: IBinder = ServiceBinder()
     private val runners : MutableMap<Int, TimerRunnerInterface> = mutableMapOf()
@@ -124,12 +120,7 @@ class TimerRunnerService : Service(), TimerRunnerServiceInterface {
 
     private fun notifyTimeOut(runner : TimerRunnerInterface)
     {
-        val intent = Intent(this, StopTimerActivity::class.java).apply {
-            putExtra("id", runner.id)
-            putExtra("start", runner.start.time)
-            putExtra( "end", runner.end.time)
-        }
-
+        val intent = StopTimerActivity.create(this, runner.id, runner.start.time, runner.end.time)
         val pIntent = PendingIntent.getActivity(this, runner.id, intent, PendingIntent.FLAG_UPDATE_CURRENT)
         val df = SimpleDateFormat("HH:mm:ss")
 
@@ -143,5 +134,9 @@ class TimerRunnerService : Service(), TimerRunnerServiceInterface {
                 .setContentIntent(pIntent)
 
         manager.notify(runner.id , builder.build())
+    }
+
+    inner class ServiceBinder : Binder() {
+        val instance: TimerRunnerService get() = this@TimerRunnerService
     }
 }

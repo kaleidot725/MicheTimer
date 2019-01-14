@@ -9,33 +9,45 @@ import kaleidot725.michetimer.service.TimerRunnerService
 
 class TimerViewModels(navigator : MicheTimerNavigator, service : TimerRunnerService, repository : TimerRepository) : ViewModel() {
     val all : ObservableList<TimerViewModel> = ObservableArrayList<TimerViewModel>()
-    var onAddEvent : ((Int, TimerViewModel) -> Unit) ?= null
-    var onRemoveEvent : ((Int, TimerViewModel) -> Unit) ?= null
+    var onAddEvent : ((Int) -> Unit) ?= null
+    var onRemoveEvent : ((Int) -> Unit) ?= null
+    var onChanged : (() -> Unit) ?= null
 
     private val navigator : MicheTimerNavigator = navigator
     private val service : TimerRunnerService? = service
     private val repository : TimerRepository = repository
 
     init {
-        repository.forEachIndexed { i, t -> all.add(TimerViewModel(navigator, service, repository, i)) }
+        repository.findAll().forEach { t -> all.add(TimerViewModel(navigator, t, service, repository)) }
         repository.addOnListChangedCallback(object : ObservableList.OnListChangedCallback<ObservableList<Timer>>(){
             override fun onItemRangeInserted(sender: ObservableList<Timer>?, positionStart: Int, itemCount: Int) {
                 if (sender != null) {
-                    val viewModel = TimerViewModel(navigator, service, repository, positionStart)
-                    all.add(viewModel)
-                    onAddEvent?.invoke(positionStart, viewModel)
+                    val viewModel = TimerViewModel(navigator, sender[positionStart], service, repository)
+                    all.add(positionStart, viewModel)
+                    onAddEvent?.invoke(positionStart)
                 }
             }
 
             override fun onItemRangeRemoved(sender: ObservableList<Timer>?, positionStart: Int, itemCount: Int) {
                 if (sender != null) {
-                    val viewModel = all.get(positionStart)
+                    val viewModel = all[positionStart]
                     all.remove(viewModel)
-                    onRemoveEvent?.invoke(positionStart, viewModel)
+                    onRemoveEvent?.invoke(positionStart)
                 }
             }
 
-            override fun onChanged(sender: ObservableList<Timer>?) { }
+            override fun onChanged(sender: ObservableList<Timer>?) {
+                if (sender != null) {
+                    sender?.forEach {
+                        val viewModel = TimerViewModel(navigator, it, service, repository)
+                        all.clear()
+                        all.add(viewModel)
+                    }
+
+                    onChanged?.invoke()
+                }
+            }
+
             override fun onItemRangeMoved(sender: ObservableList<Timer>?, fromPosition: Int, toPosition: Int, itemCount: Int) { }
             override fun onItemRangeChanged(sender: ObservableList<Timer>?, positionStart: Int, itemCount: Int) { }
         })

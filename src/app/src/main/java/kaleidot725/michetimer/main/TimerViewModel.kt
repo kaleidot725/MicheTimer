@@ -13,9 +13,8 @@ import kaleidot725.michetimer.domain.TimerRepository
 import kaleidot725.michetimer.service.TimerRunnerService
 import kaleidot725.michetimer.domain.TimerRunnerState
 
-class TimerViewModel(navigator : MicheTimerNavigator, service : TimerRunnerService, repository: TimerRepository, index : Int) : ViewModel() {
-    val name : String
-    val seconds : String
+class TimerViewModel(navigator : MicheTimerNavigator, timer : Timer, service : TimerRunnerService, repository: TimerRepository) : ViewModel() {
+    val name : MutableLiveData<String>
     val state : MutableLiveData<String>
     val remainSeconds : MutableLiveData<String>
 
@@ -33,18 +32,22 @@ class TimerViewModel(navigator : MicheTimerNavigator, service : TimerRunnerServi
         this.navigator = navigator
         this.service = service
         this.repository = repository
-        this.timer = repository.elementAt(index)
+        this.timer = timer
 
-        this.name = timer.name
-        this.seconds = toRemainSecondsString(timer.seconds)
+        this.name = MutableLiveData()
+        this.name.postValue(timer.name)
         this.state = MutableLiveData()
         this.state.postValue(toStateString(TimerRunnerState.Init))
         this.remainSeconds = MutableLiveData()
-        this.remainSeconds.postValue(this.seconds)
+        this.remainSeconds.postValue(toRemainSecondsString(timer.seconds))
         this.listener = PopupMenu.OnMenuItemClickListener {
             when(it?.itemId) {
                 R.id.delete -> {
                     delete()
+                    true
+                }
+                R.id.edit -> {
+                    edit()
                     true
                 }
                 else -> {
@@ -52,7 +55,6 @@ class TimerViewModel(navigator : MicheTimerNavigator, service : TimerRunnerServi
                 }
             }
         }
-
 
         this.runner = service.register(timer.id, timer.name, timer.seconds, timer.sound) as TimerRunnerController
         val stateDisposable = this.runner.state.subscribe {
@@ -110,6 +112,13 @@ class TimerViewModel(navigator : MicheTimerNavigator, service : TimerRunnerServi
     {
         service.unregister(timer.id)
         repository.remove(timer)
+        compositeDisposable.dispose()
+    }
+
+    fun edit()
+    {
+        navigator.onStartEditTimer(timer)
+        service.unregister(timer.id)
         compositeDisposable.dispose()
     }
 

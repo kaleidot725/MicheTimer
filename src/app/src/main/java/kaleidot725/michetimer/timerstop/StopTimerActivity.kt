@@ -11,6 +11,19 @@ import kaleidot725.michetimer.timerService
 import java.util.*
 
 class StopTimerActivity : AppCompatActivity()  {
+
+    companion object {
+        fun create(context : Context, id : Int, start : Long, end : Long) : Intent {
+            val intent = Intent(context, StopTimerActivity::class.java).apply {
+                putExtra("id", id)
+                putExtra("start", start)
+                putExtra( "end", end)
+            }
+
+            return intent
+        }
+    }
+
     private inner class TimerServiceConnectionForStoppingTimer : ServiceConnection {
         override fun onServiceConnected(name: ComponentName?, service: IBinder?) {
             var timerService = (service as TimerRunnerService.ServiceBinder).instance
