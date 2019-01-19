@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
+<layout
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:android="http://schemas.android.com/apk/res/android">
 
     <data>
-        <variable name="viewmodel" type="kaleidot725.michetimer.addtimer.TimerViewModel"/>
+        <variable name="viewmodel" type="kaleidot725.michetimer.addtimer.BaseTimerViewModel"/>
     </data>
 
     <FrameLayout
@@ -118,6 +118,8 @@
             android:layout_height="wrap_content"
             android:layout_gravity="end|bottom"
             android:src="@drawable/ic_baseline_add_24px"
+            android:clickable="true"
+            android:focusable="true"
             android:onClick="@{viewmodel::onComplete}"
             android:layout_margin="8dp" />
     </FrameLayout>

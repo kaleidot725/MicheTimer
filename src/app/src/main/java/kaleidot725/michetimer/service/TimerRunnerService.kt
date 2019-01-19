@@ -14,7 +14,7 @@ import android.util.Log
 import kaleidot725.michetimer.R
 import android.app.PendingIntent
 import kaleidot725.michetimer.domain.*
-import kaleidot725.michetimer.timerstop.StopTimerActivity
+import kaleidot725.michetimer.stoptimer.StopTimerActivity
 import java.text.SimpleDateFormat
 
 

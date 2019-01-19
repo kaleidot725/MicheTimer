@@ -1,7 +1,10 @@
 package kaleidot725.michetimer.domain
 
 import android.content.Context
+import android.media.AudioManager
 import android.media.MediaPlayer
+import android.net.rtp.AudioStream
+import android.provider.MediaStore
 import kaleidot725.michetimer.R
 
 class MediaPlayer(context : Context, name : String) : MediaPlayerInterface {
@@ -13,7 +16,9 @@ class MediaPlayer(context : Context, name : String) : MediaPlayerInterface {
         else     -> { R.raw.chime  }
     }
 
-    private var player : MediaPlayer = MediaPlayer.create(context, id).apply { isLooping = true }
+    private var player : MediaPlayer = MediaPlayer.create(context, id).apply {
+        isLooping = true
+    }
 
     override fun play() {
         if (player.isPlaying)

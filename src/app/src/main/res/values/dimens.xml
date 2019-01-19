@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <dimen name="huge_text">64dp</dimen>
+    <dimen name="huge_text">50dp</dimen>
     <dimen name="large_text">20dp</dimen>
-    <dimen name="middle_text">16dp</dimen>
-    <dimen name="small_text">12dp</dimen>
+    <dimen name="middle_text">15dp</dimen>
+    <dimen name="small_text">10dp</dimen>
 
     <dimen name="activity_horizontal_margin">16dp</dimen>
     <dimen name="activity_vertical_margin">16dp</dimen>

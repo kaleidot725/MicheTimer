@@ -1,7 +1,6 @@
 package kaleidot725.michetimer.addtimer
 
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
 import android.util.Log
 import android.view.View
 import android.widget.AdapterView
@@ -9,7 +8,7 @@ import kaleidot725.michetimer.domain.Timer
 import kaleidot725.michetimer.domain.TimerRepository
 import java.lang.Exception
 
-class AddTimerViewModel(navigator: AddTimerNavigator, timerRepository  : TimerRepository) : TimerViewModel() {
+class AddTimerViewModel(navigator: AddTimerNavigator, timerRepository  : TimerRepository) : BaseTimerViewModel() {
 
     override val name : MutableLiveData<String> =  MutableLiveData()
     override val error : MutableLiveData<String> = MutableLiveData()
