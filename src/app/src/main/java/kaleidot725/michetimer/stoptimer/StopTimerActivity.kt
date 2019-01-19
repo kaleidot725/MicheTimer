@@ -1,4 +1,4 @@
-package kaleidot725.michetimer.timerstop
+package kaleidot725.michetimer.stoptimer
 
 import android.content.*
 import android.os.Bundle
@@ -7,7 +7,6 @@ import androidx.appcompat.app.AppCompatActivity
 import kaleidot725.michetimer.R
 import kaleidot725.michetimer.domain.TimerRunnerState
 import kaleidot725.michetimer.service.TimerRunnerService
-import kaleidot725.michetimer.timerService
 import java.util.*
 
 class StopTimerActivity : AppCompatActivity()  {

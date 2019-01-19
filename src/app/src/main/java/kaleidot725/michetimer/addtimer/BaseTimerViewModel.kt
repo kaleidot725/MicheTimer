@@ -5,7 +5,7 @@ import android.widget.AdapterView
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 
-abstract class TimerViewModel : ViewModel(){
+abstract class BaseTimerViewModel : ViewModel(){
     abstract val name : MutableLiveData<String>
     abstract val error : MutableLiveData<String>
     abstract var sound : String

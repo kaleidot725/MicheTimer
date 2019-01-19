@@ -2,6 +2,9 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="kaleidot725.michetimer">
 
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_miche_timer"
@@ -9,17 +12,30 @@
         android:roundIcon="@mipmap/ic_miche_timer_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".main.MicheTimerActivity" android:theme="@style/AppTheme.NoActionBar">
+
+        <activity
+            android:name=".main.MicheTimerActivity"
+            android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".addtimer.AddTimerActivity" android:label="@string/activity_add_timer_name"  android:parentActivityName=".main.MicheTimerActivity"/>
-        <activity android:name=".timerstop.StopTimerActivity" android:label="Stop Timer"/>
-        <service android:name=".service.TimerRunnerService"/>
+        <activity
+            android:name=".addtimer.AddTimerActivity"
+            android:label="@string/activity_add_timer_name"
+            android:parentActivityName=".main.MicheTimerActivity"/>
+        <activity
+            android:name=".stoptimer.StopTimerActivity"
+            android:label="Stop Timer" />
+
+        <activity
+            android:name=".disptimer.DispTimerActivity"
+            android:label="Timer Name"
+            android:parentActivityName=".main.MicheTimerActivity"/>
+
+        <service android:name=".service.TimerRunnerService" />
     </application>
 
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
 </manifest>

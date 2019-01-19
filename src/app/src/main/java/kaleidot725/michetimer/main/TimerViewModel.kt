@@ -108,6 +108,11 @@ class TimerViewModel(navigator : MicheTimerNavigator, timer : Timer, service : T
         this.runner.reset()
     }
 
+    fun display(view: View)
+    {
+        navigator.onStartDispTimer(timer)
+    }
+
     fun delete()
     {
         service.unregister(timer.id)

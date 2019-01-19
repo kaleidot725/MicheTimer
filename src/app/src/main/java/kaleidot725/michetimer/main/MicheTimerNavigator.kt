@@ -7,6 +7,7 @@ import kaleidot725.michetimer.domain.Timer
 interface MicheTimerNavigator {
     fun onStartAddTimer()
     fun onStartEditTimer(timer : Timer)
+    fun onStartDispTimer(timer : Timer)
     fun onShowLicense()
     fun onShowOption(view : View, menuListener : PopupMenu.OnMenuItemClickListener)
 }

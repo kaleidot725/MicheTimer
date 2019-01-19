@@ -20,6 +20,7 @@ import androidx.appcompat.widget.Toolbar
 import androidx.drawerlayout.widget.DrawerLayout
 import com.google.android.material.navigation.NavigationView
 import kaleidot725.michetimer.R
+import kaleidot725.michetimer.disptimer.DispTimerActivity
 import kaleidot725.michetimer.domain.FilePersistence
 import kaleidot725.michetimer.domain.Timer
 import kaleidot725.michetimer.micheTimerNavigator
@@ -106,6 +107,11 @@ class MicheTimerActivity : AppCompatActivity(), MicheTimerNavigator {
 
     override fun onStartEditTimer(timer: Timer) {
         val intent = AddTimerActivity.create(this, AddTimerActivity.editMode, timer.id)
+        startActivity(intent)
+    }
+
+    override fun onStartDispTimer(timer: Timer) {
+        val intent = DispTimerActivity.create(this, timer.id)
         startActivity(intent)
     }
 

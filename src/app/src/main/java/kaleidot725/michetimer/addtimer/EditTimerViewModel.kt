@@ -9,7 +9,7 @@ import kaleidot725.michetimer.domain.Timer
 import kaleidot725.michetimer.domain.TimerRepository
 import java.lang.Exception
 
-class EditTimerViewModel(navigator: AddTimerNavigator, repository : TimerRepository, timer : Timer) : TimerViewModel() {
+class EditTimerViewModel(navigator: AddTimerNavigator, repository : TimerRepository, timer : Timer) : BaseTimerViewModel() {
     override val name : MutableLiveData<String> =  MutableLiveData()
     override val error : MutableLiveData<String> = MutableLiveData()
     override var sound : String = timer.sound

@@ -43,26 +43,30 @@
                 android:text="@={timerViewModel.name}"
                 android:textSize="@dimen/large_text"/>
 
-            <TextView
+            <Button
                 android:id="@+id/remain_seconds_textview"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_centerInParent="true"
                 android:text="@={timerViewModel.remainSeconds}"
-                android:textSize="@dimen/huge_text" />
+                android:textAlignment="center"
+                android:textStyle="normal"
+                android:textSize="@dimen/huge_text"
+                android:background="#00000000"
+                android:onClick="@{timerViewModel::display}"/>
 
             <Button
                 android:id="@+id/reset_button"
-                android:layout_width="64dp"
-                android:layout_height="32dp"
                 android:padding="5dp"
-                android:textStyle="normal"
-                android:textSize="@dimen/middle_text"
-                android:layout_alignParentBottom="true"
-                android:layout_toStartOf="@+id/run_button"
-                android:textColor="@color/colorSecondary"
                 android:background="#00000000"
                 android:text="Reset"
+                android:textStyle="normal"
+                android:textSize="@dimen/middle_text"
+                android:textColor="@color/colorSecondary"
+                android:layout_width="64dp"
+                android:layout_height="32dp"
+                android:layout_alignParentBottom="true"
+                android:layout_toLeftOf="@id/run_button"
                 android:onClick="@{timerViewModel::reset}"/>
 
             <Button
