@@ -118,6 +118,8 @@
             android:layout_height="wrap_content"
             android:layout_gravity="end|bottom"
             android:src="@drawable/ic_baseline_add_24px"
+            android:clickable="true"
+            android:focusable="true"
             android:onClick="@{viewmodel::onComplete}"
             android:layout_margin="8dp" />
     </FrameLayout>
