@@ -4,7 +4,7 @@ import androidx.appcompat.widget.PopupMenu
 import android.view.View
 import kaleidot725.michetimer.domain.Timer
 
-interface MicheTimerNavigator {
+interface MainNavigator {
     fun onStartAddTimer()
     fun onStartEditTimer(timer : Timer)
     fun onStartDispTimer(timer : Timer)

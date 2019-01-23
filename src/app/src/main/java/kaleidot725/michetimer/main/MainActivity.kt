@@ -8,13 +8,11 @@ import androidx.appcompat.widget.PopupMenu
 import android.view.View
 import android.os.IBinder
 import android.util.Log
-import android.view.MenuItem
 import com.google.android.gms.oss.licenses.OssLicensesMenuActivity
 import kaleidot725.michetimer.addtimer.AddTimerActivity
 import kaleidot725.michetimer.domain.TimerRepository
 import kaleidot725.michetimer.service.TimerRunnerService
 import android.content.Intent
-import android.view.Menu
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.widget.Toolbar
 import androidx.drawerlayout.widget.DrawerLayout
@@ -23,18 +21,17 @@ import kaleidot725.michetimer.R
 import kaleidot725.michetimer.disptimer.DispTimerActivity
 import kaleidot725.michetimer.domain.FilePersistence
 import kaleidot725.michetimer.domain.Timer
-import kaleidot725.michetimer.micheTimerNavigator
+import kaleidot725.michetimer.mainNavigator
 import kaleidot725.michetimer.timerRepository
 import kaleidot725.michetimer.timerService
-import kotlinx.android.synthetic.main.activity_main.*
 
-class MicheTimerActivity : AppCompatActivity(), MicheTimerNavigator {
+class MainActivity : AppCompatActivity(), MainNavigator {
     val connection : ServiceConnection = object : ServiceConnection {
         override fun onServiceConnected(name: ComponentName?, service: IBinder?) {
             // FIXME シングルトンでの変数保持をやめる
             timerService = (service as TimerRunnerService.ServiceBinder).instance
             val transaction = supportFragmentManager.beginTransaction()
-            val fragment = MicheTimerFragment() as Fragment
+            val fragment = MainFragment() as Fragment
             transaction.replace(R.id.container, fragment)
             transaction.commit()
             Log.v("tag", "onServiceConnected")
@@ -51,7 +48,7 @@ class MicheTimerActivity : AppCompatActivity(), MicheTimerNavigator {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        micheTimerNavigator = this
+        mainNavigator = this
 
         val f = this.applicationContext.filesDir.path + "setting.json"
         val p = FilePersistence(f, Timer::class.java)

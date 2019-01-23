@@ -1,7 +1,6 @@
 package kaleidot725.michetimer.addtimer
 
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
 import android.util.Log
 import android.view.View
 import android.widget.AdapterView

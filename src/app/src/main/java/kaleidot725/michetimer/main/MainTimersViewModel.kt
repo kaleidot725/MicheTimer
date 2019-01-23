@@ -7,22 +7,22 @@ import kaleidot725.michetimer.domain.Timer
 import kaleidot725.michetimer.domain.TimerRepository
 import kaleidot725.michetimer.service.TimerRunnerService
 
-class TimerViewModels(navigator : MicheTimerNavigator, service : TimerRunnerService, repository : TimerRepository) : ViewModel() {
-    val all : ObservableList<TimerViewModel> = ObservableArrayList<TimerViewModel>()
+class MainTimersViewModel(navigator : MainNavigator, service : TimerRunnerService, repository : TimerRepository) : ViewModel() {
+    val all : ObservableList<MainTimerViewModel> = ObservableArrayList<MainTimerViewModel>()
     var onAddEvent : ((Int) -> Unit) ?= null
     var onRemoveEvent : ((Int) -> Unit) ?= null
     var onChanged : (() -> Unit) ?= null
 
-    private val navigator : MicheTimerNavigator = navigator
+    private val navigator : MainNavigator = navigator
     private val service : TimerRunnerService? = service
     private val repository : TimerRepository = repository
 
     init {
-        repository.findAll().forEach { t -> all.add(TimerViewModel(navigator, t, service, repository)) }
+        repository.findAll().forEach { t -> all.add(MainTimerViewModel(navigator, t, service, repository)) }
         repository.addOnListChangedCallback(object : ObservableList.OnListChangedCallback<ObservableList<Timer>>(){
             override fun onItemRangeInserted(sender: ObservableList<Timer>?, positionStart: Int, itemCount: Int) {
                 if (sender != null) {
-                    val viewModel = TimerViewModel(navigator, sender[positionStart], service, repository)
+                    val viewModel = MainTimerViewModel(navigator, sender[positionStart], service, repository)
                     all.add(positionStart, viewModel)
                     onAddEvent?.invoke(positionStart)
                 }
@@ -39,7 +39,7 @@ class TimerViewModels(navigator : MicheTimerNavigator, service : TimerRunnerServ
             override fun onChanged(sender: ObservableList<Timer>?) {
                 if (sender != null) {
                     sender?.forEach {
-                        val viewModel = TimerViewModel(navigator, it, service, repository)
+                        val viewModel = MainTimerViewModel(navigator, it, service, repository)
                         all.clear()
                         all.add(viewModel)
                     }

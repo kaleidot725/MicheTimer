@@ -3,10 +3,10 @@
     xmlns:android="http://schemas.android.com/apk/res/android">
 
     <data>
-        <variable name="timerViewModel" type="kaleidot725.michetimer.main.TimerViewModel"/>
+        <variable name="timerViewModel" type="kaleidot725.michetimer.main.MainTimerViewModel"/>
     </data>
 
-    <androidx.cardview.widget.CardView xmlns:card_view="http://schemas.android.com/apk/res-auto"
+    <androidx.cardview.widget.CardView
         android:id="@+id/card_view"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -16,7 +16,7 @@
         android:layout_marginTop="5dp"
         android:layout_marginRight="10dp"
         android:layout_marginBottom="5dp"
-        card_view:cardCornerRadius="5dp">
+        app:cardCornerRadius="5dp">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/layout"
@@ -32,10 +32,10 @@
                 android:foreground="?android:attr/selectableItemBackground"
                 android:onClick="@{timerViewModel::popupOption}"
                 android:src="@drawable/ic_card_menu"
-                card_view:layout_constraintBottom_toTopOf="@+id/remain_seconds_button"
-                card_view:layout_constraintEnd_toEndOf="parent"
-                card_view:layout_constraintStart_toEndOf="@+id/name_textview"
-                card_view:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintBottom_toTopOf="@+id/remain_seconds_button"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/name_textview"
+                app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
                 android:id="@+id/name_textview"
@@ -48,10 +48,10 @@
                 android:paddingTop="8dp"
                 android:text="@={timerViewModel.name}"
                 android:textSize="@dimen/large_text"
-                card_view:layout_constraintBottom_toBottomOf="@+id/option_button"
-                card_view:layout_constraintEnd_toStartOf="@+id/option_button"
-                card_view:layout_constraintStart_toStartOf="parent"
-                card_view:layout_constraintTop_toTopOf="@+id/option_button" />
+                app:layout_constraintBottom_toBottomOf="@+id/option_button"
+                app:layout_constraintEnd_toStartOf="@+id/option_button"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/option_button" />
 
             <TextView
                 android:id="@+id/remain_seconds_button"
@@ -65,25 +65,26 @@
                 android:textAlignment="center"
                 android:textSize="@dimen/huge_text"
                 android:textStyle="normal"
-                card_view:layout_constraintBottom_toTopOf="@+id/reset_button"
-                card_view:layout_constraintEnd_toEndOf="parent"
-                card_view:layout_constraintStart_toStartOf="parent"
-                card_view:layout_constraintTop_toBottomOf="@+id/option_button" />
+                app:layout_constraintBottom_toTopOf="@+id/reset_button"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/option_button" />
 
             <LinearLayout
                 android:id="@+id/reset_button"
                 android:layout_width="0dp"
                 android:layout_height="32dp"
+                android:layout_marginTop="8dp"
                 android:background="#00000000"
                 android:foreground="?android:attr/selectableItemBackground"
                 android:gravity="center"
                 android:onClick="@{timerViewModel::reset}"
                 android:orientation="horizontal"
-                card_view:layout_constraintBottom_toBottomOf="parent"
-                card_view:layout_constraintEnd_toStartOf="@+id/run_button"
-                card_view:layout_constraintHorizontal_chainStyle="spread_inside"
-                card_view:layout_constraintStart_toStartOf="parent"
-                card_view:layout_constraintTop_toBottomOf="@+id/remain_seconds_button">
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/run_button"
+                app:layout_constraintHorizontal_chainStyle="spread_inside"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/remain_seconds_button">
 
                 <ImageView
                     android:layout_width="wrap_content"
@@ -91,10 +92,10 @@
                     android:layout_marginRight="15dp"
                     android:adjustViewBounds="true"
                     android:scaleType="fitCenter"
-                    android:src="@drawable/ic_card_menu" />
+                    android:src="@drawable/ic_replay" />
 
                 <TextView
-                    android:layout_width="wrap_content"
+                    android:layout_width="64dp"
                     android:layout_height="32dp"
                     android:gravity="center"
                     android:text="Reset"
@@ -105,15 +106,16 @@
                 android:id="@+id/run_button"
                 android:layout_width="0dp"
                 android:layout_height="32dp"
+                android:layout_marginTop="8dp"
                 android:background="#00000000"
                 android:foreground="?android:attr/selectableItemBackground"
                 android:gravity="center"
                 android:onClick="@{timerViewModel::run}"
-                card_view:layout_constraintBottom_toBottomOf="parent"
-                card_view:layout_constraintEnd_toEndOf="parent"
-                card_view:layout_constraintStart_toEndOf="@+id/reset_button"
-                card_view:layout_constraintTop_toBottomOf="@+id/remain_seconds_button"
-                card_view:layout_constraintVertical_bias="0.714">
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/reset_button"
+                app:layout_constraintTop_toBottomOf="@+id/remain_seconds_button"
+                app:layout_constraintVertical_bias="0.714">
 
                 <ImageView
                     android:layout_width="wrap_content"
@@ -121,10 +123,10 @@
                     android:layout_marginRight="15dp"
                     android:adjustViewBounds="true"
                     android:scaleType="fitCenter"
-                    android:src="@drawable/ic_card_menu" />
+                    app:imageResource="@{timerViewModel.stateImage}" />
 
                 <TextView
-                    android:layout_width="wrap_content"
+                    android:layout_width="64dp"
                     android:layout_height="32dp"
                     android:gravity="center"
                     android:text="@={timerViewModel.state}"
