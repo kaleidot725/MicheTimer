@@ -13,13 +13,14 @@ import kaleidot725.michetimer.domain.TimerRepository
 import kaleidot725.michetimer.service.TimerRunnerService
 import kaleidot725.michetimer.domain.TimerRunnerState
 
-class TimerViewModel(navigator : MicheTimerNavigator, timer : Timer, service : TimerRunnerService, repository: TimerRepository) : ViewModel() {
+class MainTimerViewModel(navigator : MainNavigator, timer : Timer, service : TimerRunnerService, repository: TimerRepository) : ViewModel() {
     val name : MutableLiveData<String>
     val state : MutableLiveData<String>
+    val stateImage : MutableLiveData<Int>
     val remainSeconds : MutableLiveData<String>
 
     private val tag : String = "TimerViewModel"
-    private val navigator : MicheTimerNavigator
+    private val navigator : MainNavigator
     private val service : TimerRunnerService
     private val repository : TimerRepository
     private var runner : TimerRunnerController
@@ -38,6 +39,8 @@ class TimerViewModel(navigator : MicheTimerNavigator, timer : Timer, service : T
         this.name.postValue(timer.name)
         this.state = MutableLiveData()
         this.state.postValue(toStateString(TimerRunnerState.Init))
+        this.stateImage = MutableLiveData()
+        this.stateImage.postValue(toStateImage(TimerRunnerState.Init))
         this.remainSeconds = MutableLiveData()
         this.remainSeconds.postValue(toRemainSecondsString(timer.seconds))
         this.listener = PopupMenu.OnMenuItemClickListener {
@@ -60,6 +63,7 @@ class TimerViewModel(navigator : MicheTimerNavigator, timer : Timer, service : T
         val stateDisposable = this.runner.state.subscribe {
             try {
                 this.state.postValue(toStateString(it))
+                this.stateImage.postValue(toStateImage(it))
             }
             catch(e : java.lang.Exception) {
                 Log.v("TimerViewModel", e.toString())
@@ -108,6 +112,11 @@ class TimerViewModel(navigator : MicheTimerNavigator, timer : Timer, service : T
         this.runner.reset()
     }
 
+    fun display(view: View)
+    {
+        navigator.onStartDispTimer(timer)
+    }
+
     fun delete()
     {
         service.unregister(timer.id)
@@ -136,5 +145,13 @@ class TimerViewModel(navigator : MicheTimerNavigator, timer : Timer, service : T
                 TimerRunnerState.Timeout -> { "Stop"    }
                 TimerRunnerState.Init    -> { "Start"   }
                 TimerRunnerState.Pause   -> { "Start"   }
+            }
+
+    private fun toStateImage(state : TimerRunnerState) =
+            when (state) {
+                TimerRunnerState.Run     -> { R.drawable.ic_pause  }
+                TimerRunnerState.Timeout -> { R.drawable.ic_stop   }
+                TimerRunnerState.Init    -> { R.drawable.ic_play   }
+                TimerRunnerState.Pause   -> { R.drawable.ic_play   }
             }
 }
