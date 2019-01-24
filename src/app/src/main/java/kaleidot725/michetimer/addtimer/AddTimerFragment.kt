@@ -9,6 +9,7 @@ import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.text.Html
 import android.text.method.LinkMovementMethod
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -79,7 +80,7 @@ class AddTimerFragment : Fragment() {
         val soundAdapter = ArrayAdapter.createFromResource(view.context, R.array.sounds, android.R.layout.simple_spinner_dropdown_item)
         soundAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
         soundSpinner.adapter = soundAdapter
-        soundSpinner.setSelection(soundAdapter.getPosition(viewModel.name.value))
+        soundSpinner.setSelection(soundAdapter.getPosition(viewModel.sound))
 
         val alarmUrl = view.findViewById<TextView>(R.id.alarm_url)
         alarmUrl.linksClickable = true
