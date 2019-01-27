@@ -2,11 +2,10 @@ package kaleidot725.michetimer.stoptimer
 
 import android.content.*
 import android.os.Bundle
-import android.os.IBinder
 import androidx.appcompat.app.AppCompatActivity
 import kaleidot725.michetimer.R
 import kaleidot725.michetimer.domain.TimerRunnerState
-import kaleidot725.michetimer.service.TimerRunnerService
+import kaleidot725.michetimer.timerService
 import java.util.*
 
 class StopTimerActivity : AppCompatActivity()  {
@@ -23,62 +22,30 @@ class StopTimerActivity : AppCompatActivity()  {
         }
     }
 
-    private inner class TimerServiceConnectionForStoppingTimer : ServiceConnection {
-        override fun onServiceConnected(name: ComponentName?, service: IBinder?) {
-            var timerService = (service as TimerRunnerService.ServiceBinder).instance
-            var controller = timerService.resolve(StopTimerActivity@id)
-            if (controller.state.value == TimerRunnerState.Timeout &&
-                controller.start.equals(StopTimerActivity@start) &&
-                controller.end.equals(StopTimerActivity@end))
-            {
-                controller.reset()
-            }
-
-            StopTimerActivity@completed = true
-        }
-
-        override fun onServiceDisconnected(name : ComponentName?) {
-        }
-    }
-
-    private val defaultTimeoutMs = 1000L
-    private val defaultIntervalMs = 100L
-    private var id : Int = -1
-    private var start : Date = Date()
-    private var end : Date = Date()
-    private var completed : Boolean = false
-    private lateinit var connection : TimerServiceConnectionForStoppingTimer
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
         // Initialize activity property
-        this.id = intent.getIntExtra("id", -1)
-        this.start = Date(intent.getLongExtra("start", -1))
-        this.end = Date(intent.getLongExtra("end", -1))
+        val id = intent.getIntExtra("id", -1)
+        val start = Date(intent.getLongExtra("start", -1))
+        val end = Date(intent.getLongExtra("end", -1))
 
-        // Create timer service intent
-        val intent = Intent(this, TimerRunnerService::class.java)
-        this.connection = this.TimerServiceConnectionForStoppingTimer()
-        startService(intent)
-        bindService(intent, this.connection, Context.BIND_ADJUST_WITH_ACTIVITY)
-
-        // Wait for stopping timer
-        var remainingMs = defaultTimeoutMs
-        while(completed) {
-            Thread.sleep(defaultIntervalMs)
-            remainingMs -= defaultIntervalMs
-            if (remainingMs <= 0) {
-                break
-            }
+        var controller = timerService.resolve(id)
+        if (controller.state.value == TimerRunnerState.Timeout &&
+            controller.start.equals(start) &&
+            controller.end.equals(end))
+        {
+            controller.reset()
         }
+        timerService.unregister(id)
 
         finish()
     }
 
     override fun onDestroy() {
         super.onDestroy()
-        unbindService(this.connection)
     }
+
+    fun 
 }

@@ -42,6 +42,9 @@ dependencies {
     implementation 'androidx.recyclerview:recyclerview:1.1.0-alpha01'
     implementation 'com.google.android.gms:play-services-oss-licenses:16.0.1'
 
+    implementation 'com.google.dagger:dagger:2.21'
+    annotationProcessor 'com.google.dagger:dagger-compiler:2.21'
+
     testImplementation 'junit:junit:4.12'
     testImplementation "androidx.arch.core:core-testing:2.0.0"
     androidTestImplementation 'androidx.test:runner:1.1.1'

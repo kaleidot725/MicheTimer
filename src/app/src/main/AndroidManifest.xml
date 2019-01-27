@@ -34,8 +34,6 @@
             android:name=".disptimer.DispTimerActivity"
             android:label="Timer Name"
             android:parentActivityName=".main.MainActivity"/>
-
-        <service android:name=".service.TimerRunnerService" />
     </application>
 
 </manifest>

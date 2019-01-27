@@ -9,7 +9,7 @@ import kaleidot725.michetimer.R
 import kaleidot725.michetimer.domain.TimerRunnerController
 import kaleidot725.michetimer.domain.Timer
 import kaleidot725.michetimer.domain.TimerRepository
-import kaleidot725.michetimer.service.TimerRunnerService
+import kaleidot725.michetimer.domain.TimerRunnerService
 import kaleidot725.michetimer.domain.TimerRunnerState
 
 class DispTimerViewModel(navigator : DispTimerNavigator, timer : Timer, service : TimerRunnerService, repository: TimerRepository) : ViewModel() {

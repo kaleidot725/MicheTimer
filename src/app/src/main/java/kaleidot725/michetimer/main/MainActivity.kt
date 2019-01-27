@@ -1,62 +1,38 @@
 package kaleidot725.michetimer.main
 
-import android.content.*
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import androidx.appcompat.widget.PopupMenu
 import android.view.View
-import android.os.IBinder
 import android.util.Log
 import com.google.android.gms.oss.licenses.OssLicensesMenuActivity
 import kaleidot725.michetimer.addtimer.AddTimerActivity
 import kaleidot725.michetimer.domain.TimerRepository
-import kaleidot725.michetimer.service.TimerRunnerService
+import kaleidot725.michetimer.domain.TimerRunnerService
 import android.content.Intent
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.widget.Toolbar
 import androidx.drawerlayout.widget.DrawerLayout
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
 import com.google.android.material.navigation.NavigationView
 import kaleidot725.michetimer.R
 import kaleidot725.michetimer.disptimer.DispTimerActivity
 import kaleidot725.michetimer.domain.FilePersistence
 import kaleidot725.michetimer.domain.Timer
-import kaleidot725.michetimer.mainNavigator
 import kaleidot725.michetimer.timerRepository
 import kaleidot725.michetimer.timerService
 
 class MainActivity : AppCompatActivity(), MainNavigator {
-    val connection : ServiceConnection = object : ServiceConnection {
-        override fun onServiceConnected(name: ComponentName?, service: IBinder?) {
-            // FIXME シングルトンでの変数保持をやめる
-            timerService = (service as TimerRunnerService.ServiceBinder).instance
-            val transaction = supportFragmentManager.beginTransaction()
-            val fragment = MainFragment() as Fragment
-            transaction.replace(R.id.container, fragment)
-            transaction.commit()
-            Log.v("tag", "onServiceConnected")
-        }
-
-        override fun onServiceDisconnected(name : ComponentName?) {
-            // FIXME シングルトンでの変数保持をやめる
-            timerService = null
-            Log.v("tag", "onServiceDisconnected")
-        }
-    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        mainNavigator = this
-
         val f = this.applicationContext.filesDir.path + "setting.json"
         val p = FilePersistence(f, Timer::class.java)
         timerRepository = TimerRepository(p)
-
-        val intent = Intent(this, TimerRunnerService::class.java)
-        startService(intent)
-        bindService(intent, this.connection, Context.BIND_ADJUST_WITH_ACTIVITY)
+        timerService = TimerRunnerService(applicationContext)
 
         val toolbar = findViewById<Toolbar>(R.id.toolbar)
         setSupportActionBar(toolbar)
@@ -83,6 +59,12 @@ class MainActivity : AppCompatActivity(), MainNavigator {
             drawerLayout.closeDrawers()
             true
         }
+
+        val transaction = supportFragmentManager.beginTransaction()
+        val fragment = MainFragment()
+        fragment.vmFactory = MainViewModelFactory()
+        transaction.replace(R.id.container, fragment)
+        transaction.commit()
 
         Log.v("tag", "onCreate")
     }
@@ -124,8 +106,16 @@ class MainActivity : AppCompatActivity(), MainNavigator {
         popup.show()
     }
 
-    override fun onDestroy() {
-        super.onDestroy()
-        unbindService(this.connection)
+    private inner class MainViewModelFactory : ViewModelProvider.Factory {
+        override fun <T : ViewModel?> create(modelClass: Class<T>): T {
+            if (modelClass == MainViewModel::class.java) {
+                return MainViewModel(
+                        this@MainActivity ,
+                        timerService as TimerRunnerService,
+                        timerRepository as TimerRepository) as T
+            }
+
+            throw IllegalArgumentException("Unknown ViewModel class : ${modelClass.name}")
+        }
     }
 }

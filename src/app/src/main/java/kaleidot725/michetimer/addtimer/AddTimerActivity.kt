@@ -4,8 +4,11 @@ import android.content.Context
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
 import kaleidot725.michetimer.R
-import kaleidot725.michetimer.addTimerNavigator
+import kaleidot725.michetimer.domain.Timer
+import kaleidot725.michetimer.timerRepository
 
 class AddTimerActivity : AppCompatActivity(),  AddTimerNavigator  {
 
@@ -27,21 +30,26 @@ class AddTimerActivity : AppCompatActivity(),  AddTimerNavigator  {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_add_timer)
 
-        // FIXME シングルトンでの変数保持をやめる
-        addTimerNavigator = this
         val mode = intent.getIntExtra("mode", AddTimerActivity.addMode)
-        val id = intent.getIntExtra("id", -1)
-
         when(mode)
         {
-            addMode -> setTitle("Add Timer")
-            editMode -> setTitle("Edit Timer")
+            addMode -> {
+                setTitle("Add Timer")
+                val transaction = supportFragmentManager.beginTransaction()
+                val fragment = AddTimerFragment().apply { vmFactory = AddTimerViewModelFactory() }
+                transaction.replace(R.id.container, fragment)
+                transaction.commit()
+            }
+            editMode -> {
+                setTitle("Edit Timer")
+                val transaction = supportFragmentManager.beginTransaction()
+                val id : Int = intent.getIntExtra("id", -1)
+                val fragment = AddTimerFragment().apply { vmFactory = EditTimerViewModelFactory(timerRepository?.findById(id) as Timer) }
+                transaction.replace(R.id.container, fragment)
+                transaction.commit()
+            }
         }
 
-        val transaction = supportFragmentManager.beginTransaction()
-        val fragment = AddTimerFragment.create(this, mode, id)
-        transaction.replace(R.id.container, fragment)
-        transaction.commit()
     }
 
     override fun onDestroy() {
@@ -50,5 +58,19 @@ class AddTimerActivity : AppCompatActivity(),  AddTimerNavigator  {
 
     override fun onComplete() {
         this.finish()
+    }
+
+    private inner class EditTimerViewModelFactory(timer : Timer) : ViewModelProvider.Factory {
+        private val timer : Timer = timer
+
+        override fun <T : ViewModel?> create(modelClass: Class<T>): T {
+            return EditTimerViewModel(this@AddTimerActivity, timerRepository, timer) as T
+        }
+    }
+
+    private inner class AddTimerViewModelFactory() : ViewModelProvider.Factory {
+        override fun <T : ViewModel?> create(modelClass: Class<T>): T {
+            return AddTimerViewModel(this@AddTimerActivity, timerRepository) as T
+        }
     }
 }
