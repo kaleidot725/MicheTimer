@@ -4,52 +4,39 @@ import android.content.Context
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
-import kaleidot725.michetimer.R
+import kaleidot725.michetimer.*
+import kaleidot725.michetimer.app.MicheTimerApplication
 import kaleidot725.michetimer.domain.Timer
-import kaleidot725.michetimer.timerRepository
+import kaleidot725.michetimer.domain.TimerRepository
+import kaleidot725.michetimer.domain.TimerRunnerService
+import javax.inject.Inject
+import javax.inject.Named
 
 class AddTimerActivity : AppCompatActivity(),  AddTimerNavigator  {
 
-    companion object {
-        val addMode : Int = 0
-        val editMode : Int = 1
+    lateinit var component : AddTimerActivityComponent
 
-        fun create(context : Context, mode : Int, id : Int) : Intent {
-            val intent = Intent(context, AddTimerActivity::class.java).apply {
-                putExtra("mode", mode)
-                putExtra("id", id)
-            }
+    @Inject lateinit var timerRepository : TimerRepository
 
-            return intent
-        }
-    }
+    @Inject lateinit var timerRunnerService : TimerRunnerService
+
+    @field:[Inject Named("EditTimer")] lateinit var editTimer : Timer
+
+    @Inject lateinit var addTimerMode : AddTimerMode
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_add_timer)
 
-        val mode = intent.getIntExtra("mode", AddTimerActivity.addMode)
-        when(mode)
-        {
-            addMode -> {
-                setTitle("Add Timer")
-                val transaction = supportFragmentManager.beginTransaction()
-                val fragment = AddTimerFragment().apply { vmFactory = AddTimerViewModelFactory() }
-                transaction.replace(R.id.container, fragment)
-                transaction.commit()
-            }
-            editMode -> {
-                setTitle("Edit Timer")
-                val transaction = supportFragmentManager.beginTransaction()
-                val id : Int = intent.getIntExtra("id", -1)
-                val fragment = AddTimerFragment().apply { vmFactory = EditTimerViewModelFactory(timerRepository?.findById(id) as Timer) }
-                transaction.replace(R.id.container, fragment)
-                transaction.commit()
-            }
-        }
+        val appComponent = (application as MicheTimerApplication).component
+        component = appComponent.plus(AddTimerActivityModule(this))
+        component.inject(this)
 
+        title = addTimerMode.valueString
+        val transaction = supportFragmentManager.beginTransaction()
+        val fragment = AddTimerFragment()
+        transaction.replace(R.id.container, fragment)
+        transaction.commit()
     }
 
     override fun onDestroy() {
@@ -58,19 +45,5 @@ class AddTimerActivity : AppCompatActivity(),  AddTimerNavigator  {
 
     override fun onComplete() {
         this.finish()
-    }
-
-    private inner class EditTimerViewModelFactory(timer : Timer) : ViewModelProvider.Factory {
-        private val timer : Timer = timer
-
-        override fun <T : ViewModel?> create(modelClass: Class<T>): T {
-            return EditTimerViewModel(this@AddTimerActivity, timerRepository, timer) as T
-        }
-    }
-
-    private inner class AddTimerViewModelFactory() : ViewModelProvider.Factory {
-        override fun <T : ViewModel?> create(modelClass: Class<T>): T {
-            return AddTimerViewModel(this@AddTimerActivity, timerRepository) as T
-        }
     }
 }

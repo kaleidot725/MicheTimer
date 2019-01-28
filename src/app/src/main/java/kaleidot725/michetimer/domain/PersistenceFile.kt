@@ -10,7 +10,7 @@ import java.io.FileOutputStream
 import java.lang.reflect.ParameterizedType
 
 
-class FilePersistence<T>(name : String, clazz : Class<T>) : Persistence<T>
+class PersistenceFile<T>(name : String, clazz : Class<T>) : Persistence<T>
 {
     val name : String = name
 

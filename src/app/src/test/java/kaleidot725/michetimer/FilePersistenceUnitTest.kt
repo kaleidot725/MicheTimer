@@ -1,9 +1,7 @@
 package kaleidot725.michetimer
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
-import androidx.databinding.ObservableArrayList
-import androidx.databinding.ObservableList
-import kaleidot725.michetimer.domain.FilePersistence
+import kaleidot725.michetimer.domain.PersistenceFile
 import kaleidot725.michetimer.domain.Timer
 import org.junit.Assert
 import org.junit.Rule
@@ -25,7 +23,7 @@ class FilePersistenceUnitTest {
         expected.add(Timer(2, "3", 4, "5"))
         expected.add(Timer(3, "4", 5, "6"))
 
-        val file = FilePersistence(filename, Timer::class.java)
+        val file = PersistenceFile(filename, Timer::class.java)
         file.save(expected)
         val actual = file.load()
 

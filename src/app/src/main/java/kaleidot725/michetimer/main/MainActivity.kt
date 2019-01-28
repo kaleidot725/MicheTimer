@@ -1,5 +1,6 @@
 package kaleidot725.michetimer.main
 
+import android.app.Application
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.appcompat.widget.PopupMenu
@@ -16,23 +17,36 @@ import androidx.drawerlayout.widget.DrawerLayout
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.google.android.material.navigation.NavigationView
+import kaleidot725.michetimer.MainActivityComponent
+import kaleidot725.michetimer.MainActivityModule
 import kaleidot725.michetimer.R
+import kaleidot725.michetimer.addtimer.AddTimerMode
+import kaleidot725.michetimer.app.MicheTimerApplication
 import kaleidot725.michetimer.disptimer.DispTimerActivity
-import kaleidot725.michetimer.domain.FilePersistence
 import kaleidot725.michetimer.domain.Timer
-import kaleidot725.michetimer.timerRepository
-import kaleidot725.michetimer.timerService
+import javax.inject.Inject
+import javax.inject.Named
 
 class MainActivity : AppCompatActivity(), MainNavigator {
+
+    lateinit var component : MainActivityComponent
+
+    @Inject lateinit var timerRepository : TimerRepository
+
+    @Inject lateinit var timerRunnerService : TimerRunnerService
+
+    @field:[Inject Named("DispTimer")] lateinit var dispTimer : Timer
+
+    @field:[Inject Named("EditTimer")] lateinit var editTimer : Timer
+
+    @Inject lateinit var addTimerMode : AddTimerMode
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        val f = this.applicationContext.filesDir.path + "setting.json"
-        val p = FilePersistence(f, Timer::class.java)
-        timerRepository = TimerRepository(p)
-        timerService = TimerRunnerService(applicationContext)
+        component = (application as MicheTimerApplication).component.plus(MainActivityModule(this))
+        component.inject(this)
 
         val toolbar = findViewById<Toolbar>(R.id.toolbar)
         setSupportActionBar(toolbar)
@@ -62,7 +76,6 @@ class MainActivity : AppCompatActivity(), MainNavigator {
 
         val transaction = supportFragmentManager.beginTransaction()
         val fragment = MainFragment()
-        fragment.vmFactory = MainViewModelFactory()
         transaction.replace(R.id.container, fragment)
         transaction.commit()
 
@@ -80,22 +93,36 @@ class MainActivity : AppCompatActivity(), MainNavigator {
     }
 
     override fun onStartAddTimer() {
-        val intent = AddTimerActivity.create(this, AddTimerActivity.addMode, -1)
+        val intent = Intent(applicationContext, AddTimerActivity::class.java)
+        addTimerMode.value = AddTimerMode.add
         startActivity(intent)
     }
 
     override fun onStartEditTimer(timer: Timer) {
-        val intent = AddTimerActivity.create(this, AddTimerActivity.editMode, timer.id)
+        editTimer.apply {
+            id = timer.id
+            name = timer.name
+            seconds = timer.seconds
+            sound = timer.sound
+        }
+        addTimerMode.value = AddTimerMode.edit
+        val intent = Intent(applicationContext, AddTimerActivity::class.java)
         startActivity(intent)
     }
 
     override fun onStartDispTimer(timer: Timer) {
-        val intent = DispTimerActivity.create(this, timer.id)
+        dispTimer.apply {
+            id = timer.id
+            name = timer.name
+            seconds = timer.seconds
+            sound = timer.sound
+        }
+        val intent = Intent(applicationContext, DispTimerActivity::class.java)
         startActivity(intent)
     }
 
     override fun onShowLicense() {
-        val intent = Intent(this, OssLicensesMenuActivity::class.java)
+        val intent = Intent(applicationContext, OssLicensesMenuActivity::class.java)
         startActivity(intent)
     }
 
@@ -104,18 +131,5 @@ class MainActivity : AppCompatActivity(), MainNavigator {
         popup.menuInflater.inflate(R.menu.timer_menu, popup.menu)
         popup.setOnMenuItemClickListener(listner)
         popup.show()
-    }
-
-    private inner class MainViewModelFactory : ViewModelProvider.Factory {
-        override fun <T : ViewModel?> create(modelClass: Class<T>): T {
-            if (modelClass == MainViewModel::class.java) {
-                return MainViewModel(
-                        this@MainActivity ,
-                        timerService as TimerRunnerService,
-                        timerRepository as TimerRepository) as T
-            }
-
-            throw IllegalArgumentException("Unknown ViewModel class : ${modelClass.name}")
-        }
     }
 }

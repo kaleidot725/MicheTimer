@@ -15,11 +15,18 @@ import kaleidot725.michetimer.databinding.FragmentDispTimerBinding
 import kaleidot725.michetimer.domain.Timer
 import kaleidot725.michetimer.domain.TimerRepository
 import kaleidot725.michetimer.domain.TimerRunnerService
-import java.lang.Exception
+import javax.inject.Inject
+import javax.inject.Named
 
 class DispTimerFragment : Fragment() {
 
-    lateinit var vmFactory : ViewModelProvider.Factory
+    @Inject lateinit var timerRepository : TimerRepository
+
+    @Inject lateinit var timerRunnerService : TimerRunnerService
+
+    @Inject lateinit var navigator : DispTimerNavigator
+
+    @field:[Inject Named("DispTimer")] lateinit var dispTimer : Timer
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
@@ -29,9 +36,18 @@ class DispTimerFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        val vm = ViewModelProviders.of(this, vmFactory).get(DispTimerViewModel::class.java)
+
+        (activity as DispTimerActivity).component.plus(DispTimerFragmentModule()).inject(this)
+
+        val vm = ViewModelProviders.of(this, DispTimerViewModelFactory()).get(DispTimerViewModel::class.java)
         val binding = DataBindingUtil.bind<FragmentDispTimerBinding>(view)
         binding?.setVariable(BR.dispTimerViewModel, vm)
         binding?.setLifecycleOwner(this)
+    }
+
+    private inner class DispTimerViewModelFactory() : ViewModelProvider.Factory {
+        override fun <T : ViewModel?> create(modelClass: Class<T>): T {
+            return DispTimerViewModel(navigator, dispTimer, timerRunnerService, timerRepository) as T
+        }
     }
 }

@@ -6,6 +6,7 @@
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
 
     <application
+        android:name=".app.MicheTimerApplication"
         android:allowBackup="true"
         android:icon="@mipmap/ic_miche_timer"
         android:label="@string/app_name"
@@ -29,7 +30,6 @@
         <activity
             android:name=".stoptimer.StopTimerActivity"
             android:label="Stop Timer" />
-
         <activity
             android:name=".disptimer.DispTimerActivity"
             android:label="Timer Name"

@@ -1,56 +1,40 @@
 package kaleidot725.michetimer.disptimer
 
-import android.content.Context
-import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.ViewModelProviders
-import kaleidot725.michetimer.R
+import kaleidot725.michetimer.*
+import kaleidot725.michetimer.app.MicheTimerApplication
 import kaleidot725.michetimer.domain.Timer
-import kaleidot725.michetimer.timerRepository
-import kaleidot725.michetimer.timerService
-import java.lang.Exception
-
+import kaleidot725.michetimer.domain.TimerRepository
+import kaleidot725.michetimer.domain.TimerRunnerService
+import javax.inject.Inject
+import javax.inject.Named
 
 class DispTimerActivity : AppCompatActivity() , DispTimerNavigator {
 
-    companion object {
-        fun create(context : Context, id : Int) : Intent {
-            val intent = Intent(context, DispTimerActivity::class.java).apply {
-                putExtra("id", id)
-            }
+    lateinit var component : DispTimerActivityComponent
 
-            return intent
-        }
-    }
+    @Inject
+    lateinit var timerRepository : TimerRepository
+
+    @Inject
+    lateinit var timerRunnerService : TimerRunnerService
+
+    @field:[Inject Named("DispTimer")] lateinit var dispTimer : Timer
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_disp_timer)
 
-        val id = intent.getIntExtra("id", -1)
-        val timer = timerRepository.findById(id)
-        if (timer == null) {
-            finish()
-        }
+        val appComponent = (application as MicheTimerApplication).component
+        component = appComponent.plus(DispTimerActivityModule(this))
+        component.inject(this)
 
-        title = (timer as Timer).name
+        title = dispTimer.name
 
         val transaction = supportFragmentManager.beginTransaction()
-        val fragment = DispTimerFragment().apply {
-            vmFactory = DispTimerViewModelFactory(timer as Timer)
-        }
+        val fragment = DispTimerFragment()
         transaction.replace(R.id.container, fragment)
         transaction.commit()
-    }
-
-    private inner class DispTimerViewModelFactory(timer : Timer) : ViewModelProvider.Factory {
-        private val timer : Timer = timer
-
-        override fun <T : ViewModel?> create(modelClass: Class<T>): T {
-            return DispTimerViewModel(this@DispTimerActivity, timer, timerService, timerRepository) as T
-        }
     }
 }
