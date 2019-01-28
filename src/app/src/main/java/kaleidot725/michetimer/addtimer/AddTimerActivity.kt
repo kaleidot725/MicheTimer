@@ -7,8 +7,11 @@ import android.os.Bundle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import kaleidot725.michetimer.R
+import kaleidot725.michetimer.app.MicheTimerApplication
 import kaleidot725.michetimer.domain.Timer
-import kaleidot725.michetimer.timerRepository
+import kaleidot725.michetimer.domain.TimerRepository
+import kaleidot725.michetimer.domain.TimerRunnerService
+import javax.inject.Inject
 
 class AddTimerActivity : AppCompatActivity(),  AddTimerNavigator  {
 
@@ -26,9 +29,17 @@ class AddTimerActivity : AppCompatActivity(),  AddTimerNavigator  {
         }
     }
 
+    @Inject
+    lateinit var timerRepository : TimerRepository
+
+    @Inject
+    lateinit var timerRunnerService : TimerRunnerService
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_add_timer)
+
+        (application as MicheTimerApplication).component.inject(this)
 
         val mode = intent.getIntExtra("mode", AddTimerActivity.addMode)
         when(mode)
@@ -44,7 +55,7 @@ class AddTimerActivity : AppCompatActivity(),  AddTimerNavigator  {
                 setTitle("Edit Timer")
                 val transaction = supportFragmentManager.beginTransaction()
                 val id : Int = intent.getIntExtra("id", -1)
-                val fragment = AddTimerFragment().apply { vmFactory = EditTimerViewModelFactory(timerRepository?.findById(id) as Timer) }
+                val fragment = AddTimerFragment().apply { vmFactory = EditTimerViewModelFactory(timerRepository.findById(id) as Timer) }
                 transaction.replace(R.id.container, fragment)
                 transaction.commit()
             }

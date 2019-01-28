@@ -1,5 +1,6 @@
 package kaleidot725.michetimer.main
 
+import android.app.Application
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.appcompat.widget.PopupMenu
@@ -17,22 +18,24 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.google.android.material.navigation.NavigationView
 import kaleidot725.michetimer.R
+import kaleidot725.michetimer.app.MicheTimerApplication
 import kaleidot725.michetimer.disptimer.DispTimerActivity
-import kaleidot725.michetimer.domain.FilePersistence
 import kaleidot725.michetimer.domain.Timer
-import kaleidot725.michetimer.timerRepository
-import kaleidot725.michetimer.timerService
+import javax.inject.Inject
 
 class MainActivity : AppCompatActivity(), MainNavigator {
+
+    @Inject
+    lateinit var timerRepository : TimerRepository
+
+    @Inject
+    lateinit var timerRunnerService : TimerRunnerService
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        val f = this.applicationContext.filesDir.path + "setting.json"
-        val p = FilePersistence(f, Timer::class.java)
-        timerRepository = TimerRepository(p)
-        timerService = TimerRunnerService(applicationContext)
+        (application as MicheTimerApplication).component.inject(this)
 
         val toolbar = findViewById<Toolbar>(R.id.toolbar)
         setSupportActionBar(toolbar)
@@ -109,10 +112,7 @@ class MainActivity : AppCompatActivity(), MainNavigator {
     private inner class MainViewModelFactory : ViewModelProvider.Factory {
         override fun <T : ViewModel?> create(modelClass: Class<T>): T {
             if (modelClass == MainViewModel::class.java) {
-                return MainViewModel(
-                        this@MainActivity ,
-                        timerService as TimerRunnerService,
-                        timerRepository as TimerRepository) as T
+                return MainViewModel(this@MainActivity , timerRunnerService, timerRepository) as T
             }
 
             throw IllegalArgumentException("Unknown ViewModel class : ${modelClass.name}")

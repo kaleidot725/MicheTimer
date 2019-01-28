@@ -4,6 +4,12 @@ apply plugin: 'kotlin-android-extensions'
 apply plugin: 'kotlin-kapt'
 apply plugin: 'com.google.android.gms.oss-licenses-plugin'
 
+gradle.projectsEvaluated {
+    tasks.withType(JavaCompile) {
+        options.compilerArgs << "-Xmaxerrs" << "500"
+    }
+}
+
 android {
     compileSdkVersion 28
     defaultConfig {
@@ -43,14 +49,10 @@ dependencies {
     implementation 'com.google.android.gms:play-services-oss-licenses:16.0.1'
 
     implementation 'com.google.dagger:dagger:2.21'
-    annotationProcessor 'com.google.dagger:dagger-compiler:2.21'
+    kapt 'com.google.dagger:dagger-compiler:2.21'
 
     testImplementation 'junit:junit:4.12'
     testImplementation "androidx.arch.core:core-testing:2.0.0"
     androidTestImplementation 'androidx.test:runner:1.1.1'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.1.1'
-}
-
-kapt {
-    generateStubs = true
 }

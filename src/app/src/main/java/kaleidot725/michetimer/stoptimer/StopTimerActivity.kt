@@ -4,9 +4,12 @@ import android.content.*
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import kaleidot725.michetimer.R
+import kaleidot725.michetimer.app.MicheTimerApplication
+import kaleidot725.michetimer.domain.TimerRepository
+import kaleidot725.michetimer.domain.TimerRunnerService
 import kaleidot725.michetimer.domain.TimerRunnerState
-import kaleidot725.michetimer.timerService
 import java.util.*
+import javax.inject.Inject
 
 class StopTimerActivity : AppCompatActivity()  {
 
@@ -22,23 +25,31 @@ class StopTimerActivity : AppCompatActivity()  {
         }
     }
 
+    @Inject
+    lateinit var timerRepository : TimerRepository
+
+    @Inject
+    lateinit var timerRunnerService : TimerRunnerService
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+
+        (application as MicheTimerApplication).component.inject(this)
 
         // Initialize activity property
         val id = intent.getIntExtra("id", -1)
         val start = Date(intent.getLongExtra("start", -1))
         val end = Date(intent.getLongExtra("end", -1))
 
-        var controller = timerService.resolve(id)
+        var controller = timerRunnerService.resolve(id)
         if (controller.state.value == TimerRunnerState.Timeout &&
             controller.start.equals(start) &&
             controller.end.equals(end))
         {
             controller.reset()
         }
-        timerService.unregister(id)
+        timerRunnerService.unregister(id)
 
         finish()
     }
@@ -46,6 +57,4 @@ class StopTimerActivity : AppCompatActivity()  {
     override fun onDestroy() {
         super.onDestroy()
     }
-
-    fun 
 }

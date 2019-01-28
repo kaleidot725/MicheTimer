@@ -6,12 +6,12 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.ViewModelProviders
 import kaleidot725.michetimer.R
+import kaleidot725.michetimer.app.MicheTimerApplication
 import kaleidot725.michetimer.domain.Timer
-import kaleidot725.michetimer.timerRepository
-import kaleidot725.michetimer.timerService
-import java.lang.Exception
+import kaleidot725.michetimer.domain.TimerRepository
+import kaleidot725.michetimer.domain.TimerRunnerService
+import javax.inject.Inject
 
 
 class DispTimerActivity : AppCompatActivity() , DispTimerNavigator {
@@ -26,9 +26,17 @@ class DispTimerActivity : AppCompatActivity() , DispTimerNavigator {
         }
     }
 
+    @Inject
+    lateinit var timerRepository : TimerRepository
+
+    @Inject
+    lateinit var timerRunnerService : TimerRunnerService
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_disp_timer)
+
+        (application as MicheTimerApplication).component.inject(this)
 
         val id = intent.getIntExtra("id", -1)
         val timer = timerRepository.findById(id)
@@ -50,7 +58,7 @@ class DispTimerActivity : AppCompatActivity() , DispTimerNavigator {
         private val timer : Timer = timer
 
         override fun <T : ViewModel?> create(modelClass: Class<T>): T {
-            return DispTimerViewModel(this@DispTimerActivity, timer, timerService, timerRepository) as T
+            return DispTimerViewModel(this@DispTimerActivity, timer, timerRunnerService, timerRepository) as T
         }
     }
 }
