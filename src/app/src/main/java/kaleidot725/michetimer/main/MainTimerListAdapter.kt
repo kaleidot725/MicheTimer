@@ -10,14 +10,14 @@ import android.view.*
 import kaleidot725.michetimer.R
 import kaleidot725.michetimer.databinding.TimerListViewItemBinding
 
-internal class MainTimerListAdapter(timerViewModels : MainTimersViewModel) : RecyclerView.Adapter<MainTimersViewHolder>(), LifecycleOwner {
+internal class MainTimerListAdapter(viewModel : MainViewModel) : RecyclerView.Adapter<MainTimersViewHolder>(), LifecycleOwner {
     private val registry : LifecycleRegistry
-    private val timerViewModels : ObservableList<MainTimerViewModel>
+    private val viewModel : MainViewModel
 
     init {
         this.registry = LifecycleRegistry(this)
         this.registry.markState(Lifecycle.State.CREATED)
-        this.timerViewModels = timerViewModels.all
+        this.viewModel = viewModel
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MainTimersViewHolder {
@@ -28,7 +28,7 @@ internal class MainTimerListAdapter(timerViewModels : MainTimersViewModel) : Rec
     }
 
     override fun onBindViewHolder(holder: MainTimersViewHolder, position: Int) {
-        holder.bind(timerViewModels[position])
+        holder.bind(viewModel.all[position])
     }
 
     override fun onDetachedFromRecyclerView(recyclerView: RecyclerView) {
@@ -36,6 +36,6 @@ internal class MainTimerListAdapter(timerViewModels : MainTimersViewModel) : Rec
         registry.markState(Lifecycle.State.DESTROYED)
     }
 
-    override fun getItemCount(): Int = timerViewModels.count()
+    override fun getItemCount(): Int = viewModel.all.count()
     override fun getLifecycle(): Lifecycle = registry
 }
