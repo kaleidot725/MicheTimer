@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<resources>
+	<string name="define_app_sound"></string>
+	<string name="library_app_sound_author">Pocket Sound</string>
+	<string name="library_app_sound_authorWebsite">https://pocket-se.info/</string>
+	<string name="library_app_sound_libraryName">App-Alarm</string>
+	<string name="library_app_sound_libraryDescription">効果音素材：ポケットサウンド - https://pocket-se.info</string>
+</resources>

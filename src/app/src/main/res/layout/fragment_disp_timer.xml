@@ -9,7 +9,8 @@
 
     <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:layout_margin="10dp">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/layout"
@@ -19,18 +20,20 @@
 
             <TextView
                 android:id="@+id/remain_seconds_button"
-                android:layout_width="match_parent"
+                android:layout_width="0dp"
                 android:layout_height="0dp"
                 android:layout_centerInParent="true"
-                android:layout_marginTop="200dp"
                 android:background="#00000000"
-                android:foreground="?android:attr/selectableItemBackground"
+                android:gravity="center"
                 android:text="@={dispTimerViewModel.remainSeconds}"
                 android:textAlignment="center"
                 android:textSize="90dp"
                 android:textStyle="normal"
+                app:layout_constraintBottom_toTopOf="@id/reset_button"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                tools:layout_editor_absoluteX="0dp" />
+                tools:text="@tools:sample/cities" />
 
             <LinearLayout
                 android:id="@+id/reset_button"

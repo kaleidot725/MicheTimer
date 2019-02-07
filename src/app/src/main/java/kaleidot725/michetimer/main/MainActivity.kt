@@ -1,12 +1,10 @@
 package kaleidot725.michetimer.main
 
-import android.app.Application
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.appcompat.widget.PopupMenu
 import android.view.View
 import android.util.Log
-import com.google.android.gms.oss.licenses.OssLicensesMenuActivity
 import kaleidot725.michetimer.addtimer.AddTimerActivity
 import kaleidot725.michetimer.domain.TimerRepository
 import kaleidot725.michetimer.domain.TimerRunnerService
@@ -14,8 +12,6 @@ import android.content.Intent
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.widget.Toolbar
 import androidx.drawerlayout.widget.DrawerLayout
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
 import com.google.android.material.navigation.NavigationView
 import kaleidot725.michetimer.MainActivityComponent
 import kaleidot725.michetimer.MainActivityModule
@@ -26,6 +22,10 @@ import kaleidot725.michetimer.disptimer.DispTimerActivity
 import kaleidot725.michetimer.domain.Timer
 import javax.inject.Inject
 import javax.inject.Named
+import com.mikepenz.aboutlibraries.Libs
+import com.mikepenz.aboutlibraries.LibsBuilder
+
+
 
 class MainActivity : AppCompatActivity(), MainNavigator {
 
@@ -122,8 +122,10 @@ class MainActivity : AppCompatActivity(), MainNavigator {
     }
 
     override fun onShowLicense() {
-        val intent = Intent(applicationContext, OssLicensesMenuActivity::class.java)
-        startActivity(intent)
+        LibsBuilder()
+                .withActivityTitle("License")
+                .withShowLoadingProgress(false)
+                .withActivityStyle(Libs.ActivityStyle.LIGHT_DARK_TOOLBAR).start(this)
     }
 
     override fun onShowOption(view : View, listner : PopupMenu.OnMenuItemClickListener) {
