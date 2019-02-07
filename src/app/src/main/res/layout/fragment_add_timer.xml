@@ -76,23 +76,6 @@
                     android:layout_height="wrap_content"
                     android:textSize="@dimen/middle_text"
                     android:text="Alarm"/>
-
-                <TextView
-                    android:id="@+id/from_text"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textSize="@dimen/middle_text"
-                    android:layout_marginLeft="10dp"
-                    android:text="from"/>
-
-                <TextView
-                    android:id="@+id/alarm_url"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Sound Pocket"
-                    android:layout_marginLeft="10dp"
-                    android:textSize="@dimen/middle_text"
-                    app:layout_constraintLeft_toRightOf="@id/alarm_text" />
             </LinearLayout>
 
             <Spinner
@@ -106,7 +89,8 @@
                 android:id="@+id/error_message"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textColor="#FF0000"
+                android:textColor="@color/compColorPrimary"
+                android:textSize="@dimen/middle_text"
                 android:layout_marginTop="10dp"
                 app:layout_constraintTop_toBottomOf="@+id/sound_spinner"
                 android:text="@{viewmodel.error}"/>

@@ -16,10 +16,15 @@ android {
         applicationId "kaleidot725.michetimer"
         minSdkVersion 21
         targetSdkVersion 28
-        versionCode 4
-        versionName "1.0.3"
+        versionCode 5
+        versionName "1.0.4"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         vectorDrawables.useSupportLibrary = true
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
     }
 
     buildTypes {
@@ -37,16 +42,16 @@ android {
 dependencies {
     implementation 'io.reactivex.rxjava2:rxkotlin:2.2.0'
     implementation fileTree(dir: 'libs', include: ['*.jar'])
-    implementation "org.jetbrains.kotlin:kotlin-stdlib-jre7:$kotlin_version"
+    implementation"org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
     implementation 'com.squareup.moshi:moshi-kotlin:1.5.0'
-    implementation 'androidx.constraintlayout:constraintlayout:2.0.0-alpha2'
+    implementation 'androidx.constraintlayout:constraintlayout:2.0.0-alpha3'
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
     implementation 'androidx.cardview:cardview:1.0.0'
     implementation 'androidx.appcompat:appcompat:1.1.0-alpha01'
-    implementation "com.google.android.material:material:1.1.0-alpha02"
+    implementation "com.google.android.material:material:1.1.0-alpha03"
     implementation "androidx.lifecycle:lifecycle-extensions:2.0.0"
-    implementation 'androidx.recyclerview:recyclerview:1.1.0-alpha01'
-    implementation 'com.google.android.gms:play-services-oss-licenses:16.0.1'
+    implementation 'androidx.recyclerview:recyclerview:1.1.0-alpha02'
+    implementation "com.mikepenz:aboutlibraries:6.2.2"
 
     implementation 'com.google.dagger:dagger:2.21'
     kapt 'com.google.dagger:dagger-compiler:2.21'

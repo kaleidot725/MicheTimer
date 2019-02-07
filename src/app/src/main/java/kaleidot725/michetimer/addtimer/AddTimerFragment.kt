@@ -66,12 +66,6 @@ class AddTimerFragment : Fragment() {
         soundSpinner.adapter = soundAdapter
         soundSpinner.setSelection(soundAdapter.getPosition(vm.sound))
 
-        val alarmUrl = view.findViewById<TextView>(R.id.alarm_url)
-        alarmUrl.linksClickable = true
-        @Suppress("DEPRECATION")
-        alarmUrl.text = Html.fromHtml( "<a href=\"https://pocket-se.info/\">Pocket Sound</a>")
-        alarmUrl.movementMethod = LinkMovementMethod.getInstance()
-
         val binding = DataBindingUtil.bind<FragmentAddTimerBinding>(view)
         binding?.setVariable(BR.viewmodel, vm)
         binding?.setLifecycleOwner(this)

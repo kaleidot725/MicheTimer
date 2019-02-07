@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<resources>
+	<string name="define_app_icon"></string>
+	<string name="library_app_icon_author">FreePik</string>
+	<string name="library_app_icon_authorWebsite">https://www.freepik.com/</string>
+	<string name="library_app_icon_libraryName">App-Icon</string>
+	<string name="library_app_icon_libraryDescription">Icon made by https://www.freepik.com/ from www.flaticon.com </string>
+	<string name="library_app_icon_licenseId">Flaticon Basic License</string>
+</resources>
