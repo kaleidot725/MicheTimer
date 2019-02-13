@@ -18,6 +18,7 @@ import kaleidot725.michetimer.domain.Timer
 import kaleidot725.michetimer.domain.TimerRepository
 import kaleidot725.michetimer.domain.TimerRunnerService
 import kaleidot725.michetimer.main.MainActivity
+import kaleidot725.michetimer.main.MainFilter
 import kaleidot725.michetimer.main.MainFragment
 import kaleidot725.michetimer.main.MainNavigator
 import javax.inject.Named
@@ -58,6 +59,12 @@ class MicheTimerApplicationModule(application : Application) {
     @Provides
     fun provideAddTimerMode() : AddTimerMode {
         return AddTimerMode(AddTimerMode.add)
+    }
+
+    @Singleton
+    @Provides
+    fun provideMainFilter() : MainFilter {
+        return MainFilter.None
     }
 }
 
