@@ -18,8 +18,10 @@ import kaleidot725.michetimer.domain.Timer
 import kaleidot725.michetimer.domain.TimerRepository
 import kaleidot725.michetimer.domain.TimerRunnerService
 import kaleidot725.michetimer.main.MainActivity
+import kaleidot725.michetimer.main.MainFilter
 import kaleidot725.michetimer.main.MainFragment
 import kaleidot725.michetimer.main.MainNavigator
+import kaleidot725.michetimer.stoptimer.StopTimerActivity
 import javax.inject.Named
 import javax.inject.Scope
 import javax.inject.Singleton
@@ -59,6 +61,12 @@ class MicheTimerApplicationModule(application : Application) {
     fun provideAddTimerMode() : AddTimerMode {
         return AddTimerMode(AddTimerMode.add)
     }
+
+    @Singleton
+    @Provides
+    fun provideMainFilter() : MainFilter {
+        return MainFilter.None
+    }
 }
 
 @Module
@@ -95,6 +103,13 @@ class DispTimerActivityModule(activity : DispTimerActivity)
 }
 
 @Module
+class StopTimerActivityModule()
+{
+
+}
+
+
+@Module
 class MainFragmentModule{
 }
 
@@ -115,6 +130,7 @@ interface MicheTimerApplicationComponent {
     fun plus(module : MainActivityModule) : MainActivityComponent
     fun plus(module : AddTimerActivityModule) : AddTimerActivityComponent
     fun plus(module : DispTimerActivityModule) : DispTimerActivityComponent
+    fun plus(module : StopTimerActivityModule) : StopTimerActivityComponent
 }
 
 @Subcomponent(modules = [MainActivityModule::class])
@@ -148,4 +164,9 @@ interface DispTimerActivityComponent {
 @Subcomponent(modules = [DispTimerFragmentModule::class])
 interface  DispTimerFragmentComponent {
     fun inject(fragment : DispTimerFragment)
+}
+
+@Subcomponent(modules = [StopTimerActivityModule::class])
+interface StopTimerActivityComponent {
+    fun inject(activity : StopTimerActivity)
 }

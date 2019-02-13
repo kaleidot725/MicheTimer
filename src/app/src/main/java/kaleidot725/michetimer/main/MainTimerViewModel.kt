@@ -14,6 +14,7 @@ import kaleidot725.michetimer.domain.TimerRunnerService
 import kaleidot725.michetimer.domain.TimerRunnerState
 
 class MainTimerViewModel(navigator : MainNavigator, timer : Timer, service : TimerRunnerService, repository: TimerRepository) : ViewModel() {
+    val id : MutableLiveData<Int>
     val name : MutableLiveData<String>
     val state : MutableLiveData<String>
     val stateImage : MutableLiveData<Int>
@@ -35,6 +36,8 @@ class MainTimerViewModel(navigator : MainNavigator, timer : Timer, service : Tim
         this.repository = repository
         this.timer = timer
 
+        this.id = MutableLiveData()
+        this.id.postValue(timer.id)
         this.name = MutableLiveData()
         this.name.postValue(timer.name)
         this.state = MutableLiveData()

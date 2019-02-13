@@ -9,7 +9,7 @@ import kaleidot725.michetimer.domain.TimerRepository
 import kaleidot725.michetimer.domain.TimerRunnerService
 
 
-class MainViewModel(navigator : MainNavigator, service : TimerRunnerService, repository : TimerRepository) : ViewModel() {
+class MainViewModel(navigator : MainNavigator, service : TimerRunnerService, repository : TimerRepository, filter : MainFilter, search : String) : ViewModel() {
 
     val all : ObservableList<MainTimerViewModel> = ObservableArrayList<MainTimerViewModel>()
     var onAddEvent : ((Int) -> Unit) ?= null
@@ -17,46 +17,67 @@ class MainViewModel(navigator : MainNavigator, service : TimerRunnerService, rep
     var onChanged : (() -> Unit) ?= null
 
     private val navigator : MainNavigator = navigator
-    private val service : TimerRunnerService? = service
+    private val service : TimerRunnerService = service
     private val repository : TimerRepository = repository
+    private val filter : MainFilter = filter
+    private val search : String = search
+
+    private val changedCallback = object : ObservableList.OnListChangedCallback<ObservableList<Timer>>() {
+        override fun onItemRangeInserted(sender: ObservableList<Timer>?, positionStart: Int, itemCount: Int) {
+            if (sender != null) {
+                all.clear()
+                repository.filter(filter, search).forEach { t -> all.add(MainTimerViewModel(navigator, t, service, repository)) }
+                onAddEvent?.invoke(positionStart)
+            }
+        }
+
+        override fun onItemRangeRemoved(sender: ObservableList<Timer>?, positionStart: Int, itemCount: Int) {
+            if (sender != null) {
+                all.clear()
+                repository.filter(filter, search).forEach { t -> all.add(MainTimerViewModel(navigator, t, service, repository)) }
+                onRemoveEvent?.invoke(positionStart)
+            }
+        }
+
+        override fun onChanged(sender: ObservableList<Timer>?) {
+            if (sender != null) {
+                all.clear()
+                repository.filter(filter, search).forEach { t -> all.add(MainTimerViewModel(navigator, t, service, repository)) }
+                onChanged?.invoke()
+            }
+        }
+
+        override fun onItemRangeMoved(sender: ObservableList<Timer>?, fromPosition: Int, toPosition: Int, itemCount: Int) { }
+        override fun onItemRangeChanged(sender: ObservableList<Timer>?, positionStart: Int, itemCount: Int) { }
+    }
 
     init {
-        repository.findAll().forEach { t -> all.add(MainTimerViewModel(navigator, t, service, repository)) }
-        repository.addOnListChangedCallback(object : ObservableList.OnListChangedCallback<ObservableList<Timer>>(){
-            override fun onItemRangeInserted(sender: ObservableList<Timer>?, positionStart: Int, itemCount: Int) {
-                if (sender != null) {
-                    val viewModel = MainTimerViewModel(navigator, sender[positionStart], service, repository)
-                    all.add(positionStart, viewModel)
-                    onAddEvent?.invoke(positionStart)
-                }
-            }
-
-            override fun onItemRangeRemoved(sender: ObservableList<Timer>?, positionStart: Int, itemCount: Int) {
-                if (sender != null) {
-                    val viewModel = all[positionStart]
-                    all.remove(viewModel)
-                    onRemoveEvent?.invoke(positionStart)
-                }
-            }
-
-            override fun onChanged(sender: ObservableList<Timer>?) {
-                if (sender != null) {
-                    sender?.forEach {
-                        val viewModel = MainTimerViewModel(navigator, it, service, repository)
-                        all.clear()
-                        all.add(viewModel)
-                    }
-
-                    onChanged?.invoke()
-                }
-            }
-
-            override fun onItemRangeMoved(sender: ObservableList<Timer>?, fromPosition: Int, toPosition: Int, itemCount: Int) { }
-            override fun onItemRangeChanged(sender: ObservableList<Timer>?, positionStart: Int, itemCount: Int) { }
-        })
+        repository.filter(filter, search).forEach { t -> all.add(MainTimerViewModel(navigator, t, service, repository)) }
+        repository.addOnListChangedCallback(changedCallback)
     }
 
     fun onStartAddTimer(view : View){
         navigator.onStartAddTimer()
+    }
+
+    fun TimerRepository.filter(filter : MainFilter, search : String) : List<Timer>{
+        when(filter){
+            MainFilter.None -> {
+                return repository.findAll()
+            }
+            MainFilter.NameAsc -> {
+                return repository.findAll().sortedBy { it.name }
+            }
+            MainFilter.NameDesc -> {
+                return  repository.findAll().sortedByDescending { it.name }
+            }
+            MainFilter.SecondsAsc -> {
+                return repository.findAll().sortedBy { it.seconds }
+            }
+            MainFilter.SecondsDesc -> {
+                return repository.findAll().sortedByDescending { it.seconds }
+            }
+            else -> return repository.findAll()
+        }
     }
 }

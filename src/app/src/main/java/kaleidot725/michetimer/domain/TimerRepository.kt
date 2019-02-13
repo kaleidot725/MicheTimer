@@ -6,19 +6,10 @@ import androidx.databinding.ObservableList
 class TimerRepository(persistence: Persistence<Timer>) : Repository<Timer>{
 
     private val persistence : Persistence<Timer> = persistence
-    private val list     : ObservableList<Timer> = ObservableArrayList()
+    private var list     : ObservableList<Timer> = ObservableArrayList()
 
     init {
         list.addAll(persistence.load())
-    }
-
-    override fun findAll() : List<Timer>
-    {
-        return this.list
-    }
-
-    override fun findById(id: Int): Timer? {
-        return this.list.find { id == it.id }
     }
 
     override fun add(item: Timer) {
@@ -57,6 +48,15 @@ class TimerRepository(persistence: Persistence<Timer>) : Repository<Timer>{
         var next = sorted.count()
         sorted.forEachIndexed { i, t -> if (t.id != i)  { next = i  } }
         return next
+    }
+
+    override fun findById(id: Int): Timer? {
+        return this.list.find { id == it.id }
+    }
+
+    override fun findAll() : List<Timer>
+    {
+        return this.list
     }
 
     override fun count() : Int {

@@ -4,13 +4,12 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.LifecycleRegistry
 import androidx.databinding.DataBindingUtil
-import androidx.databinding.ObservableList
 import androidx.recyclerview.widget.RecyclerView
 import android.view.*
 import kaleidot725.michetimer.R
-import kaleidot725.michetimer.databinding.TimerListViewItemBinding
+import kaleidot725.michetimer.databinding.ListviewItemTimerBinding
 
-internal class MainTimerListAdapter(viewModel : MainViewModel) : RecyclerView.Adapter<MainTimersViewHolder>(), LifecycleOwner {
+internal class MainTimersAdapter(viewModel : MainViewModel) : RecyclerView.Adapter<MainTimersViewHolder>(), LifecycleOwner {
     private val registry : LifecycleRegistry
     private val viewModel : MainViewModel
 
@@ -22,7 +21,7 @@ internal class MainTimerListAdapter(viewModel : MainViewModel) : RecyclerView.Ad
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MainTimersViewHolder {
         val layoutInflater = LayoutInflater.from(parent.context)
-        val binding = DataBindingUtil.inflate<TimerListViewItemBinding>(layoutInflater, R.layout.timer_list_view_item, parent, false)
+        val binding = DataBindingUtil.inflate<ListviewItemTimerBinding>(layoutInflater, R.layout.listview_item_timer, parent, false)
         registry.markState(Lifecycle.State.STARTED)
         return MainTimersViewHolder(this, binding)
     }

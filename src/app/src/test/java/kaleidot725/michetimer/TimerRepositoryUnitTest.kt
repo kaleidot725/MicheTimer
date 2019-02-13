@@ -89,7 +89,7 @@ class TimerRepositoryUnitTest {
     @Test
     fun callback()
     {
-        val repository : Repository<Timer> = TimerRepository(persistence)
+        val repository : TimerRepository = TimerRepository(persistence)
         val spy = ObservableCallbackSpy()
         repository.addOnListChangedCallback(spy)
 
