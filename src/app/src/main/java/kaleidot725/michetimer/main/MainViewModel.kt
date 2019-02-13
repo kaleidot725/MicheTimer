@@ -74,7 +74,7 @@ class MainViewModel(navigator : MainNavigator, service : TimerRunnerService, rep
             MainFilter.SecondsAsc -> {
                 return repository.findAll().sortedBy { it.seconds }
             }
-            MainFilter.SecondsAsc -> {
+            MainFilter.SecondsDesc -> {
                 return repository.findAll().sortedByDescending { it.seconds }
             }
             else -> return repository.findAll()

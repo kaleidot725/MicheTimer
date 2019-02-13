@@ -18,7 +18,7 @@ import java.text.SimpleDateFormat
 class TimerRunnerService(context : Context)  {
     private val tag: String = "TimerService"
     private val runners : MutableMap<Int, TimerRunnerInterface> = mutableMapOf()
-    private val players : MutableMap<Int, MediaPlayerInterface> = mutableMapOf()
+    private val players : MutableMap<Int, AlarmPlayer> = mutableMapOf()
     private val context : Context = context
 
     private lateinit var builder : NotificationCompat.Builder
@@ -55,7 +55,7 @@ class TimerRunnerService(context : Context)  {
             return runners[id] as TimerRunnerController
         }
 
-        players[id] = MediaPlayer(context, sound)
+        players[id] = AlarmPlayerUsingSoundPool(context, sound, true)
         runners[id] = TimerRunner(id, name, seconds).apply {
             state.subscribe {
                 when (runners[id]?.state?.value) {

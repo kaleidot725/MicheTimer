@@ -4,10 +4,12 @@ import android.content.*
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import kaleidot725.michetimer.R
+import kaleidot725.michetimer.StopTimerActivityModule
 import kaleidot725.michetimer.app.MicheTimerApplication
 import kaleidot725.michetimer.domain.TimerRepository
 import kaleidot725.michetimer.domain.TimerRunnerService
 import kaleidot725.michetimer.domain.TimerRunnerState
+import java.lang.Exception
 import java.util.*
 import javax.inject.Inject
 
@@ -35,8 +37,8 @@ class StopTimerActivity : AppCompatActivity()  {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        val component = (application as MicheTimerApplication).component
-        component.inject(application as MicheTimerApplication)
+        val component = (application as MicheTimerApplication).component.plus(StopTimerActivityModule())
+        component.inject(this)
 
         // Initialize activity property
         val id = intent.getIntExtra("id", -1)
@@ -45,12 +47,10 @@ class StopTimerActivity : AppCompatActivity()  {
 
         var controller = timerRunnerService.resolve(id)
         if (controller.state.value == TimerRunnerState.Timeout &&
-            controller.start.equals(start) &&
-            controller.end.equals(end))
-        {
+            controller.start == start && controller.end == end) {
             controller.reset()
+            timerRunnerService.unregister(id)
         }
-        timerRunnerService.unregister(id)
 
         finish()
     }
