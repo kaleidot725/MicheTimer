@@ -7,7 +7,7 @@ import android.view.View
 import android.util.Log
 import kaleidot725.michetimer.addtimer.AddTimerActivity
 import kaleidot725.michetimer.model.repository.TimerRepository
-import kaleidot725.michetimer.model.domain.timer.TimerRunnerService
+import kaleidot725.michetimer.model.service.TimerService
 import android.content.Intent
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.view.menu.ActionMenuItemView
@@ -35,7 +35,7 @@ class MainActivity : AppCompatActivity(), MainNavigator {
 
     @Inject lateinit var timerRepository : TimerRepository
 
-    @Inject lateinit var timerRunnerService : TimerRunnerService
+    @Inject lateinit var timerService : TimerService
 
     @field:[Inject Named("DispTimer")] lateinit var dispTimer : Timer
 

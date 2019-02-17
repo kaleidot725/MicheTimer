@@ -14,7 +14,7 @@ import kaleidot725.michetimer.disptimer.DispTimerActivity
 import kaleidot725.michetimer.disptimer.DispTimerFragment
 import kaleidot725.michetimer.disptimer.DispTimerNavigator
 import kaleidot725.michetimer.model.domain.alarm.AlarmType
-import kaleidot725.michetimer.model.domain.timer.TimerRunnerService
+import kaleidot725.michetimer.model.service.TimerService
 import kaleidot725.michetimer.model.repository.PersistenceFile
 import kaleidot725.michetimer.model.entity.Timer
 import kaleidot725.michetimer.model.repository.TimerRepository
@@ -32,8 +32,8 @@ class MicheTimerApplicationModule(application : Application) {
 
     @Singleton
     @Provides
-    fun provideTimerRunnerService() : TimerRunnerService {
-        return TimerRunnerService(application)
+    fun provideTimerService() : TimerService {
+        return TimerService(application)
     }
 
     @Singleton

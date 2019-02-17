@@ -13,7 +13,7 @@ import kaleidot725.michetimer.*
 import kaleidot725.michetimer.databinding.FragmentDispTimerBinding
 import kaleidot725.michetimer.model.entity.Timer
 import kaleidot725.michetimer.model.repository.TimerRepository
-import kaleidot725.michetimer.model.domain.timer.TimerRunnerService
+import kaleidot725.michetimer.model.service.TimerService
 import javax.inject.Inject
 import javax.inject.Named
 
@@ -21,7 +21,7 @@ class DispTimerFragment : Fragment() {
 
     @Inject lateinit var timerRepository : TimerRepository
 
-    @Inject lateinit var timerRunnerService : TimerRunnerService
+    @Inject lateinit var timerService : TimerService
 
     @Inject lateinit var navigator : DispTimerNavigator
 
@@ -46,7 +46,7 @@ class DispTimerFragment : Fragment() {
 
     private inner class DispTimerViewModelFactory() : ViewModelProvider.Factory {
         override fun <T : ViewModel?> create(modelClass: Class<T>): T {
-            return DispTimerViewModel(navigator, dispTimer, timerRunnerService, timerRepository) as T
+            return DispTimerViewModel(navigator, dispTimer, timerService, timerRepository) as T
         }
     }
 }

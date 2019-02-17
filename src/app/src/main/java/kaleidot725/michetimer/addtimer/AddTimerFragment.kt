@@ -14,7 +14,7 @@ import kaleidot725.michetimer.*
 import kaleidot725.michetimer.databinding.FragmentAddTimerBinding
 import kaleidot725.michetimer.model.entity.Timer
 import kaleidot725.michetimer.model.repository.TimerRepository
-import kaleidot725.michetimer.model.domain.timer.TimerRunnerService
+import kaleidot725.michetimer.model.service.TimerService
 import java.lang.Exception
 import javax.inject.Inject
 import javax.inject.Named
@@ -28,7 +28,7 @@ class AddTimerFragment : Fragment() {
     lateinit var timerRepository : TimerRepository
 
     @Inject
-    lateinit var timerRunnerService : TimerRunnerService
+    lateinit var timerService : TimerService
 
     @field:[Inject Named("EditTimer")] lateinit var editTimer : Timer
 

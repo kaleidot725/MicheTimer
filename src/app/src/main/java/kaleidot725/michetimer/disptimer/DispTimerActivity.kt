@@ -6,7 +6,7 @@ import kaleidot725.michetimer.*
 import kaleidot725.michetimer.app.MicheTimerApplication
 import kaleidot725.michetimer.model.entity.Timer
 import kaleidot725.michetimer.model.repository.TimerRepository
-import kaleidot725.michetimer.model.domain.timer.TimerRunnerService
+import kaleidot725.michetimer.model.service.TimerService
 import javax.inject.Inject
 import javax.inject.Named
 
@@ -18,7 +18,7 @@ class DispTimerActivity : AppCompatActivity() , DispTimerNavigator {
     lateinit var timerRepository : TimerRepository
 
     @Inject
-    lateinit var timerRunnerService : TimerRunnerService
+    lateinit var timerService : TimerService
 
     @field:[Inject Named("DispTimer")] lateinit var dispTimer : Timer
 

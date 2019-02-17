@@ -7,7 +7,7 @@ import kaleidot725.michetimer.R
 import kaleidot725.michetimer.StopTimerActivityModule
 import kaleidot725.michetimer.app.MicheTimerApplication
 import kaleidot725.michetimer.model.repository.TimerRepository
-import kaleidot725.michetimer.model.domain.timer.TimerRunnerService
+import kaleidot725.michetimer.model.service.TimerService
 import kaleidot725.michetimer.model.domain.timer.TimerRunnerState
 import java.util.*
 import javax.inject.Inject
@@ -30,7 +30,7 @@ class StopTimerActivity : AppCompatActivity()  {
     lateinit var timerRepository : TimerRepository
 
     @Inject
-    lateinit var timerRunnerService : TimerRunnerService
+    lateinit var timerService : TimerService
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -44,11 +44,11 @@ class StopTimerActivity : AppCompatActivity()  {
         val start = Date(intent.getLongExtra("start", -1))
         val end = Date(intent.getLongExtra("end", -1))
 
-        var controller = timerRunnerService.resolve(id)
+        var controller = timerService.resolve(id)
         if (controller.state.value == TimerRunnerState.Timeout &&
             controller.start == start && controller.end == end) {
             controller.reset()
-            timerRunnerService.unregister(id)
+            timerService.unregister(id)
         }
 
         finish()

@@ -6,14 +6,14 @@ import androidx.appcompat.widget.PopupMenu
 import android.util.Log
 import android.view.View
 import io.reactivex.disposables.CompositeDisposable
-import kaleidot725.michetimer.model.domain.timer.TimerRunnerController
+import kaleidot725.michetimer.model.service.TimerIndicator
 import kaleidot725.michetimer.R
 import kaleidot725.michetimer.model.entity.Timer
 import kaleidot725.michetimer.model.repository.TimerRepository
-import kaleidot725.michetimer.model.domain.timer.TimerRunnerService
+import kaleidot725.michetimer.model.service.TimerService
 import kaleidot725.michetimer.model.domain.timer.TimerRunnerState
 
-class MainTimerViewModel(navigator : MainNavigator, timer : Timer, service : TimerRunnerService, repository: TimerRepository) : ViewModel() {
+class MainTimerViewModel(navigator : MainNavigator, timer : Timer, service : TimerService, repository: TimerRepository) : ViewModel() {
     val id : MutableLiveData<Int>
     val name : MutableLiveData<String>
     val state : MutableLiveData<String>
@@ -22,9 +22,9 @@ class MainTimerViewModel(navigator : MainNavigator, timer : Timer, service : Tim
 
     private val tag : String = "TimerViewModel"
     private val navigator : MainNavigator
-    private val service : TimerRunnerService
+    private val service : TimerService
     private val repository : TimerRepository
-    private var runner : TimerRunnerController
+    private var runner : TimerIndicator
     private val timer : Timer
     private val listener : PopupMenu.OnMenuItemClickListener
     private val compositeDisposable : CompositeDisposable
@@ -62,7 +62,7 @@ class MainTimerViewModel(navigator : MainNavigator, timer : Timer, service : Tim
             }
         }
 
-        this.runner = service.register(timer.id, timer.name, timer.seconds, timer.alarm) as TimerRunnerController
+        this.runner = service.register(timer.id, timer.name, timer.seconds, timer.alarm) as TimerIndicator
         val stateDisposable = this.runner.state.subscribe {
             try {
                 this.state.postValue(toStateString(it))

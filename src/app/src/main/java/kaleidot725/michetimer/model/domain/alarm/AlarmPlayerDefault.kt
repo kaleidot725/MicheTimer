@@ -5,7 +5,7 @@ import android.media.SoundPool
 import android.media.AudioAttributes
 
 
-class AlarmPlayerUsingSoundPool(context : Context, type : Int, isRepeating : Boolean) : AlarmPlayer {
+class AlarmPlayerDefault(context : Context, type : Int, isRepeating : Boolean) : AlarmPlayer {
 
     override val context = context
     override val type : Int = type
