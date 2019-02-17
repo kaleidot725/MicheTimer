@@ -9,13 +9,10 @@ import kaleidot725.michetimer.addtimer.AddTimerActivity
 import kaleidot725.michetimer.domain.TimerRepository
 import kaleidot725.michetimer.domain.TimerRunnerService
 import android.content.Intent
-import android.view.LayoutInflater
-import android.widget.Button
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.view.menu.ActionMenuItemView
 import androidx.appcompat.widget.Toolbar
 import androidx.drawerlayout.widget.DrawerLayout
-import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentTransaction
 import com.google.android.material.navigation.NavigationView
 import kaleidot725.michetimer.MainActivityComponent
@@ -151,7 +148,7 @@ class MainActivity : AppCompatActivity(), MainNavigator {
             it.id = timer.id
             it.name = timer.name
             it.seconds = timer.seconds
-            it.sound = timer.sound
+            it.alarm = timer.alarm
         }
         addTimerMode.value = AddTimerMode.edit
         val intent = Intent(applicationContext, AddTimerActivity::class.java)
@@ -163,7 +160,7 @@ class MainActivity : AppCompatActivity(), MainNavigator {
             it.id = timer.id
             it.name = timer.name
             it.seconds = timer.seconds
-            it.sound = timer.sound
+            it.alarm = timer.alarm
         }
         val intent = Intent(applicationContext, DispTimerActivity::class.java)
         startActivity(intent)

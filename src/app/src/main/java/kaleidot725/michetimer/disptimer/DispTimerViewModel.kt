@@ -42,7 +42,7 @@ class DispTimerViewModel(navigator : DispTimerNavigator, timer : Timer, service 
         this.remainSeconds = MutableLiveData()
         this.remainSeconds.postValue(toRemainSecondsString(timer.seconds))
 
-        this.runner = service.register(timer.id, timer.name, timer.seconds, timer.sound) as TimerRunnerController
+        this.runner = service.register(timer.id, timer.name, timer.seconds, timer.alarm) as TimerRunnerController
         val stateDisposable = this.runner.state.subscribe {
             try {
                 this.state.postValue(toStateString(it))

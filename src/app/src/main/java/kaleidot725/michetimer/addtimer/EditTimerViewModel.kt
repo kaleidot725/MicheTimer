@@ -4,15 +4,13 @@ import android.util.Log
 import android.view.View
 import android.widget.AdapterView
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
-import kaleidot725.michetimer.domain.Timer
-import kaleidot725.michetimer.domain.TimerRepository
+import kaleidot725.michetimer.domain.*
 import java.lang.Exception
 
 class EditTimerViewModel(navigator: AddTimerNavigator, repository : TimerRepository, timer : Timer) : BaseTimerViewModel() {
     override val name : MutableLiveData<String> =  MutableLiveData()
     override val error : MutableLiveData<String> = MutableLiveData()
-    override var sound : String = timer.sound
+    override var sound : String = AlarmType.convertAlarmTypeToString(timer.alarm)
     override var minute : Long = timer.seconds / 60
     override var second : Long = timer.seconds % 60
 
@@ -60,8 +58,8 @@ class EditTimerViewModel(navigator: AddTimerNavigator, repository : TimerReposit
 
             val name    = name.value as String
             val seconds = minute * 60 + second
-            val sound   = sound  as String
-            val timer   = Timer(id, name, seconds, sound)
+            val alarm   = AlarmType.convertStringToAlarmType(sound)
+            val timer   = Timer(id, name, seconds, alarm)
             timerRepository.update(timer)
             navigator.onComplete()
         }

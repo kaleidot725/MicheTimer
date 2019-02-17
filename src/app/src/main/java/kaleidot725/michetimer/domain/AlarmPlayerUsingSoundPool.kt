@@ -5,17 +5,15 @@ import android.media.SoundPool
 import android.media.AudioAttributes
 
 
-class AlarmPlayerUsingSoundPool(context : Context, name : String, isRepeating : Boolean) : AlarmPlayer {
+class AlarmPlayerUsingSoundPool(context : Context, type : Int, isRepeating : Boolean) : AlarmPlayer {
+
     override val context = context
-    override val name : String = name
-    override val id : Int = when(name) {
-        "chime"  -> { kaleidot725.michetimer.R.raw.chime  }
-        "timeup" -> { kaleidot725.michetimer.R.raw.timeup }
-        else     -> { kaleidot725.michetimer.R.raw.chime  }
-    }
+    override val type : Int = type
+
     override var isPlaying : Boolean = false
     override var isRepeating : Boolean = isRepeating
 
+    private val resource : Int =  AlarmType.convertAlarmTypeToResouceId(type)
     private val pool : SoundPool
     private val soundId : Int
     private var streamId : Int = 0
@@ -23,7 +21,7 @@ class AlarmPlayerUsingSoundPool(context : Context, name : String, isRepeating : 
     init {
         val audioAttributes = AudioAttributes.Builder().setUsage(AudioAttributes.USAGE_ALARM).setContentType(AudioAttributes.CONTENT_TYPE_SPEECH).build()
         pool = SoundPool.Builder().setAudioAttributes(audioAttributes).setMaxStreams(1).build()
-        soundId = pool.load(context, id, 1)
+        soundId = pool.load(context, resource, 1)
     }
 
     override fun play() {

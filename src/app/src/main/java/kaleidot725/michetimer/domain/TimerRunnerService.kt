@@ -49,13 +49,13 @@ class TimerRunnerService(context : Context)  {
         players.clear()
     }
 
-    fun register(id : Int, name : String, seconds : Long, sound : String): TimerRunnerController {
+    fun register(id : Int, name : String, seconds : Long, alarm : Int): TimerRunnerController {
         if (runners[id] != null)
         {
             return runners[id] as TimerRunnerController
         }
 
-        players[id] = AlarmPlayerUsingSoundPool(context, sound, true)
+        players[id] = AlarmPlayerUsingSoundPool(context, alarm, true)
         runners[id] = TimerRunner(id, name, seconds).apply {
             state.subscribe {
                 when (runners[id]?.state?.value) {
@@ -76,7 +76,7 @@ class TimerRunnerService(context : Context)  {
             }
         }
 
-        Log.v(tag, "register ${id} ${name} ${seconds} ${sound}")
+        Log.v(tag, "register ${id} ${name} ${seconds} ${alarm}")
         return runners[id] as TimerRunnerController
     }
 
@@ -84,7 +84,7 @@ class TimerRunnerService(context : Context)  {
         if (runners[id] == null)
             throw IndexOutOfBoundsException()
 
-        Log.v(tag, "register ${id} ${runners[id]?.name} ${runners[id]?.seconds} ${players[id]?.name}")
+        Log.v(tag, "register ${id} ${runners[id]?.name} ${runners[id]?.seconds} ${players[id]?.type}")
         return runners[id] as TimerRunnerController
     }
 

@@ -1,7 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string-array name="sounds">
-        <item>chime</item>
-        <item>timeup</item>
+        <item>bellstar</item>
+        <item>garagara</item>
+        <item>hiutiisi</item>
+        <item>suzu</item>
+        <item>tetupaipu</item>
     </string-array>
 </resources>

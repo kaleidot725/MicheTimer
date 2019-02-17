@@ -62,7 +62,7 @@ class MainTimerViewModel(navigator : MainNavigator, timer : Timer, service : Tim
             }
         }
 
-        this.runner = service.register(timer.id, timer.name, timer.seconds, timer.sound) as TimerRunnerController
+        this.runner = service.register(timer.id, timer.name, timer.seconds, timer.alarm) as TimerRunnerController
         val stateDisposable = this.runner.state.subscribe {
             try {
                 this.state.postValue(toStateString(it))

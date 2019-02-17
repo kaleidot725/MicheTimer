@@ -4,6 +4,7 @@ import androidx.lifecycle.MutableLiveData
 import android.util.Log
 import android.view.View
 import android.widget.AdapterView
+import kaleidot725.michetimer.domain.AlarmType
 import kaleidot725.michetimer.domain.Timer
 import kaleidot725.michetimer.domain.TimerRepository
 import java.lang.Exception
@@ -12,7 +13,7 @@ class AddTimerViewModel(navigator: AddTimerNavigator, timerRepository  : TimerRe
 
     override val name : MutableLiveData<String> =  MutableLiveData()
     override val error : MutableLiveData<String> = MutableLiveData()
-    override var sound : String = "chime"
+    override var sound : String = AlarmType.convertAlarmTypeToString(AlarmType.Bellstar)
     override var minute : Long = 0
     override var second : Long = 0
 
@@ -60,8 +61,8 @@ class AddTimerViewModel(navigator: AddTimerNavigator, timerRepository  : TimerRe
             val id = timerRepository.next()
             val name    = name.value as String
             val seconds = minute * 60 + second
-            val sound   = sound  as String
-            val timer   = Timer(id, name, seconds, sound)
+            val alarm   = AlarmType.convertStringToAlarmType(sound)
+            val timer   = Timer(id, name, seconds, alarm)
             timerRepository.add(timer)
             navigator.onComplete()
         }
