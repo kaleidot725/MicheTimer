@@ -1,4 +1,4 @@
-package kaleidot725.michetimer.domain
+package kaleidot725.michetimer.model.domain.timer
 
 import android.app.Notification
 import android.app.NotificationChannel
@@ -11,6 +11,8 @@ import android.util.Log
 import kaleidot725.michetimer.R
 import android.app.PendingIntent
 import android.content.Context
+import kaleidot725.michetimer.model.domain.alarm.AlarmPlayer
+import kaleidot725.michetimer.model.domain.alarm.AlarmPlayerUsingSoundPool
 import kaleidot725.michetimer.stoptimer.StopTimerActivity
 import java.text.SimpleDateFormat
 
@@ -19,6 +21,8 @@ class TimerRunnerService(context : Context)  {
     private val tag: String = "TimerService"
     private val runners : MutableMap<Int, TimerRunnerInterface> = mutableMapOf()
     private val players : MutableMap<Int, AlarmPlayer> = mutableMapOf()
+    private val callbacks : List<(state : TimerRunnerState, runner : TimerRunner) -> Void> = mutableListOf()
+
     private val context : Context = context
 
     private lateinit var builder : NotificationCompat.Builder
@@ -44,7 +48,7 @@ class TimerRunnerService(context : Context)  {
         runners.clear()
 
         players.forEach {
-            it.value.finalize()
+            it.value.dispose()
         }
         players.clear()
     }
@@ -92,11 +96,19 @@ class TimerRunnerService(context : Context)  {
         runners[id]?.finalize()
         runners.remove(id)
 
-        players[id]?.finalize()
+        players[id]?.dispose()
         players.remove(id)
 
         Log.v(tag, "register ${id}")
         return
+    }
+
+    fun addNotificationCallback() {
+
+    }
+
+    fun removeNotificationCallback() {
+
     }
 
     private fun notifyTimeOut(runner : TimerRunnerInterface)

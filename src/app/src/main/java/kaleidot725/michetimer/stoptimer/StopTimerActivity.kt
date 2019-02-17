@@ -6,10 +6,9 @@ import androidx.appcompat.app.AppCompatActivity
 import kaleidot725.michetimer.R
 import kaleidot725.michetimer.StopTimerActivityModule
 import kaleidot725.michetimer.app.MicheTimerApplication
-import kaleidot725.michetimer.domain.TimerRepository
-import kaleidot725.michetimer.domain.TimerRunnerService
-import kaleidot725.michetimer.domain.TimerRunnerState
-import java.lang.Exception
+import kaleidot725.michetimer.model.repository.TimerRepository
+import kaleidot725.michetimer.model.domain.timer.TimerRunnerService
+import kaleidot725.michetimer.model.domain.timer.TimerRunnerState
 import java.util.*
 import javax.inject.Inject
 

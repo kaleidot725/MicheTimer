@@ -1,6 +1,5 @@
 package kaleidot725.michetimer.disptimer
 
-import android.content.Context
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -12,9 +11,9 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProviders
 import kaleidot725.michetimer.*
 import kaleidot725.michetimer.databinding.FragmentDispTimerBinding
-import kaleidot725.michetimer.domain.Timer
-import kaleidot725.michetimer.domain.TimerRepository
-import kaleidot725.michetimer.domain.TimerRunnerService
+import kaleidot725.michetimer.model.entity.Timer
+import kaleidot725.michetimer.model.repository.TimerRepository
+import kaleidot725.michetimer.model.domain.timer.TimerRunnerService
 import javax.inject.Inject
 import javax.inject.Named
 

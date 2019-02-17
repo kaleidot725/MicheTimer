@@ -15,8 +15,8 @@ import kaleidot725.michetimer.BR
 import kaleidot725.michetimer.MainFragmentModule
 import kaleidot725.michetimer.R
 import kaleidot725.michetimer.databinding.FragmentMainBinding
-import kaleidot725.michetimer.domain.TimerRepository
-import kaleidot725.michetimer.domain.TimerRunnerService
+import kaleidot725.michetimer.model.repository.TimerRepository
+import kaleidot725.michetimer.model.domain.timer.TimerRunnerService
 import java.lang.Exception
 import javax.inject.Inject
 

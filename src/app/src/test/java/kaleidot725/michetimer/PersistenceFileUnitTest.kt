@@ -1,8 +1,8 @@
 package kaleidot725.michetimer
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
-import kaleidot725.michetimer.domain.PersistenceFile
-import kaleidot725.michetimer.domain.Timer
+import kaleidot725.michetimer.model.repository.PersistenceFile
+import kaleidot725.michetimer.model.entity.Timer
 import org.junit.Assert
 import org.junit.Rule
 import org.junit.Test

@@ -1,4 +1,4 @@
-package kaleidot725.michetimer.domain
+package kaleidot725.michetimer.model.domain.alarm
 
 import android.content.Context
 
@@ -10,5 +10,5 @@ interface AlarmPlayer {
 
     fun play()
     fun stop()
-    fun finalize()
+    fun dispose()
 }

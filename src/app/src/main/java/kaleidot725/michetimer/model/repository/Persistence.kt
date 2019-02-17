@@ -1,6 +1,4 @@
-package kaleidot725.michetimer.domain
-
-import androidx.databinding.ObservableList
+package kaleidot725.michetimer.model.repository
 
 interface Persistence<T> {
     fun save(list: List<T>)

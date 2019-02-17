@@ -6,8 +6,8 @@ import androidx.appcompat.widget.PopupMenu
 import android.view.View
 import android.util.Log
 import kaleidot725.michetimer.addtimer.AddTimerActivity
-import kaleidot725.michetimer.domain.TimerRepository
-import kaleidot725.michetimer.domain.TimerRunnerService
+import kaleidot725.michetimer.model.repository.TimerRepository
+import kaleidot725.michetimer.model.domain.timer.TimerRunnerService
 import android.content.Intent
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.view.menu.ActionMenuItemView
@@ -21,7 +21,7 @@ import kaleidot725.michetimer.R
 import kaleidot725.michetimer.addtimer.AddTimerMode
 import kaleidot725.michetimer.app.MicheTimerApplication
 import kaleidot725.michetimer.disptimer.DispTimerActivity
-import kaleidot725.michetimer.domain.Timer
+import kaleidot725.michetimer.model.entity.Timer
 import javax.inject.Inject
 import javax.inject.Named
 import com.mikepenz.aboutlibraries.Libs

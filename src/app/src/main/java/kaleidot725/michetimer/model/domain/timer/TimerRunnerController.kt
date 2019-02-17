@@ -1,4 +1,4 @@
-package kaleidot725.michetimer.domain
+package kaleidot725.michetimer.model.domain.timer
 
 import io.reactivex.subjects.BehaviorSubject
 import java.util.*

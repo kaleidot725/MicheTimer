@@ -4,9 +4,9 @@ import android.view.View
 import androidx.databinding.ObservableArrayList
 import androidx.databinding.ObservableList
 import androidx.lifecycle.ViewModel
-import kaleidot725.michetimer.domain.Timer
-import kaleidot725.michetimer.domain.TimerRepository
-import kaleidot725.michetimer.domain.TimerRunnerService
+import kaleidot725.michetimer.model.entity.Timer
+import kaleidot725.michetimer.model.repository.TimerRepository
+import kaleidot725.michetimer.model.domain.timer.TimerRunnerService
 
 
 class MainViewModel(navigator : MainNavigator, service : TimerRunnerService, repository : TimerRepository, filter : MainFilter, search : String) : ViewModel() {

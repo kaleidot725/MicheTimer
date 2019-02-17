@@ -1,4 +1,4 @@
-package kaleidot725.michetimer.domain
+package kaleidot725.michetimer.model.domain.alarm
 
 import android.content.Context
 import android.media.SoundPool
@@ -13,7 +13,7 @@ class AlarmPlayerUsingSoundPool(context : Context, type : Int, isRepeating : Boo
     override var isPlaying : Boolean = false
     override var isRepeating : Boolean = isRepeating
 
-    private val resource : Int =  AlarmType.convertAlarmTypeToResouceId(type)
+    private val resource : Int = AlarmType.convertAlarmTypeToResouceId(type)
     private val pool : SoundPool
     private val soundId : Int
     private var streamId : Int = 0
@@ -44,7 +44,7 @@ class AlarmPlayerUsingSoundPool(context : Context, type : Int, isRepeating : Boo
         isPlaying = false
     }
 
-    override fun finalize() {
+    override fun dispose() {
         pool.release()
     }
 }

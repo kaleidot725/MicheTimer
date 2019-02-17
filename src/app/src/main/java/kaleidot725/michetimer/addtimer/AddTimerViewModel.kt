@@ -4,9 +4,9 @@ import androidx.lifecycle.MutableLiveData
 import android.util.Log
 import android.view.View
 import android.widget.AdapterView
-import kaleidot725.michetimer.domain.AlarmType
-import kaleidot725.michetimer.domain.Timer
-import kaleidot725.michetimer.domain.TimerRepository
+import kaleidot725.michetimer.model.domain.alarm.AlarmType
+import kaleidot725.michetimer.model.entity.Timer
+import kaleidot725.michetimer.model.repository.TimerRepository
 import java.lang.Exception
 
 class AddTimerViewModel(navigator: AddTimerNavigator, timerRepository  : TimerRepository) : BaseTimerViewModel() {

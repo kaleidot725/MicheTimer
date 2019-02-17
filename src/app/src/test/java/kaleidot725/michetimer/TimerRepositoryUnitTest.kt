@@ -2,9 +2,11 @@ package kaleidot725.michetimer
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.databinding.ObservableList
-import kaleidot725.michetimer.domain.*
+import kaleidot725.michetimer.model.repository.Persistence
+import kaleidot725.michetimer.model.repository.Repository
+import kaleidot725.michetimer.model.entity.Timer
+import kaleidot725.michetimer.model.repository.TimerRepository
 import org.junit.Assert
-import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 

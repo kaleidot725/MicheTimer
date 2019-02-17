@@ -6,11 +6,11 @@ import android.util.Log
 import android.view.View
 import io.reactivex.disposables.CompositeDisposable
 import kaleidot725.michetimer.R
-import kaleidot725.michetimer.domain.TimerRunnerController
-import kaleidot725.michetimer.domain.Timer
-import kaleidot725.michetimer.domain.TimerRepository
-import kaleidot725.michetimer.domain.TimerRunnerService
-import kaleidot725.michetimer.domain.TimerRunnerState
+import kaleidot725.michetimer.model.domain.timer.TimerRunnerController
+import kaleidot725.michetimer.model.entity.Timer
+import kaleidot725.michetimer.model.repository.TimerRepository
+import kaleidot725.michetimer.model.domain.timer.TimerRunnerService
+import kaleidot725.michetimer.model.domain.timer.TimerRunnerState
 
 class DispTimerViewModel(navigator : DispTimerNavigator, timer : Timer, service : TimerRunnerService, repository: TimerRepository) : ViewModel() {
     val name : MutableLiveData<String>

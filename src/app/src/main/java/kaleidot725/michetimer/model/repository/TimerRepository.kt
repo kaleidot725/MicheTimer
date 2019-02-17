@@ -1,9 +1,10 @@
-package kaleidot725.michetimer.domain
+package kaleidot725.michetimer.model.repository
 
 import androidx.databinding.ObservableArrayList
 import androidx.databinding.ObservableList
+import kaleidot725.michetimer.model.entity.Timer
 
-class TimerRepository(persistence: Persistence<Timer>) : Repository<Timer>{
+class TimerRepository(persistence: Persistence<Timer>) : Repository<Timer> {
 
     private val persistence : Persistence<Timer> = persistence
     private var list     : ObservableList<Timer> = ObservableArrayList()
@@ -33,9 +34,7 @@ class TimerRepository(persistence: Persistence<Timer>) : Repository<Timer>{
 
     override fun update(item: Timer) {
         val rm = findById(item.id)
-        if (rm == null) {
-            throw java.lang.IllegalArgumentException("not found id")
-        }
+        rm ?: throw java.lang.IllegalArgumentException("not found id")
 
         val index = this.list.indexOf(rm)
         this.list.remove(rm)
@@ -65,5 +64,9 @@ class TimerRepository(persistence: Persistence<Timer>) : Repository<Timer>{
 
     override fun addOnListChangedCallback(callback : ObservableList.OnListChangedCallback<ObservableList<Timer>>) {
         this.list.addOnListChangedCallback(callback)
+    }
+
+    override fun removeOnListChangedCallback(callback : ObservableList.OnListChangedCallback<ObservableList<Timer>>){
+        this.list.removeOnListChangedCallback(callback)
     }
 }
