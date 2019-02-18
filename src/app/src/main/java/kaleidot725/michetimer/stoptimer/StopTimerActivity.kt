@@ -48,7 +48,6 @@ class StopTimerActivity : AppCompatActivity()  {
         if (controller.state.value == TimerRunnerState.Timeout &&
             controller.start == start && controller.end == end) {
             controller.reset()
-            timerService.unregister(id)
         }
 
         finish()

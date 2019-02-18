@@ -30,12 +30,6 @@ class TimerService(context : Context)  {
 
     private val context : Context = context
 
-
-
-    init {
-
-    }
-
     fun dispose() {
         runners.forEach {
             it.value.dispose()

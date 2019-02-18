@@ -1,24 +1,29 @@
 package kaleidot725.michetimer.app
 
 import android.app.*
+import android.content.Context
 import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.NotificationCompat
+import androidx.core.app.NotificationManagerCompat
 import kaleidot725.michetimer.DaggerMicheTimerApplicationComponent
 import kaleidot725.michetimer.MicheTimerApplicationComponent
 import kaleidot725.michetimer.MicheTimerApplicationModule
-import kaleidot725.michetimer.R
 import kaleidot725.michetimer.model.domain.timer.TimerRunnerState
 import kaleidot725.michetimer.model.repository.TimerRepository
 import kaleidot725.michetimer.model.service.TimerCallback
 import kaleidot725.michetimer.model.service.TimerIndicator
 import kaleidot725.michetimer.model.service.TimerService
+import javax.inject.Inject
+import android.graphics.Color
+import kaleidot725.michetimer.R
 import kaleidot725.michetimer.stoptimer.StopTimerActivity
 import java.text.SimpleDateFormat
-import javax.inject.Inject
+
 
 class MicheTimerApplication : Application() {
-
+    val channelId = "Miche Timer"
+    val channelName = "Miche Timer"
 
     lateinit var component : MicheTimerApplicationComponent
     lateinit var module : MicheTimerApplicationModule
@@ -30,30 +35,7 @@ class MicheTimerApplication : Application() {
     lateinit var timerService : TimerService
 
     private lateinit var builder : NotificationCompat.Builder
-    private lateinit var manager : NotificationManager
-
-    private val callback = object : TimerCallback {
-        override fun notify(indicator: TimerIndicator) {
-            when(indicator.state.value) {
-                TimerRunnerState.Timeout -> {
-                    val intent = StopTimerActivity.create(applicationContext, 0, indicator.start.time, indicator.end.time)
-                    val pIntent = PendingIntent.getActivity(applicationContext, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT)
-                    val df = SimpleDateFormat("HH:mm:ss")
-
-                    builder.setAutoCancel(true)
-                            .setDefaults(Notification.DEFAULT_ALL)
-                            .setWhen(System.currentTimeMillis())
-                            .setSmallIcon(R.drawable.ic_notification)
-                            .setTicker("${indicator.name} is Time Up ${df.format(indicator.start)} ~ ${df.format(indicator.end)}")
-                            .setContentTitle("${indicator.name} is Time Up ${df.format(indicator.start)} ~ ${df.format(indicator.end)}")
-                            .setContentText("Click to Stop Alarm!!")
-                            .setContentIntent(pIntent)
-
-                    manager.notify(0 , builder.build())
-                }
-            }
-        }
-    }
+    private lateinit var manager : NotificationManagerCompat
 
     override fun onCreate() {
         super.onCreate()
@@ -61,17 +43,7 @@ class MicheTimerApplication : Application() {
         component = DaggerMicheTimerApplicationComponent.builder().micheTimerApplicationModule(module).build()
         component.inject(this)
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            val mChannel = NotificationChannel("ID", "NAME",  NotificationManager.IMPORTANCE_DEFAULT)
-            mChannel.description = "DESCRIPTION TEXT"
-
-            val notificationManager = applicationContext.getSystemService(AppCompatActivity.NOTIFICATION_SERVICE) as NotificationManager
-            notificationManager.createNotificationChannel(mChannel)
-        }
-
-        builder = NotificationCompat.Builder(applicationContext, "ID")
-        manager = applicationContext.getSystemService(Service.NOTIFICATION_SERVICE) as NotificationManager
-
+        createNotificationBuilderAndManager()
         timerService.addNotificationCallback(callback)
     }
 
@@ -80,5 +52,42 @@ class MicheTimerApplication : Application() {
 
         val service = module.provideTimerService()
         service.dispose()
+    }
+
+    fun createNotificationBuilderAndManager(){
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            val channel = NotificationChannel(channelId, channelName, NotificationManager.IMPORTANCE_HIGH)
+            channel.lockscreenVisibility = Notification.VISIBILITY_PUBLIC
+            channel.enableVibration(true)
+
+            val manager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+            manager.createNotificationChannel(channel)
+            builder = NotificationCompat.Builder(this, channelId)
+        }
+        else {
+            builder = NotificationCompat.Builder(this)
+        }
+        manager = NotificationManagerCompat.from(applicationContext)
+    }
+
+    private val callback = object : TimerCallback {
+        override fun notify(indicator: TimerIndicator) {
+            when(indicator.state.value) {
+                TimerRunnerState.Timeout -> {
+                    val intent = StopTimerActivity.create(applicationContext, indicator.id, indicator.start.time, indicator.end.time)
+                    val pIntent = PendingIntent.getActivity(applicationContext, indicator.id, intent, PendingIntent.FLAG_UPDATE_CURRENT)
+
+                    builder.setAutoCancel(true)
+                            .setDefaults(Notification.DEFAULT_ALL)
+                            .setWhen(System.currentTimeMillis())
+                            .setSmallIcon(R.drawable.ic_launcher_foreground)
+                            .setContentTitle("${indicator.name}")
+                            .setContentText("The timer timed up.")
+                            .setContentIntent(pIntent)
+
+                    manager.notify(indicator.id, builder.build())
+                }
+            }
+        }
     }
 }

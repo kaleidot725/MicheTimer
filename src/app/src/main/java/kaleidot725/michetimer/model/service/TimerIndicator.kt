@@ -5,6 +5,7 @@ import kaleidot725.michetimer.model.domain.timer.TimerRunnerState
 import java.util.*
 
 interface TimerIndicator {
+    val id : Int
     val name : String
     val seconds : Long
     val remainSeconds : BehaviorSubject<Long>
