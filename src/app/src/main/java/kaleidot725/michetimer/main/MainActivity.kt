@@ -6,16 +6,13 @@ import androidx.appcompat.widget.PopupMenu
 import android.view.View
 import android.util.Log
 import kaleidot725.michetimer.addtimer.AddTimerActivity
-import kaleidot725.michetimer.domain.TimerRepository
-import kaleidot725.michetimer.domain.TimerRunnerService
+import kaleidot725.michetimer.model.repository.TimerRepository
+import kaleidot725.michetimer.model.service.TimerService
 import android.content.Intent
-import android.view.LayoutInflater
-import android.widget.Button
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.view.menu.ActionMenuItemView
 import androidx.appcompat.widget.Toolbar
 import androidx.drawerlayout.widget.DrawerLayout
-import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentTransaction
 import com.google.android.material.navigation.NavigationView
 import kaleidot725.michetimer.MainActivityComponent
@@ -24,7 +21,7 @@ import kaleidot725.michetimer.R
 import kaleidot725.michetimer.addtimer.AddTimerMode
 import kaleidot725.michetimer.app.MicheTimerApplication
 import kaleidot725.michetimer.disptimer.DispTimerActivity
-import kaleidot725.michetimer.domain.Timer
+import kaleidot725.michetimer.model.entity.Timer
 import javax.inject.Inject
 import javax.inject.Named
 import com.mikepenz.aboutlibraries.Libs
@@ -38,7 +35,7 @@ class MainActivity : AppCompatActivity(), MainNavigator {
 
     @Inject lateinit var timerRepository : TimerRepository
 
-    @Inject lateinit var timerRunnerService : TimerRunnerService
+    @Inject lateinit var timerService : TimerService
 
     @field:[Inject Named("DispTimer")] lateinit var dispTimer : Timer
 
@@ -151,7 +148,7 @@ class MainActivity : AppCompatActivity(), MainNavigator {
             it.id = timer.id
             it.name = timer.name
             it.seconds = timer.seconds
-            it.sound = timer.sound
+            it.alarm = timer.alarm
         }
         addTimerMode.value = AddTimerMode.edit
         val intent = Intent(applicationContext, AddTimerActivity::class.java)
@@ -163,7 +160,7 @@ class MainActivity : AppCompatActivity(), MainNavigator {
             it.id = timer.id
             it.name = timer.name
             it.seconds = timer.seconds
-            it.sound = timer.sound
+            it.alarm = timer.alarm
         }
         val intent = Intent(applicationContext, DispTimerActivity::class.java)
         startActivity(intent)

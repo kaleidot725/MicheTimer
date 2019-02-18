@@ -1,11 +1,13 @@
-package kaleidot725.michetimer.domain
+package kaleidot725.michetimer.model.domain.timer
 
 import io.reactivex.subjects.BehaviorSubject
+import kaleidot725.michetimer.model.service.TimerIndicator
 import java.util.*
 import java.util.Timer
 import kotlin.concurrent.timerTask
 
-class TimerRunner(id : Int, name : String, seconds : Long) : TimerRunnerInterface, TimerRunnerController {
+// fixme : TimerIndicatgorが依存している、Service層でインタフェースを勝手に変えてください
+class TimerRunnerDefault(id : Int, name : String, seconds : Long) : TimerRunner, TimerIndicator {
     override val id : Int = id
     override val name : String = name
     override val seconds : Long = seconds
@@ -51,7 +53,7 @@ class TimerRunner(id : Int, name : String, seconds : Long) : TimerRunnerInterfac
         state.onNext(TimerRunnerState.Init)
     }
 
-    override fun finalize()
+    override fun dispose()
     {
         reset()
     }

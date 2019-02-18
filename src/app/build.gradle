@@ -16,8 +16,9 @@ android {
         applicationId "kaleidot725.michetimer"
         minSdkVersion 21
         targetSdkVersion 28
-        versionCode 5
-        versionName "1.0.4"
+        versionCode 7
+        versionCode 7
+        versionName "1.0.6"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         vectorDrawables.useSupportLibrary = true
     }

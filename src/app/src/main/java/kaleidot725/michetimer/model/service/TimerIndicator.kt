@@ -1,9 +1,11 @@
-package kaleidot725.michetimer.domain
+package kaleidot725.michetimer.model.service
 
 import io.reactivex.subjects.BehaviorSubject
+import kaleidot725.michetimer.model.domain.timer.TimerRunnerState
 import java.util.*
 
-interface TimerRunnerController {
+interface TimerIndicator {
+    val id : Int
     val name : String
     val seconds : Long
     val remainSeconds : BehaviorSubject<Long>

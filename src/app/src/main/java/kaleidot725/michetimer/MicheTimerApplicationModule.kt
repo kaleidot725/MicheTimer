@@ -13,17 +13,17 @@ import kaleidot725.michetimer.app.MicheTimerApplication
 import kaleidot725.michetimer.disptimer.DispTimerActivity
 import kaleidot725.michetimer.disptimer.DispTimerFragment
 import kaleidot725.michetimer.disptimer.DispTimerNavigator
-import kaleidot725.michetimer.domain.PersistenceFile
-import kaleidot725.michetimer.domain.Timer
-import kaleidot725.michetimer.domain.TimerRepository
-import kaleidot725.michetimer.domain.TimerRunnerService
+import kaleidot725.michetimer.model.domain.alarm.AlarmType
+import kaleidot725.michetimer.model.service.TimerService
+import kaleidot725.michetimer.model.repository.PersistenceFile
+import kaleidot725.michetimer.model.entity.Timer
+import kaleidot725.michetimer.model.repository.TimerRepository
 import kaleidot725.michetimer.main.MainActivity
 import kaleidot725.michetimer.main.MainFilter
 import kaleidot725.michetimer.main.MainFragment
 import kaleidot725.michetimer.main.MainNavigator
 import kaleidot725.michetimer.stoptimer.StopTimerActivity
 import javax.inject.Named
-import javax.inject.Scope
 import javax.inject.Singleton
 
 @Module
@@ -32,8 +32,8 @@ class MicheTimerApplicationModule(application : Application) {
 
     @Singleton
     @Provides
-    fun provideTimerRunnerService() : TimerRunnerService {
-        return TimerRunnerService(application)
+    fun provideTimerService() : TimerService {
+        return TimerService(application)
     }
 
     @Singleton
@@ -46,14 +46,14 @@ class MicheTimerApplicationModule(application : Application) {
 
     @Singleton
     @Provides @Named(value = "DispTimer")
-    fun provideDispTimer() : Timer{
-        return Timer(-1, "", 0, "")
+    fun provideDispTimer() : Timer {
+        return Timer(-1, "", 0, AlarmType.Bellstar)
     }
 
     @Singleton
     @Provides @Named("EditTimer")
     fun provideEditTimer() : Timer {
-        return Timer(-1, "", 0, "")
+        return Timer(-1, "", 0, AlarmType.Bellstar)
     }
 
     @Singleton

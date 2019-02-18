@@ -9,21 +9,21 @@
             android:icon="@drawable/ic_home"
             android:title="Home"
             android:checked="false"/>
+
+        <item
+            android:id="@+id/navigation_license"
+            android:title="License"
+            android:icon="@drawable/ic_license"
+            android:checkable="false"/>
     </group>
 
-    <item android:title="Other">
-        <menu>
+    <!--<item android:title="Other">-->
+        <!--<menu>-->
             <!--<item-->
                 <!--android:id="@+id/navigation_setting"-->
                 <!--android:title="Setting"-->
                 <!--android:icon="@drawable/ic_setting"-->
                 <!--android:checkable="false"/>-->
-
-            <item
-                android:id="@+id/navigation_license"
-                android:title="License"
-                android:icon="@drawable/ic_license"
-                android:checkable="false"/>
-        </menu>
-    </item>
+        <!--</menu>-->
+    <!--</item>-->
 </menu>

@@ -1,14 +1,12 @@
 package kaleidot725.michetimer.addtimer
 
-import android.content.Context
-import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import kaleidot725.michetimer.*
 import kaleidot725.michetimer.app.MicheTimerApplication
-import kaleidot725.michetimer.domain.Timer
-import kaleidot725.michetimer.domain.TimerRepository
-import kaleidot725.michetimer.domain.TimerRunnerService
+import kaleidot725.michetimer.model.entity.Timer
+import kaleidot725.michetimer.model.repository.TimerRepository
+import kaleidot725.michetimer.model.service.TimerService
 import javax.inject.Inject
 import javax.inject.Named
 
@@ -18,7 +16,7 @@ class AddTimerActivity : AppCompatActivity(),  AddTimerNavigator  {
 
     @Inject lateinit var timerRepository : TimerRepository
 
-    @Inject lateinit var timerRunnerService : TimerRunnerService
+    @Inject lateinit var timerService : TimerService
 
     @field:[Inject Named("EditTimer")] lateinit var editTimer : Timer
 

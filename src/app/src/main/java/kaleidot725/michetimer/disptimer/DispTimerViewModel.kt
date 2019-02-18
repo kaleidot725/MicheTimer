@@ -6,13 +6,13 @@ import android.util.Log
 import android.view.View
 import io.reactivex.disposables.CompositeDisposable
 import kaleidot725.michetimer.R
-import kaleidot725.michetimer.domain.TimerRunnerController
-import kaleidot725.michetimer.domain.Timer
-import kaleidot725.michetimer.domain.TimerRepository
-import kaleidot725.michetimer.domain.TimerRunnerService
-import kaleidot725.michetimer.domain.TimerRunnerState
+import kaleidot725.michetimer.model.service.TimerIndicator
+import kaleidot725.michetimer.model.entity.Timer
+import kaleidot725.michetimer.model.repository.TimerRepository
+import kaleidot725.michetimer.model.service.TimerService
+import kaleidot725.michetimer.model.domain.timer.TimerRunnerState
 
-class DispTimerViewModel(navigator : DispTimerNavigator, timer : Timer, service : TimerRunnerService, repository: TimerRepository) : ViewModel() {
+class DispTimerViewModel(navigator : DispTimerNavigator, timer : Timer, service : TimerService, repository: TimerRepository) : ViewModel() {
     val name : MutableLiveData<String>
     val state : MutableLiveData<String>
     val stateImage : MutableLiveData<Int>
@@ -20,9 +20,9 @@ class DispTimerViewModel(navigator : DispTimerNavigator, timer : Timer, service 
 
     private val tag : String = "DispTimerViewModel"
     private val navigator : DispTimerNavigator
-    private val service : TimerRunnerService
+    private val service : TimerService
     private val repository : TimerRepository
-    private var runner : TimerRunnerController
+    private var runner : TimerIndicator
     private val timer : Timer
     private val compositeDisposable : CompositeDisposable
 
@@ -42,7 +42,7 @@ class DispTimerViewModel(navigator : DispTimerNavigator, timer : Timer, service 
         this.remainSeconds = MutableLiveData()
         this.remainSeconds.postValue(toRemainSecondsString(timer.seconds))
 
-        this.runner = service.register(timer.id, timer.name, timer.seconds, timer.sound) as TimerRunnerController
+        this.runner = service.register(timer.id, timer.name, timer.seconds, timer.alarm) as TimerIndicator
         val stateDisposable = this.runner.state.subscribe {
             try {
                 this.state.postValue(toStateString(it))

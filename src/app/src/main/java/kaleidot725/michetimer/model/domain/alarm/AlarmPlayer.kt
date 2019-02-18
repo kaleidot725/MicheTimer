@@ -1,15 +1,14 @@
-package kaleidot725.michetimer.domain
+package kaleidot725.michetimer.model.domain.alarm
 
 import android.content.Context
 
 interface AlarmPlayer {
     val context : Context
-    val name : String
-    val id : Int
+    val type : Int
     val isPlaying : Boolean
     val isRepeating : Boolean
 
     fun play()
     fun stop()
-    fun finalize()
+    fun dispose()
 }

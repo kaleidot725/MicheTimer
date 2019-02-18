@@ -1,4 +1,4 @@
-package kaleidot725.michetimer.domain
+package kaleidot725.michetimer.model.repository
 
 import android.util.Log
 import com.squareup.moshi.JsonAdapter

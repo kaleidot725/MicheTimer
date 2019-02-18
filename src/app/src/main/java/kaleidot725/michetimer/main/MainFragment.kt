@@ -15,8 +15,8 @@ import kaleidot725.michetimer.BR
 import kaleidot725.michetimer.MainFragmentModule
 import kaleidot725.michetimer.R
 import kaleidot725.michetimer.databinding.FragmentMainBinding
-import kaleidot725.michetimer.domain.TimerRepository
-import kaleidot725.michetimer.domain.TimerRunnerService
+import kaleidot725.michetimer.model.repository.TimerRepository
+import kaleidot725.michetimer.model.service.TimerService
 import java.lang.Exception
 import javax.inject.Inject
 
@@ -26,7 +26,7 @@ class MainFragment : Fragment() {
     lateinit var timerRepository : TimerRepository
 
     @Inject
-    lateinit var timerRunnerService : TimerRunnerService
+    lateinit var timerService : TimerService
 
     @Inject
     lateinit var navigator : MainNavigator
@@ -93,7 +93,7 @@ class MainFragment : Fragment() {
     inner class MainViewModelFactory : ViewModelProvider.Factory {
         override fun <T : ViewModel?> create(modelClass: Class<T>): T {
             if (modelClass == MainViewModel::class.java) {
-                return MainViewModel(navigator, timerRunnerService, timerRepository, filter, search) as T
+                return MainViewModel(navigator, timerService, timerRepository, filter, search) as T
             }
 
             throw IllegalArgumentException("Unknown ViewModel class : ${modelClass.name}")
