@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
-    <item
-        android:id="@+id/NameAsc"
-        android:title="Name(Asc)"/>
-    <item
-        android:id="@+id/NameDesc"
-        android:title="Name(Desc)"/>
-    <item
-        android:id="@+id/SecondsAsc"
-        android:title="Seconds(Asc)"/>
-    <item
-        android:id="@+id/SecondsDesc"
-        android:title="Seconds(Desc)"/>
+<item
+    android:id="@+id/NameAsc"
+    android:title="Name:Asc"/>
+<item
+    android:id="@+id/NameDesc"
+    android:title="Name:Desc"/>
+<item
+    android:id="@+id/SecondsAsc"
+    android:title="Seconds:Asc"/>
+<item
+    android:id="@+id/SecondsDesc"
+    android:title="Seconds:Desc"/>
 </menu>

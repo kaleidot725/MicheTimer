@@ -3,12 +3,11 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="?attr/actionBarSize"
-    android:background="@null"
     android:paddingBottom="8dp"
     android:paddingLeft="8dp"
     android:paddingRight="8dp"
     android:paddingTop="8dp"
-    android:theme="@style/AppTheme"
+    android:theme="@style/AppTheme.NavigatoinView"
     android:orientation="horizontal">
 
     <ImageView
@@ -23,7 +22,7 @@
         android:layout_gravity="center_vertical"
         android:textAlignment="center"
         android:textSize="@dimen/large_text"
-        android:text="Miche Timer"
+        android:text="@string/app_name"
         android:textStyle="bold"/>
 
 </LinearLayout>

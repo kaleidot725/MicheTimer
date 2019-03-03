@@ -13,9 +13,8 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
 
-        <activity
-            android:name=".main.MainActivity"
-            android:theme="@style/AppTheme.NoActionBar">
+        <activity android:name=".main.MainActivity"
+                  android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <action android:name="android.intent.action.VIEW" />
@@ -27,7 +26,7 @@
         <activity
             android:name=".addtimer.AddTimerActivity"
             android:label="@string/activity_add_timer_name"
-            android:parentActivityName=".main.MainActivity" />
+            android:parentActivityName=".main.MainActivity"/>
 
         <activity
             android:name=".stoptimer.StopTimerActivity"
