@@ -12,6 +12,7 @@ import android.content.Intent
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.view.menu.ActionMenuItemView
 import androidx.appcompat.widget.Toolbar
+import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.fragment.app.FragmentTransaction
 import com.google.android.material.navigation.NavigationView
@@ -27,6 +28,7 @@ import javax.inject.Named
 import com.mikepenz.aboutlibraries.Libs
 import com.mikepenz.aboutlibraries.LibsBuilder
 import kaleidot725.michetimer.setting.SettingActivity
+import kotlin.math.absoluteValue
 
 
 class MainActivity : AppCompatActivity(), MainNavigator {
@@ -102,6 +104,7 @@ class MainActivity : AppCompatActivity(), MainNavigator {
         }
 
         val drawerLayout = findViewById<DrawerLayout>(R.id.drawer_layout)
+
         val toggle = ActionBarDrawerToggle(this, drawerLayout, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close)
         drawerLayout.addDrawerListener(toggle)
         toggle.syncState()

@@ -5,10 +5,18 @@
         <item name="colorAccent">@color/colorSecondary</item>
     </style>
 
-    <style name="AppTheme.NoActionBar">
+    <style name="AppTheme.NavigatoinView" parent="AppTheme">
+        <item name="android:textColorPrimary">@color/colorSecondary</item>
+        <item name="android:textColorSecondary">@color/colorSecondary</item>
+    </style>
+
+    <style name="AppTheme.NoActionBar" parent="AppTheme">
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
     </style>
-    <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar"></style>
-    <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light"/>
+
+    <style name="AppTheme.Toolbar" parent="AppTheme">
+        <item name="android:textColorPrimary">@color/textColorSecondary</item>
+        <item name="android:textColorSecondary">@color/textColorSecondary</item>
+    </style>
 </resources>
