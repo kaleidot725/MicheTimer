@@ -113,7 +113,6 @@ class MainActivity : AppCompatActivity(), MainNavigator {
         navigationView.setNavigationItemSelectedListener { menuItem ->
 
             when (menuItem.itemId) {
-//              R.id.navigation_setting -> onShowSetting()
                 R.id.navigation_license -> onShowLicense()
             }
 
