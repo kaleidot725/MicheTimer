@@ -77,12 +77,11 @@ class MainFragment : Fragment() {
         }
 
         viewModel.onRemoveEvent = { i ->
-            recyclerView.adapter?.notifyItemRemoved(i)
+            recyclerView.adapter?.notifyDataSetChanged()
         }
 
         viewModel.onAddEvent = { i->
-            recyclerView.adapter?.notifyItemInserted(i)
-            recyclerView.adapter?.notifyItemChanged(i)
+            recyclerView.adapter?.notifyDataSetChanged()
         }
 
         viewModel.onChanged = {
