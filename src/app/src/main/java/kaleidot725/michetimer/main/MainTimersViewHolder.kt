@@ -12,6 +12,6 @@ class MainTimersViewHolder(owner: LifecycleOwner, binding: ListviewItemTimerBind
     fun bind (timerViewModel : MainTimerViewModel?) {
         binding.setVariable(BR.timerViewModel, timerViewModel)
         binding.executePendingBindings()
-        binding.setLifecycleOwner(owner)
+        binding.lifecycleOwner = owner
     }
 }
