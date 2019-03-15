@@ -30,7 +30,7 @@ class AddTimerViewModel(navigator: AddTimerNavigator, timerRepository  : TimerRe
     override fun onItemSelectedMinute(parent: AdapterView<*>, view: View, position: Int, id: Long) {
         val value = parent.selectedItem as String?
         if (!value.isNullOrEmpty())
-            minute = (value as String).toLong()
+            minute = (value).toLong()
 
         error.postValue(getError())
     }
@@ -38,7 +38,7 @@ class AddTimerViewModel(navigator: AddTimerNavigator, timerRepository  : TimerRe
     override fun onItemSelectedSecond(parent: AdapterView<*>, view: View, position: Int, id: Long) {
         val value = parent.selectedItem as String
         if (!value.isNullOrEmpty())
-            second = (value as String).toLong()
+            second = (value).toLong()
 
         error.postValue(getError())
     }
@@ -46,7 +46,7 @@ class AddTimerViewModel(navigator: AddTimerNavigator, timerRepository  : TimerRe
     override fun onItemSelectedAlarm(parent: AdapterView<*>, view: View, position: Int, id:Long) {
         val value = parent.selectedItem as String
         if (!value.isNullOrEmpty())
-            sound = value as String
+            sound = value
 
         error.postValue(getError())
     }

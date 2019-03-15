@@ -8,6 +8,7 @@ import androidx.recyclerview.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.lifecycle.LifecycleRegistry
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProviders
@@ -17,6 +18,7 @@ import kaleidot725.michetimer.R
 import kaleidot725.michetimer.databinding.FragmentMainBinding
 import kaleidot725.michetimer.model.repository.TimerRepository
 import kaleidot725.michetimer.model.service.TimerService
+import kotlinx.android.synthetic.main.fragment_main.*
 import java.lang.Exception
 import javax.inject.Inject
 
@@ -70,19 +72,18 @@ class MainFragment : Fragment() {
         val binding = DataBindingUtil.bind<FragmentMainBinding>(this.view as View)
         binding?.setVariable(BR.mainViewModel, viewModel)
 
-        val recyclerView = view.findViewById<RecyclerView>(R.id.recycler_view).apply {
-            setHasFixedSize(true)
-            layoutManager = LinearLayoutManager(activity)
-            adapter = MainTimersAdapter(viewModel)
+        val recyclerView = view.findViewById<RecyclerView>(R.id.recycler_view).also {
+            it.setHasFixedSize(true)
+            it.layoutManager = LinearLayoutManager(activity)
+            it.adapter = MainTimersAdapter(this, viewModel)
         }
 
         viewModel.onRemoveEvent = { i ->
-            recyclerView.adapter?.notifyItemRemoved(i)
+            recyclerView.adapter?.notifyDataSetChanged()
         }
 
         viewModel.onAddEvent = { i->
-            recyclerView.adapter?.notifyItemInserted(i)
-            recyclerView.adapter?.notifyItemChanged(i)
+            recyclerView.adapter?.notifyDataSetChanged()
         }
 
         viewModel.onChanged = {
