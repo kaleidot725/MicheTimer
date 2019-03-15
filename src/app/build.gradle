@@ -16,9 +16,9 @@ android {
         applicationId "kaleidot725.michetimer"
         minSdkVersion 21
         targetSdkVersion 28
-        versionCode 7
-        versionCode 7
-        versionName "1.0.6"
+        versionCode 8
+        versionCode 8
+        versionName "1.0.8"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         vectorDrawables.useSupportLibrary = true
     }
@@ -48,10 +48,10 @@ dependencies {
     implementation 'androidx.constraintlayout:constraintlayout:2.0.0-alpha3'
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
     implementation 'androidx.cardview:cardview:1.0.0'
-    implementation 'androidx.appcompat:appcompat:1.1.0-alpha01'
-    implementation "com.google.android.material:material:1.1.0-alpha03"
+    implementation 'androidx.appcompat:appcompat:1.1.0-alpha03'
+    implementation "com.google.android.material:material:1.1.0-alpha04"
     implementation "androidx.lifecycle:lifecycle-extensions:2.0.0"
-    implementation 'androidx.recyclerview:recyclerview:1.1.0-alpha02'
+    implementation 'androidx.recyclerview:recyclerview:1.1.0-alpha03'
     implementation "com.mikepenz:aboutlibraries:6.2.2"
 
     implementation 'com.google.dagger:dagger:2.21'

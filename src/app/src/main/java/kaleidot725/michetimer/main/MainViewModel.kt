@@ -26,7 +26,7 @@ class MainViewModel(navigator : MainNavigator, service : TimerService, repositor
         override fun onItemRangeInserted(sender: ObservableList<Timer>?, positionStart: Int, itemCount: Int) {
             if (sender != null) {
                 all.clear()
-                repository.filter(filter, search).forEach { t -> all.add(MainTimerViewModel(navigator, t, service, repository)) }
+                repository.filter(filter).forEach { t -> all.add(MainTimerViewModel(navigator, t, service, repository)) }
                 onAddEvent?.invoke(positionStart)
             }
         }
@@ -34,7 +34,7 @@ class MainViewModel(navigator : MainNavigator, service : TimerService, repositor
         override fun onItemRangeRemoved(sender: ObservableList<Timer>?, positionStart: Int, itemCount: Int) {
             if (sender != null) {
                 all.clear()
-                repository.filter(filter, search).forEach { t -> all.add(MainTimerViewModel(navigator, t, service, repository)) }
+                repository.filter(filter).forEach { t -> all.add(MainTimerViewModel(navigator, t, service, repository)) }
                 onRemoveEvent?.invoke(positionStart)
             }
         }
@@ -42,7 +42,7 @@ class MainViewModel(navigator : MainNavigator, service : TimerService, repositor
         override fun onChanged(sender: ObservableList<Timer>?) {
             if (sender != null) {
                 all.clear()
-                repository.filter(filter, search).forEach { t -> all.add(MainTimerViewModel(navigator, t, service, repository)) }
+                repository.filter(filter).forEach { t -> all.add(MainTimerViewModel(navigator, t, service, repository)) }
                 onChanged?.invoke()
             }
         }
@@ -52,7 +52,7 @@ class MainViewModel(navigator : MainNavigator, service : TimerService, repositor
     }
 
     init {
-        repository.filter(filter, search).forEach { t -> all.add(MainTimerViewModel(navigator, t, service, repository)) }
+        repository.filter(filter).forEach { t -> all.add(MainTimerViewModel(navigator, t, service, repository)) }
         repository.addOnListChangedCallback(changedCallback)
     }
 
@@ -60,7 +60,7 @@ class MainViewModel(navigator : MainNavigator, service : TimerService, repositor
         navigator.onStartAddTimer()
     }
 
-    fun TimerRepository.filter(filter : MainFilter, search : String) : List<Timer>{
+    fun TimerRepository.filter(filter : MainFilter) : List<Timer>{
         when(filter){
             MainFilter.None -> {
                 return repository.findAll()

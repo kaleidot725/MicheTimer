@@ -66,7 +66,7 @@ class AddTimerFragment : Fragment() {
 
         val binding = DataBindingUtil.bind<FragmentAddTimerBinding>(view)
         binding?.setVariable(BR.viewmodel, vm)
-        binding?.setLifecycleOwner(this)
+        binding?.lifecycleOwner = this
     }
 
     private inner class AddTimerFragmentViewModelFactory() : ViewModelProvider.Factory {
