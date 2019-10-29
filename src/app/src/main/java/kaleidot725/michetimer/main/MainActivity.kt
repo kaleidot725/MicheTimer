@@ -9,9 +9,11 @@ import kaleidot725.michetimer.addtimer.AddTimerActivity
 import kaleidot725.michetimer.model.repository.TimerRepository
 import kaleidot725.michetimer.model.service.TimerService
 import android.content.Intent
+import android.util.TypedValue
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.view.menu.ActionMenuItemView
 import androidx.appcompat.widget.Toolbar
+import androidx.core.content.ContextCompat
 import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.fragment.app.FragmentTransaction
@@ -27,9 +29,6 @@ import javax.inject.Inject
 import javax.inject.Named
 import com.mikepenz.aboutlibraries.Libs
 import com.mikepenz.aboutlibraries.LibsBuilder
-import kaleidot725.michetimer.setting.SettingActivity
-import kotlin.math.absoluteValue
-
 
 class MainActivity : AppCompatActivity(), MainNavigator {
 
@@ -57,6 +56,10 @@ class MainActivity : AppCompatActivity(), MainNavigator {
         val toolbar = findViewById<Toolbar>(R.id.toolbar)
         toolbar.title = "Home"
         toolbar.inflateMenu(R.menu.toolbar_menu)
+
+        val value = TypedValue()
+        theme.resolveAttribute(android.R.attr.colorPrimary, value, true)
+        toolbar.setBackgroundColor(ContextCompat.getColor(this,value.resourceId))
 
         val filter = findViewById<ActionMenuItemView>(R.id.filter)
         filter?.setOnClickListener {
@@ -165,11 +168,6 @@ class MainActivity : AppCompatActivity(), MainNavigator {
             it.alarm = timer.alarm
         }
         val intent = Intent(applicationContext, DispTimerActivity::class.java)
-        startActivity(intent)
-    }
-
-    override fun onShowSetting() {
-        val intent = Intent(applicationContext, SettingActivity::class.java)
         startActivity(intent)
     }
 

@@ -17,11 +17,5 @@
             android:title="License"
             android:icon="@drawable/ic_license"
             android:checkable="false"/>
-
-        <!--<item-->
-            <!--android:id="@+id/navigation_setting"-->
-            <!--android:title="Setting"-->
-            <!--android:icon="@drawable/ic_setting"-->
-            <!--android:checkable="false"/>-->
     </group>
 </menu>

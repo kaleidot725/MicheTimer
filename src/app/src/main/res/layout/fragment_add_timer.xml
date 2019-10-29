@@ -9,6 +9,8 @@
 
     <FrameLayout
         android:layout_width="match_parent"
+        android:background="?android:attr/colorBackground"
+        android:theme="@style/AppTheme"
         android:layout_height="match_parent">
 
         <androidx.constraintlayout.widget.ConstraintLayout
@@ -89,7 +91,7 @@
                 android:id="@+id/error_message"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textColor="@color/compColorPrimary"
+                android:textColor="?android:attr/colorAccent"
                 android:textSize="@dimen/middle_text"
                 android:layout_marginTop="10dp"
                 app:layout_constraintTop_toBottomOf="@+id/sound_spinner"
@@ -102,6 +104,9 @@
             android:layout_height="wrap_content"
             android:layout_gravity="end|bottom"
             android:src="@drawable/ic_add"
+            app:tint="@null"
+            android:backgroundTint="?android:colorAccent"
+            app:borderWidth="0dp"
             android:clickable="true"
             android:focusable="true"
             android:onClick="@{viewmodel::onComplete}"

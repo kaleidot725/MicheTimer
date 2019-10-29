@@ -15,7 +15,7 @@ android {
         release {
             storeFile file('/Users/kaleidot725/Documents/Android App Key/michetimer')
             storePassword 'answerisnear'
-            keyAlias = 'answerisnear'
+            keyAlias = 'michetimer'
             keyPassword 'answerisnear'
         }
     }
