@@ -11,6 +11,14 @@ gradle.projectsEvaluated {
 }
 
 android {
+    signingConfigs {
+        release {
+            storeFile file('/Users/kaleidot725/Documents/Android App Key/michetimer')
+            storePassword 'answerisnear'
+            keyAlias = 'michetimer'
+            keyPassword 'answerisnear'
+        }
+    }
     compileSdkVersion 28
     defaultConfig {
         applicationId "kaleidot725.michetimer"

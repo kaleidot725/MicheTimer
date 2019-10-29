@@ -8,7 +8,6 @@ interface MainNavigator {
     fun onStartAddTimer()
     fun onStartEditTimer(timer : Timer)
     fun onStartDispTimer(timer : Timer)
-    fun onShowSetting()
     fun onShowLicense()
     fun onShowOption(view : View, menuListener : PopupMenu.OnMenuItemClickListener)
 }
