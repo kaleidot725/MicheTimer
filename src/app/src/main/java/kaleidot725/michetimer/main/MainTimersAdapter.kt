@@ -20,12 +20,15 @@ internal class MainTimersAdapter(owner : LifecycleOwner, viewModel : MainViewMod
     }
 
     override fun onBindViewHolder(holder: MainTimersViewHolder, position: Int) {
-        holder.bind(viewModel.all[position])
+        val list = viewModel.all.value
+        if (list != null && (position < list.count())) {
+            holder.bind(list[position])
+        }
     }
 
     override fun onDetachedFromRecyclerView(recyclerView: RecyclerView) {
         super.onDetachedFromRecyclerView(recyclerView)
     }
 
-    override fun getItemCount(): Int = viewModel.all.count()
+    override fun getItemCount(): Int = viewModel.all.value?.count() ?: 0
 }

@@ -1,17 +1,24 @@
 package kaleidot725.michetimer.main
 
+import android.opengl.Visibility
 import android.view.View
-import androidx.databinding.ObservableArrayList
 import androidx.databinding.ObservableList
-import androidx.lifecycle.ViewModel
+import androidx.lifecycle.*
 import kaleidot725.michetimer.model.entity.Timer
 import kaleidot725.michetimer.model.repository.TimerRepository
 import kaleidot725.michetimer.model.service.TimerService
 
 
-class MainViewModel(navigator : MainNavigator, service : TimerService, repository : TimerRepository, filter : MainFilter, search : String) : ViewModel() {
+class MainViewModel(navigator : MainNavigator, service : TimerService, repository : TimerRepository, filterType : MainFilter, search : String) : ViewModel() {
 
-    val all : ObservableList<MainTimerViewModel> = ObservableArrayList<MainTimerViewModel>()
+    private val _all : MutableLiveData<List<MainTimerViewModel>> = MutableLiveData()
+    val all : LiveData<List<MainTimerViewModel>> = _all
+
+    private val _visibility : MediatorLiveData<Int> = MediatorLiveData<Int>().also { v ->
+        v.addSource(all) { all -> v.value = if(all.count() == 0)  View.VISIBLE else View.GONE }
+    }
+    val visibility : LiveData<Int> = _visibility
+
     var onAddEvent : ((Int) -> Unit) ?= null
     var onRemoveEvent : ((Int) -> Unit) ?= null
     var onChanged : (() -> Unit) ?= null
@@ -19,30 +26,29 @@ class MainViewModel(navigator : MainNavigator, service : TimerService, repositor
     private val navigator : MainNavigator = navigator
     private val service : TimerService = service
     private val repository : TimerRepository = repository
-    private val filter : MainFilter = filter
+    private val filter : MainFilter = filterType
     private val search : String = search
 
     private val changedCallback = object : ObservableList.OnListChangedCallback<ObservableList<Timer>>() {
         override fun onItemRangeInserted(sender: ObservableList<Timer>?, positionStart: Int, itemCount: Int) {
             if (sender != null) {
-                all.clear()
-                repository.filter(filter).forEach { t -> all.add(MainTimerViewModel(navigator, t, service, repository)) }
+                _all.value = repository.filter(filterType).map { MainTimerViewModel(navigator, it, service, repository) }
                 onAddEvent?.invoke(positionStart)
             }
         }
 
         override fun onItemRangeRemoved(sender: ObservableList<Timer>?, positionStart: Int, itemCount: Int) {
             if (sender != null) {
-                all.clear()
-                repository.filter(filter).forEach { t -> all.add(MainTimerViewModel(navigator, t, service, repository)) }
+                _all.value = repository.filter(filterType).map { MainTimerViewModel(navigator, it, service, repository) }
+                _visibility.value = if(repository.filter(filterType).count() == 0)  View.VISIBLE else View.GONE
                 onRemoveEvent?.invoke(positionStart)
             }
         }
 
         override fun onChanged(sender: ObservableList<Timer>?) {
             if (sender != null) {
-                all.clear()
-                repository.filter(filter).forEach { t -> all.add(MainTimerViewModel(navigator, t, service, repository)) }
+                _all.value = repository.filter(filterType).map { MainTimerViewModel(navigator, it, service, repository) }
+                _visibility.value = if(repository.filter(filterType).count() == 0)  View.VISIBLE else View.GONE
                 onChanged?.invoke()
             }
         }
@@ -52,7 +58,8 @@ class MainViewModel(navigator : MainNavigator, service : TimerService, repositor
     }
 
     init {
-        repository.filter(filter).forEach { t -> all.add(MainTimerViewModel(navigator, t, service, repository)) }
+        _all.value = repository.filter(filterType).map { MainTimerViewModel(navigator, it, service, repository) }
+        _visibility.value = if(repository.filter(filterType).count() == 0)  View.VISIBLE else View.GONE
         repository.addOnListChangedCallback(changedCallback)
     }
 
