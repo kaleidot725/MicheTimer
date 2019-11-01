@@ -26,7 +26,7 @@ android {
         targetSdkVersion 28
         versionCode 9
         versionCode 9
-        versionName "1.0.9"
+        versionName "1.1.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         vectorDrawables.useSupportLibrary = true
     }
