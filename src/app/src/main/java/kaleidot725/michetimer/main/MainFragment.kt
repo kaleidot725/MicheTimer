@@ -70,7 +70,8 @@ class MainFragment : Fragment() {
 
         viewModel = ViewModelProviders.of(this, MainViewModelFactory()).get(MainViewModel::class.java)
         val binding = DataBindingUtil.bind<FragmentMainBinding>(this.view as View)
-        binding?.setVariable(BR.mainViewModel, viewModel)
+        binding?.lifecycleOwner = this
+        binding?.mainViewModel = viewModel
 
         val recyclerView = view.findViewById<RecyclerView>(R.id.recycler_view).also {
             it.setHasFixedSize(true)
