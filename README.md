@@ -4,7 +4,7 @@ Androidで動作するシンプルなタイマーアプリです。
 
 このタイマーアプリは[Miche Timer](https://play.google.com/store/apps/details?id=kaleidot725.michetimer)として[Play Store](https://play.google.com/store/apps/details?id=kaleidot725.michetimer)に公開しています。
 
-![app](./pic/app.png)
+![app](./pic/app.jpg)
 
 # このプロジェクトの技術
 
